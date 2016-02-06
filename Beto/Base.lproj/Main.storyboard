@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BV1-FR-VrT">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Game View Controller-->
+        <scene sceneID="tXr-a1-R10">
+            <objects>
+                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModule="Beto" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="8aa-yV-Osq"/>
+                        <viewControllerLayoutGuide type="bottom" id="qHh-Mt-9TT"/>
+                    </layoutGuides>
+                    <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3se-qz-xqx" customClass="SKView">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="143,440" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9RT-fW-efm">
+                                <rect key="frame" x="255" y="28" width="66" height="22"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                <color key="textColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="999,999" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7JV-3z-w06">
+                                <rect key="frame" x="48" y="28" width="66" height="22"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                <color key="textColor" red="0.60784313729999995" green="0.60784313729999995" blue="0.60784313729999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="©" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t34-R7-oB7">
+                                <rect key="frame" x="331" y="22" width="24" height="34"/>
+                                <fontDescription key="fontDescription" type="system" weight="black" pointSize="28"/>
+                                <color key="textColor" red="0.96078431372549022" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="highscore" translatesAutoresizingMaskIntoConstraints="NO" id="3zb-fV-EVI">
+                                <rect key="frame" x="20" y="30" width="18" height="18"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="18" id="FVW-Ne-wVm"/>
+                                    <constraint firstAttribute="height" constant="18" id="vjZ-z2-EEd"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ucm-eY-HtP">
+                                <rect key="frame" x="15" y="527" width="140" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="gWf-wm-ytf"/>
+                                    <constraint firstAttribute="width" constant="140" id="hGM-pN-Qfe"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                <state key="normal" title="Play" backgroundImage="button">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dTU-47-Szb">
+                                <rect key="frame" x="220" y="527" width="140" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="Vel-w3-2NP"/>
+                                    <constraint firstAttribute="height" constant="40" id="dQb-I7-B25"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                <state key="normal" title="Clear Bets" backgroundImage="button">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="t34-R7-oB7" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="30" id="3cO-8f-KJa"/>
+                            <constraint firstAttribute="trailing" secondItem="t34-R7-oB7" secondAttribute="trailing" constant="20" id="6nP-0M-NEB"/>
+                            <constraint firstItem="t34-R7-oB7" firstAttribute="bottom" secondItem="3zb-fV-EVI" secondAttribute="bottom" id="A9u-rD-0cA"/>
+                            <constraint firstItem="t34-R7-oB7" firstAttribute="leading" secondItem="9RT-fW-efm" secondAttribute="trailing" constant="10" id="FKi-yl-G0J"/>
+                            <constraint firstItem="3zb-fV-EVI" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leading" constant="20" id="JgD-I8-yKo"/>
+                            <constraint firstItem="Ucm-eY-HtP" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leading" constant="15" id="QRl-it-Wbv"/>
+                            <constraint firstItem="Ucm-eY-HtP" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="20" id="Ved-vV-qOb"/>
+                            <constraint firstItem="7JV-3z-w06" firstAttribute="leading" secondItem="3zb-fV-EVI" secondAttribute="trailing" constant="10" id="bAN-0H-CCe"/>
+                            <constraint firstItem="9RT-fW-efm" firstAttribute="centerY" secondItem="3zb-fV-EVI" secondAttribute="centerY" id="bLl-OA-jv1"/>
+                            <constraint firstItem="dTU-47-Szb" firstAttribute="bottom" secondItem="Ucm-eY-HtP" secondAttribute="bottom" id="bfk-Vo-ZkL"/>
+                            <constraint firstItem="Ucm-eY-HtP" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="20" id="bst-hC-DZK"/>
+                            <constraint firstItem="7JV-3z-w06" firstAttribute="centerY" secondItem="3zb-fV-EVI" secondAttribute="centerY" id="mag-7j-pzI"/>
+                            <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="Ucm-eY-HtP" secondAttribute="bottom" constant="100" id="nMM-p4-dUG"/>
+                            <constraint firstAttribute="trailing" secondItem="dTU-47-Szb" secondAttribute="trailing" constant="15" id="ooX-xc-W9X"/>
+                            <constraint firstItem="t34-R7-oB7" firstAttribute="centerY" secondItem="3zb-fV-EVI" secondAttribute="centerY" id="p9t-DQ-6NQ"/>
+                            <constraint firstItem="3zb-fV-EVI" firstAttribute="top" secondItem="3se-qz-xqx" secondAttribute="topMargin" constant="30" id="xZx-OW-bZE"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="3cO-8f-KJa"/>
+                                <exclude reference="A9u-rD-0cA"/>
+                                <exclude reference="Ved-vV-qOb"/>
+                                <exclude reference="bst-hC-DZK"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="coinsLabel" destination="9RT-fW-efm" id="Nf4-Xg-iCU"/>
+                        <outlet property="highscoreLabel" destination="7JV-3z-w06" id="RBP-bu-Jbd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="button" width="137" height="40"/>
+        <image name="highscore" width="18" height="18"/>
+    </resources>
+</document>
