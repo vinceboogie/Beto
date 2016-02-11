@@ -23,12 +23,18 @@ struct Bet: CustomStringConvertible {
 //    }
     
     let square: Square
+    let betValue: Int
     
-    init(square: Square) {
+    init(square: Square, betValue: Int) {
         self.square = square
+        self.betValue = betValue
     }
     
     var description: String {
-        return "placed a bet on \(square.squareColor)"
-    }    
+        return "placed \(betValue) on \(square.color)"
+    }
+    
+    func placeBet() {            
+        square.wager += betValue
+    }
 }

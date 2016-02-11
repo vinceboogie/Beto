@@ -53,6 +53,9 @@
                                 <state key="normal" title="Play" backgroundImage="button">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="playButtonPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="sud-1L-E5H"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dTU-47-Szb">
                                 <rect key="frame" x="220" y="527" width="140" height="40"/>
@@ -64,6 +67,23 @@
                                 <state key="normal" title="Clear Bets" backgroundImage="button">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="clearButtonPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="ITf-eG-FWb"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sSB-2p-W7Q">
+                                <rect key="frame" x="117" y="607" width="140" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="3Bo-py-UOE"/>
+                                    <constraint firstAttribute="height" constant="40" id="v6J-en-JMu"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                <state key="normal" title="Buy" backgroundImage="button">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="buyButtonPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="uga-7g-531"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -71,6 +91,7 @@
                             <constraint firstItem="t34-R7-oB7" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="30" id="3cO-8f-KJa"/>
                             <constraint firstAttribute="trailing" secondItem="t34-R7-oB7" secondAttribute="trailing" constant="20" id="6nP-0M-NEB"/>
                             <constraint firstItem="t34-R7-oB7" firstAttribute="bottom" secondItem="3zb-fV-EVI" secondAttribute="bottom" id="A9u-rD-0cA"/>
+                            <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="sSB-2p-W7Q" secondAttribute="bottom" constant="20" id="BeY-hk-mPR"/>
                             <constraint firstItem="t34-R7-oB7" firstAttribute="leading" secondItem="9RT-fW-efm" secondAttribute="trailing" constant="10" id="FKi-yl-G0J"/>
                             <constraint firstItem="3zb-fV-EVI" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leading" constant="20" id="JgD-I8-yKo"/>
                             <constraint firstItem="Ucm-eY-HtP" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leading" constant="15" id="QRl-it-Wbv"/>
@@ -79,6 +100,7 @@
                             <constraint firstItem="9RT-fW-efm" firstAttribute="centerY" secondItem="3zb-fV-EVI" secondAttribute="centerY" id="bLl-OA-jv1"/>
                             <constraint firstItem="dTU-47-Szb" firstAttribute="bottom" secondItem="Ucm-eY-HtP" secondAttribute="bottom" id="bfk-Vo-ZkL"/>
                             <constraint firstItem="Ucm-eY-HtP" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="20" id="bst-hC-DZK"/>
+                            <constraint firstItem="sSB-2p-W7Q" firstAttribute="centerX" secondItem="3se-qz-xqx" secondAttribute="centerX" id="gZ8-bs-mAR"/>
                             <constraint firstItem="7JV-3z-w06" firstAttribute="centerY" secondItem="3zb-fV-EVI" secondAttribute="centerY" id="mag-7j-pzI"/>
                             <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="Ucm-eY-HtP" secondAttribute="bottom" constant="100" id="nMM-p4-dUG"/>
                             <constraint firstAttribute="trailing" secondItem="dTU-47-Szb" secondAttribute="trailing" constant="15" id="ooX-xc-W9X"/>
@@ -96,6 +118,7 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="buyButton" destination="sSB-2p-W7Q" id="d2d-dg-YEH"/>
                         <outlet property="coinsLabel" destination="9RT-fW-efm" id="Nf4-Xg-iCU"/>
                         <outlet property="highscoreLabel" destination="7JV-3z-w06" id="RBP-bu-Jbd"/>
                     </connections>
