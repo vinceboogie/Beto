@@ -14,10 +14,13 @@ class GameScene: SKScene {
     let SquareSize: CGFloat = 100.0
     let gameLayer = SKNode()
     let boardLayer = SKNode()
-    let betSound = SKAction.playSoundFileNamed("Ka-Ching.wav", waitForCompletion: false)
-
+    let placeBetSound = SKAction.playSoundFileNamed("Chomp.wav", waitForCompletion: false)
+    let clearBetSound = SKAction.playSoundFileNamed("Scrape.wav", waitForCompletion: false)
+    let winSound = SKAction.playSoundFileNamed("Ka-Ching.wav", waitForCompletion: false)
+    let lostSound = SKAction.playSoundFileNamed("Error.wav", waitForCompletion: false)
     
-    var betHandler: ((Bet) -> ())?
+    var placeBetHandler: ((Bet) -> ())?
+    var clearBetsHandler: ((Bet) -> ())?
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
@@ -37,48 +40,35 @@ class GameScene: SKScene {
         
         addChild(gameLayer)
         
-        // DELETE: Adjust position?
         let layerPosition = CGPoint( x: -SquareSize * CGFloat(Columns) / 2, y: -SquareSize * 1.3)
 
         boardLayer.position = layerPosition
         gameLayer.addChild(boardLayer)
+        
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-
         let touch = touches.first!
         let location = touch.locationInNode(boardLayer)
             
         let (success, column, row) = convertPoint(location)
         
         if success {
-            if let square = board.squareAtColumn(column, row: row) {
-                square.bet++
-                
-                // DELETE: Create function for label update
-                runAction(betSound)
-                square.label!.hidden = false
-                square.label!.text = "\(square.bet)"
-
-            }
+            let square = board.squareAtColumn(column, row: row)
+            let bet = Bet(square: square, betValue: NSUserDefaults().betValue)
+            placeBetHandler!(bet)
         }
-        
     }
     
     func addSpritesForSquares(squares: Array2D<Square>) {
         for row in 0..<Rows {
             for column in 0..<Columns {
-                let sprite = SKSpriteNode(imageNamed: squares[column, row]!.squareColor.squareColor)
-                sprite.position = pointForColumn(squares[column, row]!.column, row: squares[column, row]!.row)
+                let square = board.squareAtColumn(column, row: row)
+            
+                let sprite = SKSpriteNode(imageNamed: square.color.squareSpriteName)
+                sprite.position = pointForColumn(column, row: row)
                 boardLayer.addChild(sprite)
-                squares[column, row]?.sprite = sprite
-                
-                let label = SKLabelNode()
-                label.text = "0"
-                label.hidden = true
-                sprite.addChild(label)
-                squares[column, row]?.label = label
-                
+                square.sprite = sprite
             }
         }
     }
@@ -93,6 +83,46 @@ class GameScene: SKScene {
             return (true, Int(point.x / SquareSize), Int(point.y / SquareSize))
         } else {
             return (false, 0, 0) // invalid location
+        }
+    }
+    
+    func animatePlaceBet(bet: Bet, completion: () -> ()) {
+        let square = bet.square
+        runAction(placeBetSound)
+        
+        let label = SKLabelNode()
+        label.text = "\(square.wager)"
+        
+        square.sprite?.removeAllChildren()
+        square.sprite?.addChild(label)
+    }
+    
+    func animateClearBet(board: Board, completion: () -> ()) {
+        
+        for row in 0..<Rows {
+            for column in 0..<Columns {
+                let square = board.squareAtColumn(column, row: row)
+                square.sprite?.removeAllChildren()
+            }
+        }
+    
+        runAction(clearBetSound)
+    }
+    
+    func animateWin(square: Square) {
+        runAction(winSound)
+    }
+    
+    func animateLost(square: Square) {
+        runAction(lostSound)
+        
+        let scaleAction = SKAction.scaleTo(0.1, duration: 0.3)
+        scaleAction.timingMode = .EaseOut
+        
+        if let children = square.sprite?.children {
+            for child in children {
+                child.runAction(SKAction.sequence([scaleAction, SKAction.removeFromParent()]))
+            }
         }
     }
 }

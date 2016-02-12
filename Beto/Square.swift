@@ -8,36 +8,35 @@
 
 import SpriteKit
 
-enum SquareColor: Int, CustomStringConvertible {
-    case Unknown = 0, Blue, Red, Green, Yellow, Cyan, Purple
+enum Color: Int {
+    case Blue, Red, Green, Yellow, Cyan, Purple
     
-    var squareColor: String {
-        let squareColors = ["Blue", "Red", "Green", "Yellow", "Cyan", "Purple"]
+    var color: String {
+        let colors = ["Blue", "Red", "Green", "Yellow", "Cyan", "Purple"]
         
-        return squareColors[rawValue - 1] + "Square"
+        return colors[rawValue]
     }
     
-    var description: String {
-        return squareColor
+    var squareSpriteName: String {
+        return color + "Square"
     }
     
 }
 
-class Square : CustomStringConvertible {
-    var bet = 0
+class Square: Equatable {
+    var wager = 0
     var column: Int
     var row: Int
-    var squareColor: SquareColor
+    var color: Color
     var sprite: SKSpriteNode?
-    var label: SKLabelNode?
 
-    var description: String {
-        return "type: \(squareColor) position: (\(column), \(row))"
-    }
-    
-    init(column: Int, row: Int, squareColor: SquareColor) {
+    init(column: Int, row: Int, color: Color) {
         self.column = column
         self.row = row
-        self.squareColor = squareColor
+        self.color = color
     }
+}
+
+func ==(lhs: Square, rhs: Square) -> Bool {
+    return lhs.row == rhs.row && lhs.column == rhs.column
 }

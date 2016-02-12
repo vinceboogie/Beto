@@ -26,6 +26,7 @@
 		B94F77971C645C7D00B3A78C /* Ka-Ching.wav in Resources */ = {isa = PBXBuildFile; fileRef = B94F77911C645C7D00B3A78C /* Ka-Ching.wav */; };
 		B94F77981C645C7D00B3A78C /* Mining by Moonlight.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B94F77921C645C7D00B3A78C /* Mining by Moonlight.mp3 */; };
 		B94F77991C645C7D00B3A78C /* Scrape.wav in Resources */ = {isa = PBXBuildFile; fileRef = B94F77931C645C7D00B3A78C /* Scrape.wav */; };
+		B98D000F1C6C7DC000EB1152 /* NSUserDefaults+Beto.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98D000E1C6C7DC000EB1152 /* NSUserDefaults+Beto.swift */; };
 		B9A3BA4C1C6470C00006400D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9A3BA4B1C6470C00006400D /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +73,7 @@
 		B94F77911C645C7D00B3A78C /* Ka-Ching.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Ka-Ching.wav"; sourceTree = "<group>"; };
 		B94F77921C645C7D00B3A78C /* Mining by Moonlight.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Mining by Moonlight.mp3"; sourceTree = "<group>"; };
 		B94F77931C645C7D00B3A78C /* Scrape.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Scrape.wav; sourceTree = "<group>"; };
+		B98D000E1C6C7DC000EB1152 /* NSUserDefaults+Beto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSUserDefaults+Beto.swift"; sourceTree = "<group>"; };
 		B9A3BA4B1C6470C00006400D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Sounds/Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -133,7 +135,6 @@
 				B94F77521C63FB7F00B3A78C /* Main.storyboard */,
 				B94F77571C63FB7F00B3A78C /* LaunchScreen.storyboard */,
 				B94F775A1C63FB7F00B3A78C /* Info.plist */,
-				B94F777E1C64165F00B3A78C /* UIColor+Beto.swift */,
 			);
 			path = Beto;
 			sourceTree = "<group>";
@@ -163,6 +164,8 @@
 				B94F77841C64254000B3A78C /* Array2D.swift */,
 				B94F77861C64265F00B3A78C /* Board.swift */,
 				B94F778B1C644AAA00B3A78C /* Bet.swift */,
+				B94F777E1C64165F00B3A78C /* UIColor+Beto.swift */,
+				B98D000E1C6C7DC000EB1152 /* NSUserDefaults+Beto.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -335,6 +338,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B94F77811C641CA600B3A78C /* Square.swift in Sources */,
+				B98D000F1C6C7DC000EB1152 /* NSUserDefaults+Beto.swift in Sources */,
 				B94F77851C64254000B3A78C /* Array2D.swift in Sources */,
 				B94F774F1C63FB7F00B3A78C /* GameScene.swift in Sources */,
 				B94F77511C63FB7F00B3A78C /* GameViewController.swift in Sources */,
