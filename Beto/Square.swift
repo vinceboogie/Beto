@@ -10,33 +10,45 @@ import SpriteKit
 
 enum Color: Int {
     case Blue, Red, Green, Yellow, Cyan, Purple
-    
+
     var color: String {
         let colors = ["Blue", "Red", "Green", "Yellow", "Cyan", "Purple"]
-        
+
         return colors[rawValue]
     }
-    
+
     var squareSpriteName: String {
         return color + "Square"
     }
-    
+
 }
 
-class Square: Equatable {
+class Square: ButtonNode {
     var wager = 0
-    var column: Int
-    var row: Int
     var color: Color
-    var sprite: SKSpriteNode?
-
-    init(column: Int, row: Int, color: Color) {
-        self.column = column
-        self.row = row
+    var label: SKLabelNode
+    
+    var placeBetHandler: ((Square) -> ())?
+    
+    init(color: Color, defaultButtonImage: String, activeButtonImage: String) {
         self.color = color
-    }
-}
+        
+        label = SKLabelNode(fontNamed: Constant.FontName)
+        label.text = "\(wager)"
+        label.hidden = true
+        
 
-func ==(lhs: Square, rhs: Square) -> Bool {
-    return lhs.row == rhs.row && lhs.column == rhs.column
+        super.init(defaultButtonImage: defaultButtonImage, activeButtonImage: activeButtonImage)
+        
+        addChild(label)
+        self.action = squarePressed
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func squarePressed() {
+        placeBetHandler!(self)
+    }
 }

@@ -1,0 +1,113 @@
+//
+//  GameHUD.swift
+//  Beto
+//
+//  Created by Jem on 2/25/16.
+//  Copyright © 2016 redgarage. All rights reserved.
+//
+
+import Foundation
+import SpriteKit
+
+class GameHUD {
+    let layer = SKNode()
+
+    let gameHUD: SKSpriteNode
+    let coinsNode: ButtonNode
+    let highscoreNode: ButtonNode
+    let menuButton: ButtonNode
+    let scene: OverlayScene
+    
+    let coinsLabel: SKLabelNode
+    let highscoreLabel: SKLabelNode
+    
+    init(scene: OverlayScene) {
+        self.scene = scene
+        
+        gameHUD = SKSpriteNode(imageNamed: "gameHUD")
+        gameHUD.size = CGSize(width: 320, height: 38)
+        
+        // Menu Node
+        menuButton = ButtonNode(defaultButtonImage: "menuButton", activeButtonImage: "menuButton_active")
+        menuButton.size = CGSize(width: 60, height: 25)
+        menuButton.position = CGPoint(x: (-gameHUD.size.width + menuButton.size.width + Constant.Margin) / 2 , y: 0)
+        
+        // Coins Node
+        coinsNode = ButtonNode(defaultButtonImage: "addCoinsButton")
+        coinsNode.size = CGSize(width: 100, height: 26)
+        coinsNode.position = CGPoint(x: (gameHUD.size.width - coinsNode.size.width) / 2 - Constant.Margin, y: 0)
+        
+        coinsLabel = SKLabelNode(text: "\(GameData.coins)")
+        coinsLabel.fontName = Constant.FontName
+        coinsLabel.fontSize = 14
+        coinsLabel.horizontalAlignmentMode = .Center
+        coinsLabel.verticalAlignmentMode = .Center
+        
+        // Highscore Node
+        highscoreNode = ButtonNode(defaultButtonImage: "highscoreButton")
+        highscoreNode.size = CGSize(width: 100, height: 26)
+        highscoreNode.position = CGPoint(x: coinsNode.position.x - (highscoreNode.size.width + Constant.Margin), y: 0)
+        
+        highscoreLabel = SKLabelNode(text: "\(GameData.highscore)")
+        highscoreLabel.fontName = Constant.FontName
+        highscoreLabel.fontSize = 14
+        highscoreLabel.horizontalAlignmentMode = .Center
+        highscoreLabel.verticalAlignmentMode = .Center
+    }
+
+    func createHUDLayer() -> SKNode {
+        gameHUD.position = CGPoint(x: 0, y: (ScreenSize.height - gameHUD.size.height) / 2)
+
+        // Add actions
+        menuButton.action = presentMenuScene
+        highscoreNode.action = presentAchievementsScene
+        coinsNode.action = addCoins
+        
+        // Add nodes to gameHUD
+        coinsNode.addChild(coinsLabel)
+        highscoreNode.addChild(highscoreLabel)
+        
+        gameHUD.addChild(menuButton)
+        gameHUD.addChild(highscoreNode)
+        gameHUD.addChild(coinsNode)
+        
+        layer.addChild(gameHUD)
+        
+        return layer
+    }
+    
+    func addCoins() {
+        // DELETE: Placeholder for actual function
+        GameData.coins += 20
+        coinsLabel.text = "\(GameData.coins)"
+        
+        if GameData.coins > GameData.highscore {
+            GameData.highscore = GameData.coins
+            highscoreLabel.text = "\(GameData.highscore)"
+
+            GameData.didUnlockCoin()
+        }
+        
+        GameData.saveGameData()
+    }
+    
+    func presentMenuScene() {
+//        let transition = SKTransition.flipVerticalWithDuration(0.4)
+//        let menuScene = MenuScene(size: scene.size)
+//        menuScene.scaleMode = .AspectFill
+//        
+//        scene.view?.presentScene(menuScene, transition: transition)
+        
+        scene.view?.window?.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func presentAchievementsScene() {
+        scene.view?.window?.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
+//        
+//        let transition = SKTransition.flipVerticalWithDuration(0.4)
+//        let achievementsScene = AchievementsScene(size: scene.size)
+//        achievementsScene.scaleMode = .AspectFill
+//        
+//        scene.view?.presentScene(achievementsScene, transition: transition)
+    }
+}
