@@ -30,6 +30,8 @@ class Board {
     let winSound = SKAction.playSoundFileNamed("Ka-Ching.wav", waitForCompletion: false)
     let lostSound = SKAction.playSoundFileNamed("Error.wav", waitForCompletion: false)
     
+    var playHandler: (()->())?
+    
     init(scene: OverlayScene) {
         self.scene = scene
         
@@ -128,7 +130,7 @@ class Board {
     
     func playButtonPressed() {
         // DELETE: NEED TO CHANGE THIS SECTION WHEN 3D BLOCKS ARE INTEGRATED
-        
+        /*
         // clear selected squares
         selectedSquares = []
         
@@ -195,6 +197,12 @@ class Board {
         }
         
         GameData.saveGameData()
+        */
+        let moveDown = SKAction.moveToY(-1000, duration: 1)
+        layer.runAction(moveDown)
+        
+        playHandler!()
+        
     }
 
     func clearButtonPressed() {
