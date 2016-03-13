@@ -37,17 +37,9 @@ class MenuScene: SKScene {
         startGameButton.action = presentGameScene
         addChild(startGameButton)
         
-        //        background.yScale = -1.0 //added to flip the background upside down
-        //        startGameButton.yScale = -1.0 //added to flip the button upside down
-        
     }
     
     func presentGameScene() {
-//        let transition = SKTransition.flipVerticalWithDuration(0.4)
-//        let gameScene = GameScene(size: self.size)
-//        gameScene.scaleMode = .AspectFill
-//
-//        view!.presentScene(gameScene, transition: transition)
 
         self.view!.window!.rootViewController!.performSegueWithIdentifier("showGameScene", sender: self)
     }

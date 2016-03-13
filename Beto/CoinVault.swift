@@ -57,7 +57,7 @@ class CoinVault {
                 coins[column, row] = coin
                 vault.addChild(coin)
                 
-                index++
+                index+=1
             }
         }
     }
