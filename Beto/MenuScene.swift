@@ -15,6 +15,9 @@ class MenuScene: SKScene {
     let winSound = SKAction.playSoundFileNamed("Ka-Ching.wav", waitForCompletion: false)
     let lostSound = SKAction.playSoundFileNamed("Error.wav", waitForCompletion: false)
     
+    var startGameButton: StartGameNode?
+
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
@@ -33,6 +36,10 @@ class MenuScene: SKScene {
         startGameButton.size = CGSize(width: 86, height: 103)
         startGameButton.action = presentGameScene
         addChild(startGameButton)
+        
+        //        background.yScale = -1.0 //added to flip the background upside down
+        //        startGameButton.yScale = -1.0 //added to flip the button upside down
+        
     }
     
     func presentGameScene() {

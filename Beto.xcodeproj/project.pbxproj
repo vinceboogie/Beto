@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00543AFB1C92ACCC006C3B52 /* Cube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00543AFA1C92ACCC006C3B52 /* Cube.swift */; };
+		00543AFF1C92AD25006C3B52 /* GeometryNodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00543AFE1C92AD25006C3B52 /* GeometryNodes.swift */; };
+		00543B011C92AD44006C3B52 /* Boundary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00543B001C92AD44006C3B52 /* Boundary.swift */; };
 		B93465A21C7D2B32008CDA26 /* GameDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93465A11C7D2B32008CDA26 /* GameDataManager.swift */; };
 		B938AF1B1C90C8B800176C3E /* AchievementsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B938AF1A1C90C8B800176C3E /* AchievementsScene.swift */; };
 		B9450B0B1C7FB51F00AB5AE3 /* GameHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9450B0A1C7FB51F00AB5AE3 /* GameHUD.swift */; };
@@ -59,6 +62,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		00543AFA1C92ACCC006C3B52 /* Cube.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cube.swift; sourceTree = "<group>"; };
+		00543AFE1C92AD25006C3B52 /* GeometryNodes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryNodes.swift; sourceTree = "<group>"; };
+		00543B001C92AD44006C3B52 /* Boundary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Boundary.swift; sourceTree = "<group>"; };
 		B93465A11C7D2B32008CDA26 /* GameDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameDataManager.swift; sourceTree = "<group>"; };
 		B938AF1A1C90C8B800176C3E /* AchievementsScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AchievementsScene.swift; sourceTree = "<group>"; };
 		B9450B0A1C7FB51F00AB5AE3 /* GameHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameHUD.swift; sourceTree = "<group>"; };
@@ -195,6 +201,9 @@
 				B950AF9B1C8A50EE00A74054 /* Coin.swift */,
 				B9C7E2C31C8B88A300879014 /* CoinVault.swift */,
 				B947AB9F1C9124FF00720E2F /* Rewards.swift */,
+				00543AFA1C92ACCC006C3B52 /* Cube.swift */,
+				00543AFE1C92AD25006C3B52 /* GeometryNodes.swift */,
+				00543B001C92AD44006C3B52 /* Boundary.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -386,8 +395,11 @@
 				B94F77871C64265F00B3A78C /* Board.swift in Sources */,
 				B982DFC91C9266ED00D89ED5 /* MenuViewController.swift in Sources */,
 				B9F1D2781C7599DB00E242F7 /* StartGameNode.swift in Sources */,
+				00543B011C92AD44006C3B52 /* Boundary.swift in Sources */,
 				B93465A21C7D2B32008CDA26 /* GameDataManager.swift in Sources */,
 				B94F774B1C63FB7F00B3A78C /* AppDelegate.swift in Sources */,
+				00543AFF1C92AD25006C3B52 /* GeometryNodes.swift in Sources */,
+				00543AFB1C92ACCC006C3B52 /* Cube.swift in Sources */,
 				B9F1D27A1C75AE6700E242F7 /* ButtonNode.swift in Sources */,
 				B9C7E2C41C8B88A300879014 /* CoinVault.swift in Sources */,
 				B982DFCB1C926A3100D89ED5 /* OverlayScene.swift in Sources */,
