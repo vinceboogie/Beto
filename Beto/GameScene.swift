@@ -38,55 +38,59 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
         return (speed < 0.01 && angularSpeed < 0.5)
     }
     
-    func getUpSide(node: SCNNode) {
-        //            var rotation = node.rotation; //SCNVector4
-        //            var invRotation = rotation; invRotation.w = -invRotation.w; //SCNVector4
-        //
-        //            var up = SCNVector3Make(0,1,0);
-        //
-        //            //rotate up by invRotation
-        //            var transform = SCNMatrix4MakeRotation(invRotation.w, invRotation.x, invRotation.y, invRotation.z); //SCNMatrix4
-        //            var glkTransform = SCNMatrix4ToGLKMatrix4(transform); //GLKMatrix4
-        //            var glkUp = SCNVector3ToGLKVector3(up); //GLKVector3
-        //            var rotatedUp = GLKMatrix4MultiplyVector3(glkTransform, glkUp); //GLKVector3
-        //
-        //            //build box normals (arbitrary order here)
-        //            var boxNormals =    [ [[0,0,1]],
-        //                                  [[1,0,0]],
-        //                                  [[0,0,-1]],
-        //                                  [[-1,0,0]],
-        //                                  [[0,1,0]],
-        //                                  [[0,-1,0]] ] //GLKVector3
-        //
-        //        var bestIndex: Int = 0;
-        //        var maxDot: Float = -1;
+    func getUpSide(node: SCNNode) -> String {
         
+        let rotation = node.presentationNode.rotation; //SCNVector4
+        var invRotation = rotation; invRotation.w = -invRotation.w; //SCNVector4
         
-        //This section is not working - need to understand whats going on here
-        //            for  i in 0...5 {
-        //                var dot: Float = GLKVector3DotProduct(boxNormals[i], rotatedUp);
-        //                if(dot > maxDot){
-        //                    maxDot = dot;
-        //                    bestIndex = i;
-        //                }
-        //            }
-        //
-        //            return bestIndex;
+        let up = SCNVector3Make(0,1,0);
+        
+        //rotate up by invRotation
+        let transform = SCNMatrix4MakeRotation(invRotation.w, invRotation.x, invRotation.y, invRotation.z); //SCNMatrix4
+        let glkTransform = SCNMatrix4ToGLKMatrix4(transform); //GLKMatrix4
+        let glkUp = SCNVector3ToGLKVector3(up); //GLKVector3
+        let rotatedUp = GLKMatrix4MultiplyVector3(glkTransform, glkUp); //GLKVector3
+        
+        //build box normals (arbitrary order here)
+        
+        var boxNormals: [GLKVector3] = [GLKVector3(v: (0,0,1)),
+            GLKVector3(v: (1,0,0)),
+            GLKVector3(v: (0,0,-1)),
+            GLKVector3(v: (-1,0,0)),
+            GLKVector3(v: (0,1,0)),
+            GLKVector3(v: (0,-1,0))]
+        
+        var bestIndex: Int = 0;
+        var maxDot: Float = -1;
+        
+        for  i in 0...5 {
+            let dot: Float = GLKVector3DotProduct( boxNormals[i] , rotatedUp ) ;
+            
+            if(dot > maxDot){
+                maxDot = dot;
+                bestIndex = i;
+            }
+        }
+        
+        var colorUp = ["Green", "Red", "Yellow", "Blue","Purple", "Cyan"]
+        
+        print("NodeName=\(node.name) ; FaceUp=\(colorUp[bestIndex]) ") //; Rot=\(node.rotation) ; PresNd.Rot=\(node.presentationNode.rotation)")
+        return colorUp[bestIndex];
     }
     
     
     func resetCubes() {
+        
         // DELETE: Need to add cubes back to the cubesNode.
-    
         var count = 0.0
     
         for node in geometryNodes.cubesNode.childNodes {
             node.physicsBody?.velocity = SCNVector3(0,0,0)
             node.physicsBody?.angularVelocity = SCNVector4(0,0,0,0)
             node.position = SCNVector3((-0.25*count+0.17),0.15,1.15)
-            node.rotation = SCNVector4(Float(arc4random()%20),Float(arc4random()%20),Float(arc4random()%20),Float(arc4random()%20))
-                
-            count++
+            node.eulerAngles = SCNVector3Make(Float(M_PI/2 * Double(arc4random()%4)), Float(M_PI/2 * Double(arc4random()%4)),Float(M_PI/2 * Double(arc4random()%4)))
+
+            count+=1
         }
     }
     
@@ -94,12 +98,15 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
         if shouldCheckMovement {
             for node in geometryNodes.cubesNode.childNodes {
                 if node.physicsBody!.isResting || nearlyAtRest(node) {
+                    getUpSide(node)
                     node.removeFromParentNode()
                 }
             }
             
             if geometryNodes.cubesNode.childNodes.count == 0 {
                 shouldCheckMovement = false
+                print("ALL 3 Cubes are gone")
+                
             }
         }
     }

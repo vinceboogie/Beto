@@ -19,7 +19,7 @@ class Cube {
         cube.position = SCNVector3(position, 0.15, 1.15)
         
         cube.geometry = SCNBox (width: cubeSize, height: cubeSize, length: cubeSize, chamferRadius: cubeSize/5)
-        cube.rotation = SCNVector4(Float(arc4random() % 20), Float(arc4random() % 20), Float(arc4random() % 20), Float(arc4random() % 20))
+        cube.eulerAngles = SCNVector3Make(Float(M_PI/2 * Double(arc4random()%4)), Float(M_PI/2 * Double(arc4random()%4)),Float(M_PI/2 * Double(arc4random()%4)))
         cube.categoryBitMask = 2
         
         let blueSide = SCNMaterial()

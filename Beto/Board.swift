@@ -71,7 +71,7 @@ class Board {
                 square.position = pointForColumn(column, row: row)
         
                 squares[column, row] = square
-                index++
+                index+=1
             }
         }
     }
@@ -129,7 +129,10 @@ class Board {
     }
     
     func playButtonPressed() {
-        // DELETE: NEED TO CHANGE THIS SECTION WHEN 3D BLOCKS ARE INTEGRATED
+        
+        // TODO DELETE: NEED TO CHANGE THIS SECTION WHEN 3D BLOCKS ARE INTEGRATED
+        // Still need to handle winning algorithm
+        
         /*
         // clear selected squares
         selectedSquares = []
@@ -198,10 +201,18 @@ class Board {
         
         GameData.saveGameData()
         */
+        
         let moveDown = SKAction.moveToY(-1000, duration: 1)
         layer.runAction(moveDown)
         
         playHandler!()
+        
+    }
+    
+    func cubesAtRest() {
+        
+        let moveUp = SKAction.moveToY(1000, duration: 1)
+        layer.runAction(moveUp)
         
     }
 

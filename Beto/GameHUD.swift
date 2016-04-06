@@ -92,22 +92,10 @@ class GameHUD {
     }
     
     func presentMenuScene() {
-//        let transition = SKTransition.flipVerticalWithDuration(0.4)
-//        let menuScene = MenuScene(size: scene.size)
-//        menuScene.scaleMode = .AspectFill
-//        
-//        scene.view?.presentScene(menuScene, transition: transition)
-        
         scene.view?.window?.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func presentAchievementsScene() {
         scene.view?.window?.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
-//        
-//        let transition = SKTransition.flipVerticalWithDuration(0.4)
-//        let achievementsScene = AchievementsScene(size: scene.size)
-//        achievementsScene.scaleMode = .AspectFill
-//        
-//        scene.view?.presentScene(achievementsScene, transition: transition)
     }
 }

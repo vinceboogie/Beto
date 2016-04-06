@@ -101,7 +101,7 @@ class GameViewController: UIViewController {
                     node.physicsBody!.applyForce(SCNVector3(translationX/17,(-translationY/130)+9,(translationY/5)-11), impulse: true) //MIN (0,17,-31) MAX (0,21,-65)
                 }
                 
-                touchCount++
+                touchCount+=1
             }
         } else if touchCount == 2 {
             // DELETE: test
@@ -112,11 +112,14 @@ class GameViewController: UIViewController {
     func handleTap(gesture:UITapGestureRecognizer) {
         touchCount = 0
         
-        for node in gameScene.rootNode.childNodes {
-            gameScene.getUpSide(node)
-            gameScene.resetCubes()
-        }
+        //TODO: PR#4 Currently does nothing, but will be used for game resets
+        print("Screen tapped from game scene")
+        gameScene.resetCubes()
+
+//        for node in gameScene.rootNode.childNodes {
+//            gameScene.getUpSide(node)
+//        }
+//        self.view.gestureRecognizers = []
         
-        self.view.gestureRecognizers = []
     }
 }
