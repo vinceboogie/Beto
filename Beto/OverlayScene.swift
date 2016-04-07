@@ -38,9 +38,7 @@ class OverlayScene: SKScene {
         addChild(boardLayer)
     }
     
-    func showUnlockedCoin() {
-        print("hello")
-        
+    func showUnlockedCoin() {        
         let reward = Rewards()
         addChild(reward.createRewardsLayer())
     }

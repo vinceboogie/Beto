@@ -19,6 +19,10 @@ class GeometryNodes {
     let cubesNode = SCNNode()
     
     let boundary = Boundary()
+
+    let cube1 = Cube(name: "cube1", position: -0.2)
+    let cube2 = Cube(name: "cube2", position: 0.0)
+    let cube3 = Cube(name: "cube3", position: 0.2)
     
     init () {
         let floorMaterial = SCNMaterial()
@@ -34,14 +38,9 @@ class GeometryNodes {
         cameraNode.camera = SCNCamera()
         cameraNode.position = SCNVector3Make(0, 3.7, 0)
         cameraNode.eulerAngles = SCNVector3Make(Float(-M_PI/2), 0, 0)
+                
+        addCubesTo(cubesNode)
         
-        let cube1 = Cube(name: "cube1", position: -0.2)
-        let cube2 = Cube(name: "cube2", position: 0.0)
-        let cube3 = Cube(name: "cube3", position: 0.2)
-        
-        cube1.addNodesTo(cubesNode)
-        cube2.addNodesTo(cubesNode)
-        cube3.addNodesTo(cubesNode)
     }
     
     func addNodesTo(parentNode:SCNNode) {
@@ -50,5 +49,12 @@ class GeometryNodes {
         parentNode.addChildNode(cubesNode)
      
         boundary.addNodesTo(parentNode)
+    }
+    
+    func addCubesTo(parentNode:SCNNode) {
+        cube1.addNodesTo(parentNode)
+        cube2.addNodesTo(parentNode)
+        cube3.addNodesTo(parentNode)
+        
     }
 }

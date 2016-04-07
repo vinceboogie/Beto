@@ -25,6 +25,10 @@ class Board {
     private let layer = SKNode()
     private var selectedSquares: [Square] = []
 
+    
+    private var winningSquares = [Square]()
+
+    
     let placeBetSound = SKAction.playSoundFileNamed("Chomp.wav", waitForCompletion: false)
     let clearBetSound = SKAction.playSoundFileNamed("Scrape.wav", waitForCompletion: false)
     let winSound = SKAction.playSoundFileNamed("Ka-Ching.wav", waitForCompletion: false)
@@ -115,7 +119,7 @@ class Board {
             }
             
             square.wager += GameData.defaultBetValue
-
+            
             let coins = GameData.coins - getWagers()
             scene.gameHUD.coinsLabel.text = "\(coins)"
             scene.runAction(placeBetSound)
@@ -130,25 +134,26 @@ class Board {
     
     func playButtonPressed() {
         
-        // TODO DELETE: NEED TO CHANGE THIS SECTION WHEN 3D BLOCKS ARE INTEGRATED
-        // Still need to handle winning algorithm
-        
-        /*
-        // clear selected squares
-        selectedSquares = []
-        
-        var winningSquares = [Square]()
+        if getWagers() > 0 {
 
-        for _ in 0...2 {
-            let row = Int(arc4random_uniform(2))
-            let column = Int(arc4random_uniform(3))
+            let hideBoard = SKAction.moveBy(CGVector(dx: 0,dy: -1000), duration: 0.5)
+            layer.runAction(hideBoard)
+            
+            playHandler!()
+            selectedSquares = []
+        }
+    }
+    
+    func getWiningSquares(row: Int, column: Int) {
+        let square = squareAtColumn(column, row: row)
+        winningSquares.append(square)
+        print("\(square.color) - \(square.wager)")
+    }
+    
+    func handleResults() {
 
-            let square = squareAtColumn(column, row: row)
-
-            winningSquares.append(square)
-
-            print("\(square.color) - \(square.wager)")
-
+        for square in winningSquares {
+            
             if square.wager > 0 {
                 // re-select winning squares
                 if !selectedSquares.contains(square) {
@@ -165,16 +170,16 @@ class Board {
                 scene.gameHUD.highscoreLabel.text = "\(GameData.highscore)"
             }
         }
-
+        
         // Remove wagers from winning squares
         for row in 0..<Rows {
             for column in 0..<Columns {
                 let square = squareAtColumn(column, row: row)
-
+                
                 if square.wager > 0 && !winningSquares.contains(square) {
                     
                     GameData.coins -= square.wager
-
+                    
                     scene.runAction(lostSound)
                     
                     let scaleAction = SKAction.scaleTo(0.0, duration: 0.3)
@@ -195,25 +200,18 @@ class Board {
         if GameData.coins > GameData.highscore {
             GameData.highscore = GameData.coins
             scene.gameHUD.highscoreLabel.text = "\(GameData.highscore)"
-
+            
             GameData.didUnlockCoin()
         }
         
         GameData.saveGameData()
-        */
-        
-        let moveDown = SKAction.moveToY(-1000, duration: 1)
-        layer.runAction(moveDown)
-        
-        playHandler!()
-        
+        winningSquares = []
     }
     
-    func cubesAtRest() {
-        
-        let moveUp = SKAction.moveToY(1000, duration: 1)
-        layer.runAction(moveUp)
-        
+    
+    func showBoard() {
+        let moveBoardUp = SKAction.moveTo(CGPoint(x: 0,y: 0), duration: 0.25)
+        layer.runAction(moveBoardUp)
     }
 
     func clearButtonPressed() {
