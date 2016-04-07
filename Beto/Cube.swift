@@ -13,6 +13,7 @@ import SceneKit
 class Cube {
     let cube = SCNNode()
     let cubeSize: CGFloat = 0.33
+    var group: Int = 1
     
     init(name: String, position: CGFloat) {
         cube.name = name
@@ -20,7 +21,6 @@ class Cube {
         
         cube.geometry = SCNBox (width: cubeSize, height: cubeSize, length: cubeSize, chamferRadius: cubeSize/5)
         cube.eulerAngles = SCNVector3Make(Float(M_PI/2 * Double(arc4random()%4)), Float(M_PI/2 * Double(arc4random()%4)),Float(M_PI/2 * Double(arc4random()%4)))
-        cube.categoryBitMask = 2
         
         let blueSide = SCNMaterial()
         blueSide.diffuse.contents = UIImage(named: "BlueCubeFace")
@@ -45,8 +45,9 @@ class Cube {
         let cyanSide = SCNMaterial()
         cyanSide.diffuse.contents = UIImage(named: "CyanCubeFace")
         cyanSide.locksAmbientWithDiffuse = false
-        
-        cube.geometry!.materials = [greenSide, redSide, yellowSide, blueSide, purpleSide, cyanSide]
+                
+        cube.geometry!.materials = [yellowSide, cyanSide, purpleSide, blueSide, redSide, greenSide]
+
         cube.physicsBody = SCNPhysicsBody.dynamicBody()
         cube.physicsBody?.affectedByGravity = true
         cube.physicsBody?.mass = CGFloat(10)

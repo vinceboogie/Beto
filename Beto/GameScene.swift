@@ -11,6 +11,9 @@ import SceneKit
 class GameScene: SCNScene, SCNSceneRendererDelegate {
     var geometryNodes = GeometryNodes()
     var shouldCheckMovement = false
+    var winningSquares = [String]()
+
+    var cubeRestHandler: (()->())?
     
     override init() {
         super.init()
@@ -72,9 +75,9 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
             }
         }
         
-        var colorUp = ["Green", "Red", "Yellow", "Blue","Purple", "Cyan"]
+        var colorUp = ["Yellow", "Cyan", "Purple", "Blue","Red", "Green"]
         
-        print("NodeName=\(node.name) ; FaceUp=\(colorUp[bestIndex]) ") //; Rot=\(node.rotation) ; PresNd.Rot=\(node.presentationNode.rotation)")
+        print("NodeName=\(node.name) ; FaceUp=\(colorUp[bestIndex])")
         return colorUp[bestIndex];
     }
     
@@ -96,18 +99,20 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
     
     func renderer(renderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
         if shouldCheckMovement {
+            
+            
             for node in geometryNodes.cubesNode.childNodes {
                 if node.physicsBody!.isResting || nearlyAtRest(node) {
-                    getUpSide(node)
+                    winningSquares.append(getUpSide(node))
                     node.removeFromParentNode()
+                    print("winningSquares = \(winningSquares)")
                 }
             }
-            
-            if geometryNodes.cubesNode.childNodes.count == 0 {
-                shouldCheckMovement = false
-                print("ALL 3 Cubes are gone")
-                
-            }
+        }
+        
+        if geometryNodes.cubesNode.childNodes.count == 0 {
+            shouldCheckMovement = false
+            cubeRestHandler!()
         }
     }
 }
