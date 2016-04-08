@@ -20,9 +20,7 @@ class GeometryNodes {
     
     let boundary = Boundary()
 
-    let cube1 = Cube(name: "cube1", position: -0.2)
-    let cube2 = Cube(name: "cube2", position: 0.0)
-    let cube3 = Cube(name: "cube3", position: 0.2)
+
     
     init () {
         let floorMaterial = SCNMaterial()
@@ -52,6 +50,9 @@ class GeometryNodes {
     }
     
     func addCubesTo(parentNode:SCNNode) {
+        let cube1 = Cube(name: "cube1", position: -0.2)
+        let cube2 = Cube(name: "cube2", position: 0.0)
+        let cube3 = Cube(name: "cube3", position: 0.2)
         cube1.addNodesTo(parentNode)
         cube2.addNodesTo(parentNode)
         cube3.addNodesTo(parentNode)

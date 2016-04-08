@@ -9,6 +9,11 @@
 import SceneKit
 
 class GameScene: SCNScene, SCNSceneRendererDelegate {
+    
+    var didNotRunYet1 = true //dirty - TODO: Delete
+    var didNotRunYet2 = true //dirty - TODO: Delete
+    var didNotRunYet3 = true //dirty - TODO: Delete
+    
     var geometryNodes = GeometryNodes()
     var shouldCheckMovement = false
     var winningSquares = [String]()
@@ -38,7 +43,7 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
         
         let angularSpeed = sqrtf(x*x+y*y+z*z)
 
-        return (speed < 0.01 && angularSpeed < 0.5)
+        return (speed < 0.001 || angularSpeed < 0.9)
     }
     
     func getUpSide(node: SCNNode) -> String {
@@ -84,7 +89,6 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
     
     func resetCubes() {
         
-        // DELETE: Need to add cubes back to the cubesNode.
         var count = 0.0
     
         for node in geometryNodes.cubesNode.childNodes {
@@ -92,27 +96,66 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
             node.physicsBody?.angularVelocity = SCNVector4(0,0,0,0)
             node.position = SCNVector3((-0.25*count+0.17),0.15,1.15)
             node.eulerAngles = SCNVector3Make(Float(M_PI/2 * Double(arc4random()%4)), Float(M_PI/2 * Double(arc4random()%4)),Float(M_PI/2 * Double(arc4random()%4)))
-
             count+=1
         }
     }
     
     func renderer(renderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
+
+        
+        
         if shouldCheckMovement {
             
             
             for node in geometryNodes.cubesNode.childNodes {
                 if node.physicsBody!.isResting || nearlyAtRest(node) {
-                    winningSquares.append(getUpSide(node))
-                    node.removeFromParentNode()
-                    print("winningSquares = \(winningSquares)")
+                    
+                    var actions = [SCNAction]()
+                    actions.append(SCNAction.fadeOutWithDuration(0.75))
+                    actions.append(SCNAction.removeFromParentNode())
+                    let sequence = SCNAction.sequence(actions)
+                    
+                    //TODO: Need to display text of side up or wagers
+
+                    if node.name == "cube1" && didNotRunYet1 {
+                        node.runAction(sequence)
+                        self.winningSquares.append(self.getUpSide(node))
+                        cubeRestHandler!()
+                        didNotRunYet1 = false
+                    } else if node.name == "cube2" && didNotRunYet2 {
+                        node.runAction(sequence)
+                        self.winningSquares.append(self.getUpSide(node))
+                        cubeRestHandler!()
+                        didNotRunYet2 = false
+                    } else if node.name == "cube3" && didNotRunYet3 {
+                        node.runAction(sequence)
+                        self.winningSquares.append(self.getUpSide(node))
+                        cubeRestHandler!()
+                        didNotRunYet3 = false
+                    }
                 }
             }
         }
         
-        if geometryNodes.cubesNode.childNodes.count == 0 {
+        if winningSquares.count == 3 {
             shouldCheckMovement = false
-            cubeRestHandler!()
         }
+        
+        if geometryNodes.cubesNode.childNodes.count == 0 {
+            print("all 3 cubes are gone")
+            didNotRunYet1 = true
+            didNotRunYet2 = true
+            didNotRunYet3 = true
+        }
+        
+    }
+    
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
     }
 }
