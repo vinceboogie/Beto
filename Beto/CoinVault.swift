@@ -35,7 +35,7 @@ class CoinVault {
         
         closeButton = ButtonNode(defaultButtonImage: "closeButton")
         // DELETE: Change position to dynamic values
-        closeButton.position = CGPoint(x: 144, y: 74)
+        closeButton.position = CGPoint(x: 140, y: 74)
         
         var index = 0
         
@@ -47,15 +47,21 @@ class CoinVault {
                     unlocked = true
                 }
                 
+                let coinHolder = SKSpriteNode(imageNamed: "coinHolder")
+                coinHolder.size = CGSize(width: 42, height: 42)
+                coinHolder.position = pointForColumn(column, row: row)
+                
                 let coin = Coin(value: BetValues[index], unlocked: unlocked)
                 // DELETE: Because of atlas. Not sure why it has to be this way
-                coin.defaultButton.size = CGSize(width: 40, height: 40)
-                coin.activeButton.size = CGSize(width: 40, height: 40)
-                coin.position = pointForColumn(column, row: row)
+                coin.defaultButton.size = CGSize(width: 38, height: 39)
+                coin.activeButton.size = CGSize(width: 38, height: 39)
+                coin.position = CGPoint(x: 1, y: -1)
                 coin.coinSelectedHandler = handleCoinSelected
                 
                 coins[column, row] = coin
-                vault.addChild(coin)
+                
+                coinHolder.addChild(coin)
+                vault.addChild(coinHolder)
                 
                 index+=1
             }

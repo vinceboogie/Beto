@@ -11,17 +11,16 @@ import SpriteKit
 
 class GameHUD {
     let layer = SKNode()
-
+    
+    let scene: SKScene
     let gameHUD: SKSpriteNode
+    let menuButton: ButtonNode
     let coinsNode: ButtonNode
     let highscoreNode: ButtonNode
-    let menuButton: ButtonNode
-    let scene: OverlayScene
-    
     let coinsLabel: SKLabelNode
     let highscoreLabel: SKLabelNode
     
-    init(scene: OverlayScene) {
+    init(scene: SKScene) {
         self.scene = scene
         
         gameHUD = SKSpriteNode(imageNamed: "gameHUD")
@@ -33,8 +32,8 @@ class GameHUD {
         menuButton.position = CGPoint(x: (-gameHUD.size.width + menuButton.size.width + Constant.Margin) / 2 , y: 0)
         
         // Coins Node
-        coinsNode = ButtonNode(defaultButtonImage: "addCoinsButton")
-        coinsNode.size = CGSize(width: 100, height: 26)
+        coinsNode = ButtonNode(defaultButtonImage: "buyCoinsButton")
+        coinsNode.size = CGSize(width: 100, height: 25)
         coinsNode.position = CGPoint(x: (gameHUD.size.width - coinsNode.size.width) / 2 - Constant.Margin, y: 0)
         
         coinsLabel = SKLabelNode(text: "\(GameData.coins)")
@@ -45,7 +44,7 @@ class GameHUD {
         
         // Highscore Node
         highscoreNode = ButtonNode(defaultButtonImage: "highscoreButton")
-        highscoreNode.size = CGSize(width: 100, height: 26)
+        highscoreNode.size = CGSize(width: 100, height: 25)
         highscoreNode.position = CGPoint(x: coinsNode.position.x - (highscoreNode.size.width + Constant.Margin), y: 0)
         
         highscoreLabel = SKLabelNode(text: "\(GameData.highscore)")
@@ -55,13 +54,13 @@ class GameHUD {
         highscoreLabel.verticalAlignmentMode = .Center
     }
 
-    func createHUDLayer() -> SKNode {
+    func createLayer() -> SKNode {
         gameHUD.position = CGPoint(x: 0, y: (ScreenSize.height - gameHUD.size.height) / 2)
 
         // Add actions
         menuButton.action = presentMenuScene
-        highscoreNode.action = presentAchievementsScene
-        coinsNode.action = addCoins
+        highscoreNode.action = displayAchievements
+        coinsNode.action = displayStore
         
         // Add nodes to gameHUD
         coinsNode.addChild(coinsLabel)
@@ -76,8 +75,21 @@ class GameHUD {
         return layer
     }
     
-    func addCoins() {
-        // DELETE: Placeholder for actual function
+    func presentMenuScene() {
+        let transition = SKTransition.flipVerticalWithDuration(0.4)
+        let menuScene = MenuScene(size: scene.size)
+        menuScene.scaleMode = .AspectFill
+        
+        scene.view!.presentScene(menuScene, transition: transition)
+    }
+    
+    func displayStore() {
+        let store = Store()
+        let layer = store.createLayer()
+
+        scene.addChild(layer)
+        
+        // DELETE: Placeholder for In-App Purchases
         GameData.coins += 20
         coinsLabel.text = "\(GameData.coins)"
         
@@ -91,11 +103,10 @@ class GameHUD {
         GameData.saveGameData()
     }
     
-    func presentMenuScene() {
-        scene.view?.window?.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func presentAchievementsScene() {
-        scene.view?.window?.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
+    func displayAchievements() {
+        let achievements = Achievements()
+        let layer = achievements.createLayer()
+        
+        scene.addChild(layer)
     }
 }
