@@ -13,8 +13,6 @@ import SpriteKit
 
 class GameViewController: UIViewController {
     
-    var didNotRunYet = true
-    
     var gameScene: GameScene! // SCNScene
 
     var panGesture = UIPanGestureRecognizer.self()
@@ -100,60 +98,54 @@ class GameViewController: UIViewController {
 
     func cubeRestHandler() {
         
-        if didNotRunYet {
+//        if didNotRunYet {
             
-            touchCount = 0
+            var row = Int()
+            var column = Int()
             
-            overlayScene.board.showBoard()
-            self.view.gestureRecognizers = []
-            
-            for winningColor in gameScene.winningSquares {
-                
-                var row = Int()
-                var column = Int()
-                
-                if winningColor == "Yellow" {
-                    row = 1
-                    column = 0
-                } else if winningColor == "Cyan" {
-                    row = 1
-                    column = 1
-                } else if winningColor == "Purple" {
-                    row = 1
-                    column = 2
-                } else if winningColor == "Blue" {
-                    row = 0
-                    column = 0
-                } else if winningColor == "Red" {
-                    row = 0
-                    column = 1
-                } else if winningColor == "Green" {
-                    row = 0
-                    column = 2
-                }
-                
-                overlayScene.board.getWiningSquares(row, column: column)
-                
+            if gameScene.winningSquares.last == "Yellow" {
+                row = 1
+                column = 0
+            } else if gameScene.winningSquares.last == "Cyan" {
+                row = 1
+                column = 1
+            } else if gameScene.winningSquares.last == "Purple" {
+                row = 1
+                column = 2
+            } else if gameScene.winningSquares.last == "Blue" {
+                row = 0
+                column = 0
+            } else if gameScene.winningSquares.last == "Red" {
+                row = 0
+                column = 1
+            } else if gameScene.winningSquares.last == "Green" {
+                row = 0
+                column = 2
             }
+            overlayScene.board.getWiningSquares(row, column: column)
+
+            
             overlayScene.board.handleResults()
             
             
-            let triggerTime = (Int64(NSEC_PER_SEC) * 1)
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, triggerTime), dispatch_get_main_queue(), { () -> Void in
-                self.delayCubeRest()
-            })
-            //Note: triggerTime = 1000000000 (i.e. 1sec x 10^9)
-            //Note: DISPATCH_TIME_NOW = 0
-            
-            didNotRunYet = false
+            if gameScene.winningSquares.count == 3 {
+
+                touchCount = 0
+                
+                overlayScene.board.showBoard()
+                self.view.gestureRecognizers = []
+                
+                let triggerTime = (Int64(NSEC_PER_SEC) * 1) //Note: Delay needed for cubes to be removed first
+                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, triggerTime), dispatch_get_main_queue(), { () -> Void in
+                    self.delayCubeRest()
+                })
         }
-        
     }
     
     func delayCubeRest() {
         self.gameScene.geometryNodes.addCubesTo(self.gameScene.geometryNodes.cubesNode)
         self.gameScene.resetCubes()
-        didNotRunYet = true
     }
     
     func delay(delay:Double, closure:()->()) {
@@ -166,6 +158,6 @@ class GameViewController: UIViewController {
     }
     
     func handleTap(gesture:UITapGestureRecognizer) {
-        print("Screen Tapped")
+        //TODO: Cancel gesture
     }
 }

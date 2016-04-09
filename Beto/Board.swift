@@ -24,9 +24,8 @@ class Board {
     
     private let layer = SKNode()
     private var selectedSquares: [Square] = []
-
     
-    private var winningSquares = [Square]()
+    var winningSquares = [Square]()
 
     
     let placeBetSound = SKAction.playSoundFileNamed("Chomp.wav", waitForCompletion: false)
@@ -110,6 +109,20 @@ class Board {
         
         if !selectedSquares.contains(square) && selectedSquares.count >= 3 {
             scene.runAction(lostSound)
+            
+            let testNode = SKLabelNode(text: "Select up to 3 colors!")
+            testNode.fontSize = 30
+            testNode.color = SKColor.blueColor()
+            testNode.colorBlendFactor = 1
+            testNode.fontName = "Helvetica-Bold"
+            testNode.blendMode = SKBlendMode.Multiply
+            testNode.colorBlendFactor = 0.6
+            testNode.position = CGPoint(x: (0), y: (boardNode.size.height) / 2 + Constant.Margin)
+            boardNode.addChild(testNode)
+            
+            let fade = SKAction.fadeOutWithDuration(1.0)
+            testNode.runAction(fade)
+            
             return
         }
         
@@ -129,6 +142,22 @@ class Board {
         }
         else {
             scene.runAction(lostSound)
+            
+            let testNode = SKLabelNode(text: "Not enough coins!")
+            testNode.fontSize = 30
+            testNode.color = SKColor.blueColor()
+            testNode.colorBlendFactor = 1
+            testNode.fontName = "Helvetica-Bold"
+            testNode.blendMode = SKBlendMode.Multiply
+            testNode.colorBlendFactor = 0.6
+            testNode.position = CGPoint(x: (0), y: (boardNode.size.height) / 2 + Constant.Margin)
+            boardNode.addChild(testNode)
+            
+            let fade = SKAction.fadeOutWithDuration(1.0)
+            testNode.runAction(fade)
+            
+            
+            
         }
     }
     
@@ -152,60 +181,64 @@ class Board {
     
     func handleResults() {
 
-        for square in winningSquares {
+        
+        //Reselect , Add winning to total , udpate labels
+        
+        if winningSquares.last?.wager > 0 {
+            // re-select winning squares
+            if !selectedSquares.contains(winningSquares.last!) {
+                print(selectedSquares.count)
+                selectedSquares.append(winningSquares.last!)
+                print("added winning selectedsquare")
+                print(selectedSquares.count)
+                
+            }
+            // add winnings
+            GameData.coins += winningSquares.last!.wager
+            scene.runAction(winSound)
             
-            if square.wager > 0 {
-                // re-select winning squares
-                if !selectedSquares.contains(square) {
-                    selectedSquares.append(square)
+            // Update labels
+            let coins = GameData.coins - getWagers()
+            scene.gameHUD.coinsLabel.text = "\(coins)"
+            scene.gameHUD.highscoreLabel.text = "\(GameData.highscore)" //TODO: Ask Jem if OK to delete?
+        }
+    
+        if winningSquares.count == 3 {
+
+            // Remove wagers from winning squares
+            for row in 0..<Rows {
+                for column in 0..<Columns {
+                    let square = squareAtColumn(column, row: row)
+                    
+                    if square.wager > 0 && !winningSquares.contains(square) {
+                        
+                        GameData.coins -= square.wager
+                        
+                        scene.runAction(lostSound)
+                        
+                        let scaleAction = SKAction.scaleTo(0.0, duration: 0.3)
+                        scaleAction.timingMode = .EaseOut
+                        
+                        square.label.runAction(scaleAction)
+                        
+                        square.label.hidden = true
+                        let restore = SKAction.scaleTo(1.0, duration: 0.3)
+                        square.label.runAction(restore)
+                        
+                        square.wager = 0
+                    }
                 }
-                
-                GameData.coins += square.wager
-                
-                scene.runAction(winSound)
-                
-                // Update labels
-                let coins = GameData.coins - getWagers()
-                scene.gameHUD.coinsLabel.text = "\(coins)"
+            }
+            
+            // Check if there's a new highscore
+            if GameData.coins > GameData.highscore {
+                GameData.highscore = GameData.coins
                 scene.gameHUD.highscoreLabel.text = "\(GameData.highscore)"
+                GameData.didUnlockCoin()
             }
+            GameData.saveGameData()
+            winningSquares = []
         }
-        
-        // Remove wagers from winning squares
-        for row in 0..<Rows {
-            for column in 0..<Columns {
-                let square = squareAtColumn(column, row: row)
-                
-                if square.wager > 0 && !winningSquares.contains(square) {
-                    
-                    GameData.coins -= square.wager
-                    
-                    scene.runAction(lostSound)
-                    
-                    let scaleAction = SKAction.scaleTo(0.0, duration: 0.3)
-                    scaleAction.timingMode = .EaseOut
-                    
-                    square.label.runAction(scaleAction)
-                    
-                    square.label.hidden = true
-                    let restore = SKAction.scaleTo(1.0, duration: 0.3)
-                    square.label.runAction(restore)
-                    
-                    square.wager = 0
-                }
-            }
-        }
-        
-        // Check if there's a new highscore
-        if GameData.coins > GameData.highscore {
-            GameData.highscore = GameData.coins
-            scene.gameHUD.highscoreLabel.text = "\(GameData.highscore)"
-            
-            GameData.didUnlockCoin()
-        }
-        
-        GameData.saveGameData()
-        winningSquares = []
     }
     
     
