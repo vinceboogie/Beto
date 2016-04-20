@@ -6,13 +6,10 @@
 //  Copyright (c) 2016 redgarage. All rights reserved.
 //
 
-import UIKit
-import QuartzCore
 import SceneKit
 import SpriteKit
 
 class GameViewController: UIViewController {
-    
     var gameScene: GameScene!
     var boardScene: BoardScene!
 
@@ -45,23 +42,17 @@ class GameViewController: UIViewController {
         gameScene = GameScene()
         gameScene.cubeRestHandler = handleCubeRest
         gameScene.endGameplayHandler = handleEndGameplay
-
+        
         // Configure the view
         let sceneView = self.view as! SCNView
         sceneView.scene = gameScene
         sceneView.delegate = gameScene
         sceneView.playing = true
-        sceneView.backgroundColor = UIColor.blackColor()
+        sceneView.backgroundColor = UIColor.clearColor()
         sceneView.antialiasingMode = SCNAntialiasingMode.Multisampling4X
         
-        // Configure the background
-        let sceneMaterials = SCNMaterial()
-        sceneMaterials.diffuse.contents = boardScene
-        sceneMaterials.locksAmbientWithDiffuse = false
-        sceneMaterials.doubleSided = true
-        gameScene.geometryNodes.floorNode.geometry!.materials = [sceneMaterials]
-        gameScene.geometryNodes.floorNode.scale.y = -1
-
+        gameScene.background.contents = boardScene
+        
         // Configure the gestures
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(GameViewController.handlePan(_:)))
         view.addGestureRecognizer(panGesture)
@@ -74,9 +65,6 @@ class GameViewController: UIViewController {
         
         // Subtract wagers from GameData
         GameData.coins -= boardScene.board.getWagers()
-        
-        // DELETE 
-        print(GameData.coins)
     }
     
     func handlePan(gesture:UIPanGestureRecognizer) {
@@ -98,46 +86,19 @@ class GameViewController: UIViewController {
     }
 
     func handleCubeRest(winningColor: Color) {
-        
-        // DELETE
-        print("handling \(winningColor.name)")
-        
-        boardScene.board.payout(winningColor)
-        
-        // DELETE 
-        print("finished payout")
+        dispatch_async(dispatch_get_main_queue()) {
+            self.boardScene.board.payout(winningColor)
+        }
     }
     
     func handleEndGameplay() {
-        //DELETE
-        print("about to resolve")
-        
-        boardScene.board.resolveWagers()
-        
-        touchCount = 0
-        self.view.gestureRecognizers = []
-        
-        let triggerTime = (Int64(NSEC_PER_SEC) * 1) //Note: Delay needed for cubes to be removed first
-        
-        print("resolved complete")
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, triggerTime), dispatch_get_main_queue(),
-                       { () -> Void in
-                        self.view.window?.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
-        })
-        
-        
-        print("dismissed controller")
-        
-        //            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, triggerTime * 2), dispatch_get_main_queue(),
-        //                { () -> Void in
-        //                    self.gameScene.geometryNodes.addCubesTo(self.gameScene.geometryNodes.cubesNode)
-        //                    self.gameScene.resetCubes()
-        //                })
-        
-        //NOTE: Use to crash from dismissing the viewController too early, but now crashes after 5 throws ("Message from debugger: Terminated due to memory issue")
+        dispatch_async(dispatch_get_main_queue()) {
+            self.boardScene.board.resolveWagers()
+            self.boardScene.board.toggleReplayButton()
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
-    
+ 
     func handleTap(gesture:UITapGestureRecognizer) {
         //TODO: Cancel gesture
     }

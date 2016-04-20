@@ -6,70 +6,80 @@
 //  Copyright © 2016 redgarage. All rights reserved.
 //
 
-import Foundation
 import SpriteKit
 
 class GameHUD {
-    let layer = SKNode()
+    private let layer: SKNode
+    private let scene: SKScene
+    private let gameHUD: SKSpriteNode
+    private let menuButton: ButtonNode
+    private let coinsNode: ButtonNode
+    private let highscoreNode: ButtonNode
     
-    let scene: SKScene
-    let gameHUD: SKSpriteNode
-    let menuButton: ButtonNode
-    let coinsNode: ButtonNode
-    let highscoreNode: ButtonNode
     let coinsLabel: SKLabelNode
     let highscoreLabel: SKLabelNode
     
     init(scene: SKScene) {
         self.scene = scene
         
+        layer = SKNode()
+        layer.setScale(Constant.ScaleFactor)
+        
         gameHUD = SKSpriteNode(imageNamed: "gameHUD")
         gameHUD.size = CGSize(width: 320, height: 38)
         
-        // Menu Node
         menuButton = ButtonNode(defaultButtonImage: "menuButton", activeButtonImage: "menuButton_active")
         menuButton.size = CGSize(width: 60, height: 25)
-        menuButton.position = CGPoint(x: (-gameHUD.size.width + menuButton.size.width + Constant.Margin) / 2 , y: 0)
         
-        // Coins Node
         coinsNode = ButtonNode(defaultButtonImage: "buyCoinsButton")
         coinsNode.size = CGSize(width: 100, height: 25)
-        coinsNode.position = CGPoint(x: (gameHUD.size.width - coinsNode.size.width) / 2 - Constant.Margin, y: 0)
         
         coinsLabel = SKLabelNode(text: "\(GameData.coins)")
-        coinsLabel.fontName = Constant.FontName
+        coinsLabel.fontName = Constant.FontNameCondensed
         coinsLabel.fontSize = 14
         coinsLabel.horizontalAlignmentMode = .Center
         coinsLabel.verticalAlignmentMode = .Center
         
-        // Highscore Node
         highscoreNode = ButtonNode(defaultButtonImage: "highscoreButton")
         highscoreNode.size = CGSize(width: 100, height: 25)
-        highscoreNode.position = CGPoint(x: coinsNode.position.x - (highscoreNode.size.width + Constant.Margin), y: 0)
         
         highscoreLabel = SKLabelNode(text: "\(GameData.highscore)")
-        highscoreLabel.fontName = Constant.FontName
+        highscoreLabel.fontName = Constant.FontNameCondensed
         highscoreLabel.fontSize = 14
         highscoreLabel.horizontalAlignmentMode = .Center
         highscoreLabel.verticalAlignmentMode = .Center
     }
 
     func createLayer() -> SKNode {
-        gameHUD.position = CGPoint(x: 0, y: (ScreenSize.height - gameHUD.size.height) / 2)
-
-        // Add actions
+        // Assign actions
         menuButton.action = presentMenuScene
         highscoreNode.action = displayAchievements
         coinsNode.action = displayStore
         
-        // Add nodes to gameHUD
+        // Designate positions
+        var gameHUDPosition: CGFloat = 266.0
+        let dynamicPosition = (ScreenSize.height - gameHUD.size.height) / 2
+        
+        // Custom position for iPhone 4 (Screen size: 320 x 480)
+        if dynamicPosition < gameHUDPosition {
+            gameHUDPosition = dynamicPosition
+        }
+        
+        gameHUD.position = CGPoint(x: 0, y: gameHUDPosition)
+        menuButton.position = CGPoint(x: (-gameHUD.size.width + menuButton.size.width + Constant.Margin) / 2 , y: 0)
+        coinsNode.position = CGPoint(x: (gameHUD.size.width - coinsNode.size.width) / 2 - Constant.Margin, y: 0)
+        highscoreNode.position = CGPoint(x: coinsNode.position.x - (highscoreNode.size.width + Constant.Margin), y: 0)
+        
+        // Add labels to corresponding nodes
         coinsNode.addChild(coinsLabel)
         highscoreNode.addChild(highscoreLabel)
         
+        // Add nodes to gameHUD
         gameHUD.addChild(menuButton)
         gameHUD.addChild(highscoreNode)
         gameHUD.addChild(coinsNode)
         
+        // Add gameHUD to the layer node
         layer.addChild(gameHUD)
         
         return layer

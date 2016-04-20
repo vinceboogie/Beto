@@ -9,7 +9,6 @@
 import SpriteKit
 
 class MenuScene: SKScene {
-            
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
@@ -17,11 +16,13 @@ class MenuScene: SKScene {
     override init(size: CGSize) {
         super.init(size: size)
         
+        let layer = SKNode()
+        layer.setScale(Constant.ScaleFactor)
+        
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         let background = SKSpriteNode(imageNamed: "menuBackground")
         background.size = self.frame.size
-        addChild(background)
         
         // Start Game Button
         let startGameButton = ButtonNode(defaultButtonImage: "startGame", activeButtonImage: "startGame_active")
@@ -35,27 +36,31 @@ class MenuScene: SKScene {
         let wobble = SKAction.repeatActionForever(cycle)
         startGameButton.runAction(wobble, withKey: "wobble")
         
-        addChild(startGameButton)
-        
         // Customize Button
         let customizeButton = ButtonNode(defaultButtonImage: "customizeButton")
         customizeButton.size = CGSize(width: 44, height: 45)
         customizeButton.position = CGPoint(x: -60, y: -100)
-        addChild(customizeButton)
         
         // Achievements Button
         let achievementsButton = ButtonNode(defaultButtonImage: "achievementsButton")
         achievementsButton.size = CGSize(width: 44, height: 45)
         achievementsButton.position = CGPoint(x: 0, y: -100)
         achievementsButton.action = displayAchievements
-        addChild(achievementsButton)
         
         // Settings Button
         let settingsButton = ButtonNode(defaultButtonImage: "settingsButton")
         settingsButton.size = CGSize(width: 44, height: 45)
         settingsButton.position = CGPoint(x: 60, y: -100)
         settingsButton.action = displaySettings
-        addChild(settingsButton)
+
+        // Add nodes
+        layer.addChild(startGameButton)
+        layer.addChild(customizeButton)
+        layer.addChild(achievementsButton)
+        layer.addChild(settingsButton)
+        
+        addChild(background)
+        addChild(layer)
     }
     
     func presentBoardScene() {
@@ -75,8 +80,8 @@ class MenuScene: SKScene {
     
     func displaySettings() {
         let settings = Settings()
-        
         let layer = settings.createLayer()
+        
         addChild(layer)
     }
 }

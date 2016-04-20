@@ -6,49 +6,26 @@
 //  Copyright © 2016 redgarage. All rights reserved.
 //
 
-import UIKit
-import QuartzCore
 import SceneKit
 
 class Cube {
     let cube = SCNNode()
     let cubeSize: CGFloat = 0.33
-    var group: Int = 1
     
-    init(name: String, position: CGFloat) {
+    // DELETE: What is this for?
+//    var group: Int = 1
+    
+    // DELETE: Is name needed? Is it referred to?
+
+    init(name: String, position: CGFloat, cubeMaterials: [SCNMaterial]) {
         cube.name = name
         cube.position = SCNVector3(position, 0.15, 1.15)
         
-        cube.geometry = SCNBox (width: cubeSize, height: cubeSize, length: cubeSize, chamferRadius: cubeSize/5)
+        cube.geometry = SCNBox (width: cubeSize, height: cubeSize, length: cubeSize, chamferRadius: cubeSize/6)
         cube.eulerAngles = SCNVector3Make(Float(M_PI/2 * Double(arc4random()%4)), Float(M_PI/2 * Double(arc4random()%4)),Float(M_PI/2 * Double(arc4random()%4)))
         cube.opacity = 1.0
-        
-        let blueSide = SCNMaterial()
-        blueSide.diffuse.contents = UIImage(named: "BlueCubeFace")
-        blueSide.locksAmbientWithDiffuse = false
-        
-        let redSide = SCNMaterial()
-        redSide.diffuse.contents = UIImage(named: "RedCubeFace")
-        redSide.locksAmbientWithDiffuse = false
-        
-        let yellowSide = SCNMaterial()
-        yellowSide.diffuse.contents = UIImage(named: "YellowCubeFace")
-        yellowSide.locksAmbientWithDiffuse = false
-        
-        let greenSide = SCNMaterial()
-        greenSide.diffuse.contents = UIImage(named: "GreenCubeFace")
-        greenSide.locksAmbientWithDiffuse = false
-        
-        let purpleSide = SCNMaterial()
-        purpleSide.diffuse.contents = UIImage(named: "PurpleCubeFace")
-        purpleSide.locksAmbientWithDiffuse = false
-        
-        let cyanSide = SCNMaterial()
-        cyanSide.diffuse.contents = UIImage(named: "CyanCubeFace")
-        cyanSide.locksAmbientWithDiffuse = false
-                
-        cube.geometry!.materials = [yellowSide, cyanSide, purpleSide, blueSide, redSide, greenSide]
-
+        cube.geometry!.materials = cubeMaterials
+    
         cube.physicsBody = SCNPhysicsBody.dynamicBody()
         cube.physicsBody?.affectedByGravity = true
         cube.physicsBody?.mass = CGFloat(10)

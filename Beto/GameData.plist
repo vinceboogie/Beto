@@ -7,9 +7,9 @@
 	<key>defaultBetValue</key>
 	<integer>1</integer>
 	<key>coins</key>
-	<integer>25</integer>
+	<integer>50</integer>
 	<key>highscore</key>
-	<integer>25</integer>
+	<integer>50</integer>
 	<key>XInitializerItem</key>
 	<string>DoNotEverChangeMe</string>
 </dict>

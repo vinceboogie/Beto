@@ -9,8 +9,8 @@
 import SpriteKit
 
 class ButtonNode: SKNode {
-    var defaultButton: SKSpriteNode
-    var activeButton: SKSpriteNode
+    let defaultButton: SKSpriteNode
+    let activeButton: SKSpriteNode
     var action: () -> Void
     
     var size: CGSize {

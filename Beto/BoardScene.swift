@@ -6,7 +6,6 @@
 //  Copyright © 2016 redgarage. All rights reserved.
 //
 
-import Foundation
 import SpriteKit
 
 class BoardScene: SKScene {
@@ -14,35 +13,36 @@ class BoardScene: SKScene {
     var gameHUD: GameHUD!
     var boardLayer: SKNode!
     var gameHUDLayer: SKNode!
-    
     var backgroundMusic = SKAudioNode(fileNamed: "Mining by Moonlight.mp3")
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
     
     override init(size: CGSize) {
         super.init(size: size)
-        
+                
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         GameData.showUnlockedCoinHandler = showUnlockedCoin
         
         let background = SKSpriteNode(imageNamed: "background")
         background.size = self.frame.size
-        addChild(background)
         
         board = Board(scene: self)
-        boardLayer = board.createBoardLayer()
+        boardLayer = board.createLayer()
         
         gameHUD = GameHUD(scene: self)
         gameHUDLayer = gameHUD.createLayer()
-        
+
+        addChild(background)
         addChild(gameHUDLayer)
         addChild(boardLayer)
     }
     
     override func didMoveToView(view: SKView) {
+        board.toggleReplayButton()
+        
         if !Audio.musicMuted {
             runAction(SKAction.waitForDuration(0.5), completion: {
                 self.addChild(self.backgroundMusic)
@@ -52,7 +52,7 @@ class BoardScene: SKScene {
     
     func showUnlockedCoin() {
         let reward = Rewards()
-        addChild(reward.createRewardsLayer())
+        addChild(reward.createLayer())
     }
     
     func presentGameScene() {

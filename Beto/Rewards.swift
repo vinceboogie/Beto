@@ -6,38 +6,34 @@
 //  Copyright © 2016 redgarage. All rights reserved.
 //
 
-import Foundation
 import SpriteKit
 
 class Rewards {
-    
-    let rows = 2
-    let columns = 4
-    
-    private let layer = SKNode()
-    
-    var background: SKSpriteNode
-    var container: SKSpriteNode
-    var coin: SKSpriteNode
-    var claimButton: ButtonNode
+    private let layer: SKNode
+    private let background: SKSpriteNode
+    private let container: SKSpriteNode
+    private let coin: SKSpriteNode
+    private let claimButton: ButtonNode
         
     init() {
+        layer = SKNode()
+        layer.setScale(Constant.ScaleFactor)
+        
         background = SKSpriteNode(color: .blackColor(), size: CGSize(width: ScreenSize.width, height: ScreenSize.height))
         background.alpha = 0.0
         
         container = SKSpriteNode(imageNamed: "coinUnlocked")
         container.size = CGSize(width: 304, height: 225)
-        container.position = CGPoint(x: 0, y: ScreenSize.height)
         
         coin = SKSpriteNode(imageNamed: "coin\(BetValues[GameData.unlockedCoins])")
-        coin.position = CGPoint(x:0, y: 20)
+        coin.size = CGSize(width: 38, height: 39)
  
-        claimButton = ButtonNode(defaultButtonImage: "claimButton", activeButtonImage: "claimButton_active")
-        // DELETE: change position and action to correct code
-        claimButton.position = CGPoint(x: 0, y: -80)
+        claimButton = ButtonNode(defaultButtonImage: "claimButton")
+        claimButton.size = CGSize(width: 110, height: 40)
     }
     
-    func createRewardsLayer() -> SKNode {
+    func createLayer() -> SKNode {
+        // Run SKActions
         let fadeIn = SKAction.fadeAlphaTo(0.6, duration: 0.3)
         background.runAction(fadeIn)
         
@@ -46,8 +42,15 @@ class Rewards {
         let actions = SKAction.sequence([dropDown, compress, compress.reversedAction()])
         container.runAction(actions)
         
+        // Assign actions
         claimButton.action = close
         
+        // Designate positions
+        container.position = CGPoint(x: 0, y: ScreenSize.height)
+        coin.position = CGPoint(x: 0, y: 20)
+        claimButton.position = CGPoint(x: 0, y: -80)
+        
+        // Add nodes
         container.addChild(coin)
         container.addChild(claimButton)
         

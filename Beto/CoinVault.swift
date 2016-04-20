@@ -6,16 +6,11 @@
 //  Copyright © 2016 redgarage. All rights reserved.
 //
 
-import Foundation
 import SpriteKit
 
 class CoinVault {
-    
-    let rows = 2
-    let columns = 4
-    
-    private let layer = SKNode()
-    private var coins: Array2D<Coin>
+    private let layer: SKNode
+    private var coins: [Coin]
     
     var background: SKSpriteNode
     var vault: SKSpriteNode
@@ -24,51 +19,29 @@ class CoinVault {
     var changeBetValueHandler: (() -> ())?
     
     init() {
-        coins = Array2D<Coin>(columns: columns, rows: rows)
+        coins = []
+        layer = SKNode()
+        layer.setScale(Constant.ScaleFactor)
         
         background = SKSpriteNode(color: .blackColor(), size: CGSize(width: ScreenSize.width, height: ScreenSize.height))
         background.alpha = 0.0
         
         vault = SKSpriteNode(imageNamed: "coinVault")
         vault.size = CGSize(width: 304, height: 174)
-        vault.position = CGPoint(x: 0, y: ScreenSize.height)
         
         closeButton = ButtonNode(defaultButtonImage: "closeButton")
-        // DELETE: Change position to dynamic values
-        closeButton.position = CGPoint(x: 140, y: 74)
-        
-        var index = 0
-        
-        for row in 0..<rows  {
-            for column in 0..<columns {
-                var unlocked = false
-                
-                if index <= GameData.unlockedCoins {
-                    unlocked = true
-                }
-                
-                let coinHolder = SKSpriteNode(imageNamed: "coinHolder")
-                coinHolder.size = CGSize(width: 42, height: 42)
-                coinHolder.position = pointForColumn(column, row: row)
-                
-                let coin = Coin(value: BetValues[index], unlocked: unlocked)
-                // DELETE: Because of atlas. Not sure why it has to be this way
-                coin.defaultButton.size = CGSize(width: 38, height: 39)
-                coin.activeButton.size = CGSize(width: 38, height: 39)
-                coin.position = CGPoint(x: 1, y: -1)
-                coin.coinSelectedHandler = handleCoinSelected
-                
-                coins[column, row] = coin
-                
-                coinHolder.addChild(coin)
-                vault.addChild(coinHolder)
-                
-                index+=1
-            }
+        closeButton.size = CGSize(width: 44, height: 45)
+    
+        for (index, betValue) in BetValues.enumerate() {
+            let coin = Coin(value: betValue, unlocked: index <= GameData.unlockedCoins)
+            coin.size = CGSize(width: 38, height: 39)
+            
+            coins.append(coin)
         }
     }
 
-    func createVaultLayer() -> SKNode {
+    func createLayer() -> SKNode {
+        // Run SKActions
         let fadeIn = SKAction.fadeAlphaTo(0.6, duration: 0.3)
         background.runAction(fadeIn)
         
@@ -77,9 +50,29 @@ class CoinVault {
         let actions = SKAction.sequence([dropDown, compress, compress.reversedAction()])
         vault.runAction(actions)
     
+        // Assign actions
         closeButton.action = close
         
+        // Designate positions
+        vault.position = CGPoint(x: 0, y: ScreenSize.height)
+        closeButton.position = CGPoint(x: 140, y: 74)
+
+        // Add nodes
         vault.addChild(closeButton)
+        
+        // Add coins to coinVault
+        for coin in coins {
+            let coinHolder = SKSpriteNode(imageNamed: "coinHolder")
+            coinHolder.size = CGSize(width: 42, height: 42)
+            coinHolder.position = pointForPosition(coins.indexOf(coin)!)
+            
+            coin.coinSelectedHandler = handleCoinSelected
+            coin.position = CGPoint(x: 1, y: -1)
+            
+            coinHolder.addChild(coin)
+            vault.addChild(coinHolder)
+        }
+    
         layer.addChild(background)
         layer.addChild(vault)
         
@@ -106,8 +99,19 @@ class CoinVault {
         changeBetValueHandler!()
         close()
     }
-    
-    func pointForColumn(column: Int, row: Int) -> CGPoint {
+        
+    func pointForPosition(position: Int) -> CGPoint {
+        var column = 0
+        var row = 0
+        
+        // Position coins based on a 2x4 grid
+        if position <= 3 {
+            column = position
+        } else  {
+            row = 1
+            column = position - 4
+        }
+        
         let squareMargin: CGFloat = 10
         let squareWithMargin = 40 + squareMargin
         
@@ -115,6 +119,5 @@ class CoinVault {
         let offsetY = (squareWithMargin / 2) - (squareWithMargin * CGFloat(row)) - 10
         
         return CGPoint(x: offsetX, y: offsetY)
-        
     }
 }

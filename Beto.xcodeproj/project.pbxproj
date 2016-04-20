@@ -27,7 +27,7 @@
 		00543B011C92AD44006C3B52 /* Boundary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00543B001C92AD44006C3B52 /* Boundary.swift */; };
 		B93465A21C7D2B32008CDA26 /* GameDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93465A11C7D2B32008CDA26 /* GameDataManager.swift */; };
 		B9450B0B1C7FB51F00AB5AE3 /* GameHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9450B0A1C7FB51F00AB5AE3 /* GameHUD.swift */; };
-		B9450B131C804A0200AB5AE3 /* Squares.atlas in Resources */ = {isa = PBXBuildFile; fileRef = B9450B121C804A0100AB5AE3 /* Squares.atlas */; };
+		B946FD6B1CCC20DB005E984E /* Achievements.plist in Resources */ = {isa = PBXBuildFile; fileRef = B946FD6A1CCC20DB005E984E /* Achievements.plist */; };
 		B947ABA01C9124FF00720E2F /* Rewards.swift in Sources */ = {isa = PBXBuildFile; fileRef = B947AB9F1C9124FF00720E2F /* Rewards.swift */; };
 		B94F774B1C63FB7F00B3A78C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94F774A1C63FB7F00B3A78C /* AppDelegate.swift */; };
 		B94F774F1C63FB7F00B3A78C /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94F774E1C63FB7F00B3A78C /* GameScene.swift */; };
@@ -37,7 +37,6 @@
 		B94F77641C63FB7F00B3A78C /* BetoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94F77631C63FB7F00B3A78C /* BetoTests.swift */; };
 		B94F776F1C63FB7F00B3A78C /* BetoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94F776E1C63FB7F00B3A78C /* BetoUITests.swift */; };
 		B94F77811C641CA600B3A78C /* Square.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94F77801C641CA600B3A78C /* Square.swift */; };
-		B94F77851C64254000B3A78C /* Array2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94F77841C64254000B3A78C /* Array2D.swift */; };
 		B94F77871C64265F00B3A78C /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94F77861C64265F00B3A78C /* Board.swift */; };
 		B94F77941C645C7D00B3A78C /* Chomp.wav in Resources */ = {isa = PBXBuildFile; fileRef = B94F778E1C645C7D00B3A78C /* Chomp.wav */; };
 		B94F77951C645C7D00B3A78C /* Drip.wav in Resources */ = {isa = PBXBuildFile; fileRef = B94F778F1C645C7D00B3A78C /* Drip.wav */; };
@@ -53,7 +52,6 @@
 		B982E8FC1CB8DC5B00700002 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = B982E8FB1CB8DC5B00700002 /* Store.swift */; };
 		B988697B1CB99CFE0017577D /* BoardScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B988697A1CB99CFE0017577D /* BoardScene.swift */; };
 		B9A3BA4C1C6470C00006400D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9A3BA4B1C6470C00006400D /* Assets.xcassets */; };
-		B9B17AB31CC0FC610000B528 /* Coins.atlas in Resources */ = {isa = PBXBuildFile; fileRef = B9B17AB21CC0FC610000B528 /* Coins.atlas */; };
 		B9C7E2C41C8B88A300879014 /* CoinVault.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C7E2C31C8B88A300879014 /* CoinVault.swift */; };
 		B9CDB80F1CB8593C00BC8A57 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9CDB80E1CB8593C00BC8A57 /* Settings.swift */; };
 		B9CDB8111CB86D1100BC8A57 /* Achievements.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9CDB8101CB86D1100BC8A57 /* Achievements.swift */; };
@@ -105,7 +103,7 @@
 		00543B001C92AD44006C3B52 /* Boundary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Boundary.swift; sourceTree = "<group>"; };
 		B93465A11C7D2B32008CDA26 /* GameDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameDataManager.swift; sourceTree = "<group>"; };
 		B9450B0A1C7FB51F00AB5AE3 /* GameHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameHUD.swift; sourceTree = "<group>"; };
-		B9450B121C804A0100AB5AE3 /* Squares.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Squares.atlas; sourceTree = "<group>"; };
+		B946FD6A1CCC20DB005E984E /* Achievements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Achievements.plist; sourceTree = "<group>"; };
 		B947AB9F1C9124FF00720E2F /* Rewards.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rewards.swift; sourceTree = "<group>"; };
 		B94F77471C63FB7F00B3A78C /* Beto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Beto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B94F774A1C63FB7F00B3A78C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -121,7 +119,6 @@
 		B94F776E1C63FB7F00B3A78C /* BetoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetoUITests.swift; sourceTree = "<group>"; };
 		B94F77701C63FB7F00B3A78C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B94F77801C641CA600B3A78C /* Square.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Square.swift; sourceTree = "<group>"; };
-		B94F77841C64254000B3A78C /* Array2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array2D.swift; sourceTree = "<group>"; };
 		B94F77861C64265F00B3A78C /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		B94F778E1C645C7D00B3A78C /* Chomp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Chomp.wav; sourceTree = "<group>"; };
 		B94F778F1C645C7D00B3A78C /* Drip.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Drip.wav; sourceTree = "<group>"; };
@@ -137,7 +134,6 @@
 		B982E8FB1CB8DC5B00700002 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		B988697A1CB99CFE0017577D /* BoardScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardScene.swift; sourceTree = "<group>"; };
 		B9A3BA4B1C6470C00006400D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Sounds/Assets.xcassets; sourceTree = "<group>"; };
-		B9B17AB21CC0FC610000B528 /* Coins.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Coins.atlas; sourceTree = "<group>"; };
 		B9C7E2C31C8B88A300879014 /* CoinVault.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoinVault.swift; sourceTree = "<group>"; };
 		B9CDB80E1CB8593C00BC8A57 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		B9CDB8101CB86D1100BC8A57 /* Achievements.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Achievements.swift; sourceTree = "<group>"; };
@@ -252,12 +248,11 @@
 				B94F778A1C642D2100B3A78C /* Controller */,
 				B94F778D1C645C7D00B3A78C /* Sounds */,
 				B9A3BA4B1C6470C00006400D /* Assets.xcassets */,
-				B9B17AB21CC0FC610000B528 /* Coins.atlas */,
-				B9450B121C804A0100AB5AE3 /* Squares.atlas */,
 				B94F77521C63FB7F00B3A78C /* Main.storyboard */,
 				B94F77571C63FB7F00B3A78C /* LaunchScreen.storyboard */,
 				B94F775A1C63FB7F00B3A78C /* Info.plist */,
 				B981110E1C7D650600E118EC /* GameData.plist */,
+				B946FD6A1CCC20DB005E984E /* Achievements.plist */,
 			);
 			path = Beto;
 			sourceTree = "<group>";
@@ -284,7 +279,6 @@
 			isa = PBXGroup;
 			children = (
 				B9450B0A1C7FB51F00AB5AE3 /* GameHUD.swift */,
-				B94F77841C64254000B3A78C /* Array2D.swift */,
 				B94F77861C64265F00B3A78C /* Board.swift */,
 				B94F77801C641CA600B3A78C /* Square.swift */,
 				B9F1D2791C75AE6700E242F7 /* ButtonNode.swift */,
@@ -441,14 +435,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9450B131C804A0200AB5AE3 /* Squares.atlas in Resources */,
 				B981110F1C7D650600E118EC /* GameData.plist in Resources */,
-				B9B17AB31CC0FC610000B528 /* Coins.atlas in Resources */,
 				002742151CC1BDC600E47F1F /* README.txt in Resources */,
 				B94F77991C645C7D00B3A78C /* Scrape.wav in Resources */,
 				B94F77981C645C7D00B3A78C /* Mining by Moonlight.mp3 in Resources */,
 				B94F77951C645C7D00B3A78C /* Drip.wav in Resources */,
 				B9A3BA4C1C6470C00006400D /* Assets.xcassets in Resources */,
+				B946FD6B1CCC20DB005E984E /* Achievements.plist in Resources */,
 				B94F77971C645C7D00B3A78C /* Ka-Ching.wav in Resources */,
 				B94F77961C645C7D00B3A78C /* Error.wav in Resources */,
 				B94F77591C63FB7F00B3A78C /* LaunchScreen.storyboard in Resources */,
@@ -484,7 +477,6 @@
 				B973BA101CBE3A0700FF90F9 /* AudioManager.swift in Sources */,
 				B9F1D2701C7571BC00E242F7 /* MenuScene.swift in Sources */,
 				B969C0FC1C7E8B2A00B24CDB /* Constant.swift in Sources */,
-				B94F77851C64254000B3A78C /* Array2D.swift in Sources */,
 				B9450B0B1C7FB51F00AB5AE3 /* GameHUD.swift in Sources */,
 				B94F774F1C63FB7F00B3A78C /* GameScene.swift in Sources */,
 				B950AF9C1C8A50EE00A74054 /* Coin.swift in Sources */,
