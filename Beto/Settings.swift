@@ -6,26 +6,24 @@
 //  Copyright © 2016 redgarage. All rights reserved.
 //
 
-import Foundation
 import SpriteKit
 
 class Settings {
-    private let layer = SKNode()
-    
-    var background: SKSpriteNode
-    var soundButton: ButtonNode
-    var musicButton: ButtonNode
-    var closeButton: ButtonNode
-    
-    var changeBetValueHandler: (() -> ())?
-    
+    private let layer: SKNode
+    private let background: SKSpriteNode
+    private let soundButton: ButtonNode
+    private let musicButton: ButtonNode
+    private let closeButton: ButtonNode
+        
     init() {
+        layer = SKNode()
+        layer.setScale(Constant.ScaleFactor)
+        
         background = SKSpriteNode(color: .blackColor(), size: CGSize(width: ScreenSize.width, height: ScreenSize.height))
         background.alpha = 0.0
         
         closeButton = ButtonNode(defaultButtonImage: "closeButton")
         closeButton.size = CGSize(width: 44, height: 45)
-        closeButton.position = CGPoint(x: 60, y: -100)
         
         var soundImage = "soundButton"
         var musicImage = "musicButton"
@@ -40,21 +38,27 @@ class Settings {
         
         soundButton = ButtonNode(defaultButtonImage: soundImage)
         soundButton.size = CGSize(width: 44, height: 45)
-        soundButton.position = CGPoint(x: 0, y: -160)
         
         musicButton = ButtonNode(defaultButtonImage: musicImage)
         musicButton.size = CGSize(width: 44, height: 45)
-        musicButton.position = CGPoint(x: 60, y: -160)
     }
     
     func createLayer() -> SKNode {
+        // Run SKActions
         let fadeIn = SKAction.fadeAlphaTo(0.6, duration: 0.3)
         background.runAction(fadeIn)
         
+        // Assign actions
         closeButton.action = close
         soundButton.action = toggleSound
         musicButton.action = toggleMusic
         
+        // Designate positions
+        closeButton.position = CGPoint(x: 60, y: -100)
+        soundButton.position = CGPoint(x: 0, y: -160)
+        musicButton.position = CGPoint(x: 60, y: -160)
+        
+        // Add nodes to layer node
         layer.addChild(background)
         layer.addChild(closeButton)
         layer.addChild(soundButton)

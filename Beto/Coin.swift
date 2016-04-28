@@ -6,7 +6,6 @@
 //  Copyright © 2016 redgarage. All rights reserved.
 //
 
-import Foundation
 import SpriteKit
 
 class Coin: ButtonNode {

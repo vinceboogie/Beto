@@ -16,28 +16,29 @@ enum Color: Int {
 
         return colors[rawValue]
     }
-
-    var squareSpriteName: String {
-        return name + "Square"
-    }
-
 }
 
 class Square: ButtonNode {
-    var wager = 0
     var color: Color
+    var wager: Int
+    var selected: Bool
     var label: SKLabelNode
+    var defaultButtonImage: String
     
     var placeBetHandler: ((Square) -> ())?
     
-    init(color: Color, defaultButtonImage: String, activeButtonImage: String) {
+    init(color: Color) {
         self.color = color
+        self.wager = 0
+        self.selected = false
+        self.defaultButtonImage = color.name + "Square"
         
-        label = SKLabelNode(fontNamed: Constant.FontName)
+        label = SKLabelNode(fontNamed: Constant.FontNameCondensed)
         label.text = "\(wager)"
         label.hidden = true
         
-
+        let activeButtonImage = defaultButtonImage + "_active"
+        
         super.init(defaultButtonImage: defaultButtonImage, activeButtonImage: activeButtonImage)
         
         addChild(label)

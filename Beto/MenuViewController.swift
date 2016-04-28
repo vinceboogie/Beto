@@ -6,29 +6,21 @@
 //  Copyright © 2016 redgarage. All rights reserved.
 //
 
-import UIKit
 import SpriteKit
 import iAd
 import GoogleMobileAds
 
 class MenuViewController: UIViewController, ADBannerViewDelegate {
-    var scene: MenuScene!
-    var board: Board!
+    var scene: SKScene!
     
     @IBOutlet var adBannerView: ADBannerView?
     @IBOutlet var gAdBannerView: GADBannerView!
-    
-    
-    @IBAction func unwindFromGameViewController(segue: UIStoryboardSegue) {
-    
-    }
     
     override func shouldAutorotate() -> Bool {
         return true
     }
     
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        
         return UIInterfaceOrientationMask.AllButUpsideDown
     }
     
@@ -44,7 +36,6 @@ class MenuViewController: UIViewController, ADBannerViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         // Configure the view.
         let skView = view as! SKView
         skView.multipleTouchEnabled = false
@@ -59,17 +50,6 @@ class MenuViewController: UIViewController, ADBannerViewDelegate {
         self.canDisplayBannerAds = true
         adBannerView?.delegate = self
         self.gAdBannerView.hidden = true
-        
-        // DELETE
-        print("menu")
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        // DELETE
-        print("got back safely")
-        
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -94,9 +74,5 @@ class MenuViewController: UIViewController, ADBannerViewDelegate {
         gAdBannerView.adUnitID = "ca-app-pub-2442145650959654/8984886127"
         gAdBannerView.rootViewController = self
         gAdBannerView.loadRequest(GADRequest())
-        
-        
     }
-    
-    
 }

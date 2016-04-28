@@ -69,9 +69,7 @@ class GameDataManager {
     
     func didUnlockCoin() -> Bool {
         var value = 0
-        
-        // DELETE: Bug here where coins doesnt get unlocked right away when treshold is reached.
-        
+                
         if highscore >= 1000000 {
             value = 7
         } else if highscore >= 100000 {

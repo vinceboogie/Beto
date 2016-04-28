@@ -14,8 +14,9 @@ let Audio = AudioManager()
 
 struct Constant {
     static let Margin: CGFloat = 10
-    static let ScaleFactor: CGFloat = UIScreen.mainScreen().bounds.width / 320.0
-    static let FontName = "Futura Condensed Medium"
+    static let ScaleFactor: CGFloat = UIScreen.mainScreen().bounds.width / 320
+    static let FontName = "Futura Medium"
+    static let FontNameCondensed = "Futura Condensed Medium"
 }
 
 struct ScreenSize {
