@@ -8,16 +8,6 @@
 
 import SpriteKit
 
-enum Color: Int {
-    case Blue, Red, Green, Yellow, Cyan, Purple
-
-    var name: String {
-        let colors = ["Blue", "Red", "Green", "Yellow", "Cyan", "Purple"]
-
-        return colors[rawValue]
-    }
-}
-
 class Square: ButtonNode {
     var color: Color
     var wager: Int
@@ -31,7 +21,8 @@ class Square: ButtonNode {
         self.color = color
         self.wager = 0
         self.selected = false
-        self.defaultButtonImage = color.name + "Square"
+        self.defaultButtonImage = color.rawValue + "Square"
+        
         
         label = SKLabelNode(fontNamed: Constant.FontNameCondensed)
         label.text = "\(wager)"

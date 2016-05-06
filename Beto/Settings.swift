@@ -14,12 +14,12 @@ class Settings {
     private let soundButton: ButtonNode
     private let musicButton: ButtonNode
     private let closeButton: ButtonNode
-        
+    
     init() {
         layer = SKNode()
         layer.setScale(Constant.ScaleFactor)
         
-        background = SKSpriteNode(color: .blackColor(), size: CGSize(width: ScreenSize.width, height: ScreenSize.height))
+        background = SKSpriteNode(color: .blackColor(), size: CGSize(width: ScreenSize.Width, height: ScreenSize.Height))
         background.alpha = 0.0
         
         closeButton = ButtonNode(defaultButtonImage: "closeButton")
@@ -50,8 +50,8 @@ class Settings {
         
         // Assign actions
         closeButton.action = close
-        soundButton.action = toggleSound
-        musicButton.action = toggleMusic
+        soundButton.action = toggleSoundButton
+        musicButton.action = toggleMusicButton
         
         // Designate positions
         closeButton.position = CGPoint(x: 60, y: -100)
@@ -82,23 +82,23 @@ class Settings {
         layer.runAction(actions)
     }
     
-    func toggleSound() {
-        if !Audio.soundMuted {
+    func toggleSoundButton() {
+        Audio.toggleSound()
+        
+        if Audio.soundMuted {
             soundButton.changeTexture("soundButton_mute")
         } else {
             soundButton.changeTexture("soundButton")
         }
-        
-        Audio.soundMuted = !Audio.soundMuted
     }
     
-    func toggleMusic() {
-        if !Audio.musicMuted {
+    func toggleMusicButton() {
+        Audio.toggleMusic()
+        
+        if Audio.musicMuted {
             musicButton.changeTexture("musicButton_mute")
         } else {
             musicButton.changeTexture("musicButton")
         }
-        
-        Audio.musicMuted = !Audio.musicMuted
     }
 }

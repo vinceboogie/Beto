@@ -32,14 +32,14 @@ class Coin: ButtonNode {
             activeButton.colorBlendFactor = 0.3
         }
         
-        self.action = coinPressed
+        self.action = coinButtonPressed
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func coinPressed() {
+    func coinButtonPressed() {
         if unlocked {
             coinSelectedHandler!(self)
         }

@@ -9,8 +9,8 @@
 import SpriteKit
 
 class GameHUD {
+    private let scene: BoardScene
     private let layer: SKNode
-    private let scene: SKScene
     private let gameHUD: SKSpriteNode
     private let menuButton: ButtonNode
     private let coinsNode: ButtonNode
@@ -19,7 +19,7 @@ class GameHUD {
     let coinsLabel: SKLabelNode
     let highscoreLabel: SKLabelNode
     
-    init(scene: SKScene) {
+    init(scene: BoardScene) {
         self.scene = scene
         
         layer = SKNode()
@@ -49,16 +49,16 @@ class GameHUD {
         highscoreLabel.horizontalAlignmentMode = .Center
         highscoreLabel.verticalAlignmentMode = .Center
     }
-
+    
     func createLayer() -> SKNode {
         // Assign actions
-        menuButton.action = presentMenuScene
+        menuButton.action = scene.presentMenuScene
         highscoreNode.action = displayAchievements
         coinsNode.action = displayStore
         
         // Designate positions
         var gameHUDPosition: CGFloat = 266.0
-        let dynamicPosition = (ScreenSize.height - gameHUD.size.height) / 2
+        let dynamicPosition = (ScreenSize.Height - gameHUD.size.height) / 2
         
         // Custom position for iPhone 4 (Screen size: 320 x 480)
         if dynamicPosition < gameHUDPosition {
@@ -85,36 +85,22 @@ class GameHUD {
         return layer
     }
     
-    func presentMenuScene() {
-        let transition = SKTransition.flipVerticalWithDuration(0.4)
-        let menuScene = MenuScene(size: scene.size)
-        menuScene.scaleMode = .AspectFill
-        
-        scene.view!.presentScene(menuScene, transition: transition)
-    }
-    
     func displayStore() {
         let store = Store()
         let layer = store.createLayer()
-
+        
         scene.addChild(layer)
         
         // DELETE: Placeholder for In-App Purchases
-        GameData.coins += 20
+        GameData.addCoins(20)
+        GameData.save()
+        
         coinsLabel.text = "\(GameData.coins)"
-        
-        if GameData.coins > GameData.highscore {
-            GameData.highscore = GameData.coins
-            highscoreLabel.text = "\(GameData.highscore)"
-
-            GameData.didUnlockCoin()
-        }
-        
-        GameData.saveGameData()
+        highscoreLabel.text = "\(GameData.highscore)"
     }
     
     func displayAchievements() {
-        let achievements = Achievements()
+        let achievements = AchievementsListNode()
         let layer = achievements.createLayer()
         
         scene.addChild(layer)

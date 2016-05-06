@@ -52,7 +52,7 @@ class MenuScene: SKScene {
         settingsButton.size = CGSize(width: 44, height: 45)
         settingsButton.position = CGPoint(x: 60, y: -100)
         settingsButton.action = displaySettings
-
+        
         // Add nodes
         layer.addChild(startGameButton)
         layer.addChild(customizeButton)
@@ -67,12 +67,12 @@ class MenuScene: SKScene {
         let transition = SKTransition.flipVerticalWithDuration(0.4)
         let boardScene = BoardScene(size: self.size)
         boardScene.scaleMode = .AspectFill
-    
+        
         view!.presentScene(boardScene, transition: transition)
     }
     
     func displayAchievements() {
-        let achievements = Achievements()
+        let achievements = AchievementsListNode()
         let layer = achievements.createLayer()
         
         addChild(layer)

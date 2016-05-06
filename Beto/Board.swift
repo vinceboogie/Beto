@@ -50,13 +50,13 @@ class Board {
         replayButton = ButtonNode(defaultButtonImage: "replayButton")
         replayButton.size = CGSize(width: 38, height: 39)
         
-        coinVaultButton = ButtonNode(defaultButtonImage: "coin\(GameData.defaultBetValue)")
+        coinVaultButton = ButtonNode(defaultButtonImage: "coin\(GameData.betDenomination)")
         coinVaultButton.size = CGSize(width: 38, height: 39)
         
         // Initialize the squares
-        let colors = [Color.Blue, Color.Red, Color.Green, Color.Yellow, Color.Cyan, Color.Purple]
         
-        for color in colors {
+        
+        for color in Color.allValues {
             let square = Square(color: color)
             square.size = CGSize(width: squareSize, height: squareSize)
             
@@ -123,8 +123,8 @@ class Board {
         }
         
         // Check if there are coins available to wager
-        if GameData.defaultBetValue <= coinsAvailable  {
-            square.wager += GameData.defaultBetValue
+        if GameData.betDenomination <= coinsAvailable  {
+            square.wager += GameData.betDenomination
             
             // In order to safe guard from crashes, we don't subtract the coins
             // from the GameData until after we roll the cubes
@@ -156,6 +156,8 @@ class Board {
     
     func playButtonPressed() {
         if getWagers() > 0 {
+            // Reset previousBets
+            previousBets = []
             
             // Save bets for the replay button
             for square in squares {
@@ -184,9 +186,11 @@ class Board {
         scene.gameHUD.coinsLabel.text = "\(coins)"
     }
     
-    func payout(winningColor: Color) {
+    func payout(winningColor: Color) -> Bool {
         var winningSquare: Square!
+        var didWin = false
         
+        // Keep track of winning squares
         for square in squares {
             if square.color == winningColor {
                 winningSquare = square
@@ -201,26 +205,24 @@ class Board {
         
         // Add winnings
         if winningSquare.wager > 0 {
-            GameData.coins += winningSquare.wager
+            GameData.addCoins(winningSquare.wager)
             scene.runAction(Audio.winSound)
             
-            // Update coinslabel
-            scene.gameHUD.coinsLabel.text = "\(GameData.coins)"
+            didWin = true
             
-            // Check and update if there's a new highscore
-            if GameData.coins > GameData.highscore {
-                GameData.highscore = GameData.coins
-                scene.gameHUD.highscoreLabel.text = "\(GameData.highscore)"
-                GameData.didUnlockCoin()
-            }
+            // Update labels
+            scene.gameHUD.coinsLabel.text = "\(GameData.coins)"
+            scene.gameHUD.highscoreLabel.text = "\(GameData.highscore)"
         }
+        
+        return didWin
     }
     
     func resolveWagers() {
         // Add winning wagers back to GameData.coins, clear the board
         for square in squares {
             if winningSquares.contains(square) {
-                GameData.coins += square.wager
+                GameData.addCoins(square.wager)
             }
             
             let scaleAction = SKAction.scaleTo(0.0, duration: 0.3)
@@ -231,24 +233,18 @@ class Board {
             let restore = SKAction.scaleTo(1.0, duration: 0.3)
             square.label.runAction(restore)
             square.wager = 0
+            square.selected = false
             
-            // Update coinslabel
+            // Update labels
             scene.gameHUD.coinsLabel.text = "\(GameData.coins)"
-            
-            // Check and update if there's a new highscore
-            if GameData.coins > GameData.highscore {
-                GameData.highscore = GameData.coins
-                scene.gameHUD.highscoreLabel.text = "\(GameData.highscore)"
-                GameData.didUnlockCoin()
-            }
+            scene.gameHUD.highscoreLabel.text = "\(GameData.highscore)"
         }
         
-        GameData.saveGameData()
+        // Reset winning squares
         winningSquares = []
     }
     
     func clearButtonPressed() {
-        
         // reset each square
         for square in squares {
             square.wager = 0
@@ -262,21 +258,21 @@ class Board {
     
     func coinVaultButtonPressed() {
         let coinVault = CoinVault()
-        coinVault.changeBetValueHandler = { self.coinVaultButton.changeTexture("coin\(GameData.defaultBetValue)") }
+        coinVault.changeDenominationHandler = { self.coinVaultButton.changeTexture("coin\(GameData.betDenomination)") }
         
         let vaultLayer = coinVault.createLayer()
         scene.addChild(vaultLayer)
     }
     
-    func squareWithColor(color: Color) -> Square {
+    func squareWithColor(color: Color) -> Square! {
         for square in squares {
             if square.color == color {
                 return square
             }
         }
         
-        // Return dummy square. This code should never execute
-        return Square(color: Color.Blue)
+        // Return nil if square is not found. This code should never execute
+        return nil
     }
     
     func pointForPosition(position: Int) -> CGPoint {
@@ -312,7 +308,7 @@ class Board {
     
     func maxColorsSelected() -> Bool {
         var total = 0
-       
+        
         for square in squares {
             if square.selected {
                 total += 1
@@ -336,6 +332,6 @@ class Board {
             replayButton.hidden = true
         } else {
             replayButton.hidden = false
-        }        
+        }
     }
 }

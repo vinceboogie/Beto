@@ -18,7 +18,7 @@ class Store {
         layer = SKNode()
         layer.setScale(Constant.ScaleFactor)
         
-        background = SKSpriteNode(color: .blackColor(), size: CGSize(width: ScreenSize.width, height: ScreenSize.height))
+        background = SKSpriteNode(color: .blackColor(), size: CGSize(width: ScreenSize.Width, height: ScreenSize.Height))
         background.alpha = 0.0
         
         closeButton = ButtonNode(defaultButtonImage: "closeButton")
@@ -42,7 +42,7 @@ class Store {
         
         // Designate positions
         closeButton.position = CGPoint(x: 140, y: 190)
-        placeHolder.position = CGPoint(x: 0, y: ScreenSize.height)
+        placeHolder.position = CGPoint(x: 0, y: ScreenSize.Height)
         
         // Add nodes
         placeHolder.addChild(closeButton)
@@ -55,7 +55,7 @@ class Store {
     func close() {
         let wait = SKAction.waitForDuration(0.5)
         
-        let exitScreen = SKAction.moveToY(ScreenSize.height, duration: 0.4)
+        let exitScreen = SKAction.moveToY(ScreenSize.Height, duration: 0.4)
         let exitActions = SKAction.sequence([exitScreen, SKAction.removeFromParent()])
         placeHolder.runAction(exitActions)
         closeButton.runAction(exitActions)
