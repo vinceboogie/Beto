@@ -8,7 +8,10 @@
 
 import SpriteKit
 
-class AudioManager {
+class AudioManager {    
+    var backgroundMusic: SKAudioNode
+    var soundMuted: Bool
+    var musicMuted: Bool
     
     var placeBetSound: SKAction {
         if !soundMuted {
@@ -42,13 +45,22 @@ class AudioManager {
         }
     }
     
-    var backgroundMusic = SKAudioNode(fileNamed: "Mining by Moonlight.mp3")
-    
-    var soundMuted: Bool
-    var musicMuted: Bool
-    
     init() {
-        soundMuted = false
-        musicMuted = true
+        soundMuted = GameData.soundMuted
+        musicMuted = GameData.musicMuted
+        
+        backgroundMusic = SKAudioNode(fileNamed: "Mining by Moonlight.mp3")
+    }
+    
+    func toggleSound() {
+        soundMuted = !soundMuted
+        GameData.setSound(soundMuted)
+        GameData.save()
+    }
+    
+    func toggleMusic() {
+        musicMuted = !musicMuted
+        GameData.setMusic(musicMuted)
+        GameData.save()
     }
 }

@@ -12,7 +12,7 @@ import SpriteKit
 class GameViewController: UIViewController {
     var gameScene: GameScene!
     var boardScene: BoardScene!
-
+    
     var panGesture = UIPanGestureRecognizer.self()
     var tapGesture = UITapGestureRecognizer.self()
     var tapRecognizer = UITapGestureRecognizer.self()
@@ -37,11 +37,10 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
- 
+        
         // Configure the scene
         gameScene = GameScene()
-        gameScene.cubeRestHandler = handleCubeRest
-        gameScene.endGameplayHandler = handleEndGameplay
+        gameScene.resolveGameplayHandler = handleResolveGameplay
         
         // Configure the view
         let sceneView = self.view as! SCNView
@@ -51,20 +50,22 @@ class GameViewController: UIViewController {
         sceneView.backgroundColor = UIColor.clearColor()
         sceneView.antialiasingMode = SCNAntialiasingMode.Multisampling4X
         
-        gameScene.background.contents = boardScene
+        // Custom background contents for iPhone 5 (Screen size: 320 x 480)
+        if UIScreen.mainScreen().bounds.height == 568 {
+            gameScene.background.contents = UIImage(named: "background")
+        } else {
+            gameScene.background.contents = boardScene
+        }
         
         // Configure the gestures
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(GameViewController.handlePan(_:)))
         view.addGestureRecognizer(panGesture)
-
-        tapGesture = UITapGestureRecognizer(target: self, action: #selector(GameViewController.handleTap(_:)))
-        view.addGestureRecognizer(tapGesture)
-
+        
         tapRecognizer.numberOfTapsRequired = 1
         tapRecognizer.numberOfTouchesRequired = 1
         
         // Subtract wagers from GameData
-        GameData.coins -= boardScene.board.getWagers()
+        GameData.subtractCoins(boardScene.board.getWagers())
     }
     
     func handlePan(gesture:UIPanGestureRecognizer) {
@@ -84,22 +85,38 @@ class GameViewController: UIViewController {
             gameScene.shouldCheckMovement = true
         }
     }
-
-    func handleCubeRest(winningColor: Color) {
-        dispatch_async(dispatch_get_main_queue()) {
-            self.boardScene.board.payout(winningColor)
-        }
-    }
     
-    func handleEndGameplay() {
-        dispatch_async(dispatch_get_main_queue()) {
-            self.boardScene.board.resolveWagers()
-            self.boardScene.board.toggleReplayButton()
+    func handleResolveGameplay() {
+        GameData.incrementGamesPlayed()
+        
+        var winningColors: [Color] = []
+        
+        for node in gameScene.geometryNodes.cubesNode.childNodes {
+            let winningColor = gameScene.getWinningColor(node)
+            let didWin = boardScene.board.payout(winningColor)
+            
+            // DELETE: Test that winCount only registered once per gameplay
+            if didWin && !winningColors.contains(winningColor) {
+                GameData.incrementWinCount(winningColor)
+                winningColors.append(winningColor)
+            }
+            
+            self.gameScene.animateCubeResult(node, didWin: didWin)
+            
+            delay(1.0) {}
+        }
+        
+        boardScene.board.resolveWagers()
+        boardScene.board.toggleReplayButton()
+        
+        GameData.save()
+        
+        delay(1.0) {
             self.dismissViewControllerAnimated(true, completion: nil)
         }
     }
- 
-    func handleTap(gesture:UITapGestureRecognizer) {
-        //TODO: Cancel gesture
+    
+    func delay(delay: Double, closure: ()->()) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), closure)
     }
 }

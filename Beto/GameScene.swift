@@ -12,8 +12,7 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
     var geometryNodes: GeometryNodes!
     var shouldCheckMovement = false
     
-    var cubeRestHandler: ((Color)->())?
-    var endGameplayHandler: (() -> ())?
+    var resolveGameplayHandler: (() -> ())?
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -34,7 +33,7 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
         let dx = Float((node.physicsBody?.velocity.x)!)
         let dy = Float((node.physicsBody?.velocity.y)!)
         let dz = Float((node.physicsBody?.velocity.z)!)
-
+        
         let speed = sqrtf(dx*dx+dy*dy+dz*dz)
         
         let x = Float((node.physicsBody?.angularVelocity.x)!)
@@ -42,7 +41,7 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
         let z = Float((node.physicsBody?.angularVelocity.z)!)
         
         let angularSpeed = sqrtf(x*x+y*y+z*z)
-
+        
         return (speed < 0.001 || angularSpeed < 0.9)
     }
     
@@ -82,27 +81,35 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
         return colors[winningIndex]
     }
     
+    func animateCubeResult(node: SCNNode, didWin: Bool) {
+        node.paused = false
+        
+        var actions: SCNAction = SCNAction()
+        
+        if !didWin {
+            actions = SCNAction.sequence([SCNAction.fadeOutWithDuration(0.5), SCNAction.removeFromParentNode()])
+        }
+        
+        node.runAction(actions)
+        
+    }
+    
     func renderer(renderer: SCNSceneRenderer, didSimulatePhysicsAtTime time: NSTimeInterval) {
         if shouldCheckMovement {
             shouldCheckMovement = false
             
             for node in geometryNodes.cubesNode.childNodes {
-                if nearlyAtRest(node) && !node.hasActions && !node.hidden {
-                    let winningColor = getWinningColor(node)
-                    cubeRestHandler!(winningColor)
-                    
-                    let sequence = SCNAction.sequence([SCNAction.fadeOutWithDuration(0.75),
-                        SCNAction.hide()])
-                    node.runAction(sequence)
+                if nearlyAtRest(node) && !node.paused {
+                    node.paused = true
                 }
                 
-                if !node.hidden {
+                if !node.paused {
                     shouldCheckMovement = true
                 }
             }
             
             if !shouldCheckMovement {
-                endGameplayHandler!()
+                resolveGameplayHandler!()
             }
         }
     }

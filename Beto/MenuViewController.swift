@@ -35,7 +35,7 @@ class MenuViewController: UIViewController, ADBannerViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         // Configure the view.
         let skView = view as! SKView
         skView.multipleTouchEnabled = false
@@ -61,13 +61,12 @@ class MenuViewController: UIViewController, ADBannerViewDelegate {
         }
     }
     
-
+    
     func bannerView(banner: ADBannerView!, didFailToReceiveAdWithError error: NSError!) {
         //Switches to AdMob when iAd fails:
         
         //GAD Info: Ad unit name: BottomBanner
         //GAD Info: Ad unit ID: ca-app-pub-2442145650959654/8984886127
-        
         
         adBannerView?.hidden = true
         gAdBannerView.hidden = false

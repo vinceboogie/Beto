@@ -18,17 +18,10 @@ class GeometryNodes {
         cubesNode = SCNNode()
         boundary = Boundary()
         
-//        let floorMaterial = SCNMaterial()
-//        floorMaterial.diffuse.contents = UIImage(named: "background")!
-//        floorMaterial.locksAmbientWithDiffuse = false
-        
-        // DELETE: Is name needed? Is it referred to?
         floorNode = SCNNode()
-        floorNode.name = "Floor"
         floorNode.geometry = SCNBox(width: 2.25, height: 0.5, length: 4, chamferRadius: 0)
         floorNode.physicsBody = SCNPhysicsBody.staticBody()
         floorNode.opacity = 0.0
-//        floorNode.geometry?.materials = [floorMaterial]
         
         cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
@@ -70,9 +63,8 @@ class GeometryNodes {
     }
     
     func addNodesTo(parentNode:SCNNode) {
-        // DELETE: What's the difference between the two?
         floorNode.position = SCNVector3(0, 0, 0)
-        cameraNode.position = SCNVector3Make(0, 3.7, 0)
+        cameraNode.position = SCNVector3(0, 3.7, 0)
 
         parentNode.addChildNode(cameraNode)
         parentNode.addChildNode(floorNode)

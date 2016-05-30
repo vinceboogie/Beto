@@ -16,14 +16,14 @@ class CoinVault {
     var vault: SKSpriteNode
     var closeButton: ButtonNode
     
-    var changeBetValueHandler: (() -> ())?
+    var changeDenominationHandler: (() -> ())?
     
     init() {
         coins = []
         layer = SKNode()
         layer.setScale(Constant.ScaleFactor)
         
-        background = SKSpriteNode(color: .blackColor(), size: CGSize(width: ScreenSize.width, height: ScreenSize.height))
+        background = SKSpriteNode(color: .blackColor(), size: CGSize(width: ScreenSize.Width, height: ScreenSize.Height))
         background.alpha = 0.0
         
         vault = SKSpriteNode(imageNamed: "coinVault")
@@ -31,15 +31,15 @@ class CoinVault {
         
         closeButton = ButtonNode(defaultButtonImage: "closeButton")
         closeButton.size = CGSize(width: 44, height: 45)
-    
-        for (index, betValue) in BetValues.enumerate() {
-            let coin = Coin(value: betValue, unlocked: index <= GameData.unlockedCoins)
+        
+        for (index, betValue) in Constant.Denominations.enumerate() {
+            let coin = Coin(value: betValue, unlocked: index <= GameData.coinsUnlocked)
             coin.size = CGSize(width: 38, height: 39)
             
             coins.append(coin)
         }
     }
-
+    
     func createLayer() -> SKNode {
         // Run SKActions
         let fadeIn = SKAction.fadeAlphaTo(0.6, duration: 0.3)
@@ -49,14 +49,14 @@ class CoinVault {
         let compress = SKAction.scaleXBy(1.02, y: 0.9, duration: 0.2)
         let actions = SKAction.sequence([dropDown, compress, compress.reversedAction()])
         vault.runAction(actions)
-    
+        
         // Assign actions
         closeButton.action = close
         
         // Designate positions
-        vault.position = CGPoint(x: 0, y: ScreenSize.height)
+        vault.position = CGPoint(x: 0, y: ScreenSize.Height)
         closeButton.position = CGPoint(x: 140, y: 74)
-
+        
         // Add nodes
         vault.addChild(closeButton)
         
@@ -72,7 +72,7 @@ class CoinVault {
             coinHolder.addChild(coin)
             vault.addChild(coinHolder)
         }
-    
+        
         layer.addChild(background)
         layer.addChild(vault)
         
@@ -82,7 +82,7 @@ class CoinVault {
     func close() {
         let wait = SKAction.waitForDuration(0.5)
         
-        let exitScreen = SKAction.moveToY(ScreenSize.height, duration: 0.4)
+        let exitScreen = SKAction.moveToY(ScreenSize.Height, duration: 0.4)
         let vaultActions = SKAction.sequence([exitScreen, SKAction.removeFromParent()])
         vault.runAction(vaultActions)
         
@@ -95,11 +95,11 @@ class CoinVault {
     }
     
     func handleCoinSelected(coin: Coin) {
-        GameData.defaultBetValue = coin.value
-        changeBetValueHandler!()
+        GameData.setDenomination(coin.value)
+        changeDenominationHandler!()
         close()
     }
-        
+    
     func pointForPosition(position: Int) -> CGPoint {
         var column = 0
         var row = 0

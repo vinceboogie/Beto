@@ -19,13 +19,13 @@ class Rewards {
         layer = SKNode()
         layer.setScale(Constant.ScaleFactor)
         
-        background = SKSpriteNode(color: .blackColor(), size: CGSize(width: ScreenSize.width, height: ScreenSize.height))
+        background = SKSpriteNode(color: .blackColor(), size: CGSize(width: ScreenSize.Width, height: ScreenSize.Height))
         background.alpha = 0.0
         
         container = SKSpriteNode(imageNamed: "coinUnlocked")
         container.size = CGSize(width: 304, height: 225)
         
-        coin = SKSpriteNode(imageNamed: "coin\(BetValues[GameData.unlockedCoins])")
+        coin = SKSpriteNode(imageNamed: "coin\(Constant.Denominations[GameData.coinsUnlocked])")
         coin.size = CGSize(width: 38, height: 39)
  
         claimButton = ButtonNode(defaultButtonImage: "claimButton")
@@ -46,7 +46,7 @@ class Rewards {
         claimButton.action = close
         
         // Designate positions
-        container.position = CGPoint(x: 0, y: ScreenSize.height)
+        container.position = CGPoint(x: 0, y: ScreenSize.Height)
         coin.position = CGPoint(x: 0, y: 20)
         claimButton.position = CGPoint(x: 0, y: -80)
         
@@ -63,7 +63,7 @@ class Rewards {
     func close() {
         let wait = SKAction.waitForDuration(0.5)
         
-        let exitScreen = SKAction.moveToY(ScreenSize.height, duration: 0.4)
+        let exitScreen = SKAction.moveToY(ScreenSize.Height, duration: 0.4)
         let vaultActions = SKAction.sequence([exitScreen, SKAction.removeFromParent()])
         container.runAction(vaultActions)
         

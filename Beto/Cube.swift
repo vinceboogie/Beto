@@ -12,11 +12,6 @@ class Cube {
     let cube = SCNNode()
     let cubeSize: CGFloat = 0.33
     
-    // DELETE: What is this for?
-//    var group: Int = 1
-    
-    // DELETE: Is name needed? Is it referred to?
-
     init(name: String, position: CGFloat, cubeMaterials: [SCNMaterial]) {
         cube.name = name
         cube.position = SCNVector3(position, 0.15, 1.15)
@@ -25,7 +20,7 @@ class Cube {
         cube.eulerAngles = SCNVector3Make(Float(M_PI/2 * Double(arc4random()%4)), Float(M_PI/2 * Double(arc4random()%4)),Float(M_PI/2 * Double(arc4random()%4)))
         cube.opacity = 1.0
         cube.geometry!.materials = cubeMaterials
-    
+        
         cube.physicsBody = SCNPhysicsBody.dynamicBody()
         cube.physicsBody?.affectedByGravity = true
         cube.physicsBody?.mass = CGFloat(10)

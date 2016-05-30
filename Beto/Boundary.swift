@@ -26,22 +26,15 @@ class Boundary {
         invisiPlaneTop = SCNNode()
         boundary = SCNNode()
         
-        // DELETE: Is name needed? Is it referred to?
-        invisiPlaneFront.name = "invisiPlaneFront"
         setProperties(invisiPlaneFront)
-
-        invisiPlaneBack.name = "invisiPlaneBack"
         setProperties(invisiPlaneBack)
 
-        invisiPlaneLeft.name = "invisiPlaneLeft"
         invisiPlaneLeft.rotation = SCNVector4(0, 1, 0, Float(M_PI_2))
         setProperties(invisiPlaneLeft)
 
-        invisiPlaneRight.name = "invisiPlaneRight"
         invisiPlaneRight.rotation = SCNVector4(0, 1 , 0, Float(-M_PI_2))
         setProperties(invisiPlaneRight)
         
-        invisiPlaneTop.name = "invisiPlaneTop"
         invisiPlaneTop.rotation = SCNVector4(1, 0, 0, Float(M_PI_2))
         setProperties(invisiPlaneTop)
     }
