@@ -36,9 +36,7 @@ class Achievement {
         newLevel = level
         
         if newLevel > oldLevel {
-            // DELETE: Replace with pop up node
-            // Check for possible multiple level jump
-            print("Rewards unlocked: ")
+            GameData.unlockedLevelHandler!(self)
         }
         
         progress = calculateProgress!()

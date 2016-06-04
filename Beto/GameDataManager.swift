@@ -15,6 +15,8 @@ class GameDataManager {
     private(set) var coinsUnlocked: Int
     private(set) var soundMuted: Bool
     private(set) var musicMuted: Bool
+    private(set) var themeName: String
+    private(set) var theme: Theme
     
     private(set) var gamesPlayed: Int
     private(set) var redWinCount: Int
@@ -25,7 +27,8 @@ class GameDataManager {
     private(set) var purpleWinCount: Int
     private(set) var highestWager: Int
     
-    var showUnlockedCoinHandler: (() -> ())?
+    var unlockedCoinHandler: (() -> ())?
+    var unlockedLevelHandler: ((Achievement) -> ())?
     
     // keys
     private let coinsKey = "coins"
@@ -34,6 +37,8 @@ class GameDataManager {
     private let coinsUnlockedKey = "coinsUnlocked"
     private let soundMutedKey = "soundMuted"
     private let musicMutedKey = "musicMuted"
+    private let themeNameKey = "themeName"
+
     private let gamesPlayedKey = "gamesPlayed"
     private let redWinCountKey = "redWinCount"
     private let blueWinCountKey = "blueWinCount"
@@ -42,8 +47,8 @@ class GameDataManager {
     private let cyanWinCountKey = "cyanWinCount"
     private let purpleWinCountKey = "purpleWinCount"
     private let highestWagerKey = "highestWager"
-    
-    init() {        
+        
+    init() {
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         let documentsDirectory = paths[0] as NSString
         let path = documentsDirectory.stringByAppendingPathComponent("GameData.plist")
@@ -73,6 +78,7 @@ class GameDataManager {
             coinsUnlocked = dict.objectForKey(coinsUnlockedKey) as! Int
             soundMuted = dict.objectForKey(soundMutedKey) as! Bool
             musicMuted = dict.objectForKey(musicMutedKey) as! Bool
+            themeName = dict.objectForKey(themeNameKey) as! String
             
             gamesPlayed = dict.objectForKey(gamesPlayedKey) as! Int
             redWinCount = dict.objectForKey(redWinCountKey) as! Int
@@ -91,6 +97,7 @@ class GameDataManager {
             coinsUnlocked = 0
             soundMuted = true
             musicMuted = true
+            themeName = "Default"
             
             gamesPlayed = 0
             redWinCount = 0
@@ -101,6 +108,8 @@ class GameDataManager {
             purpleWinCount = 0
             highestWager = 0
         }
+        
+        theme = Theme(themeName: themeName, unlocked: true)
     }
     
     func save() {
@@ -116,6 +125,7 @@ class GameDataManager {
         dict.setObject(coinsUnlocked, forKey: coinsUnlockedKey)
         dict.setObject(soundMuted, forKey: soundMutedKey)
         dict.setObject(musicMuted, forKey: musicMutedKey)
+        dict.setObject(themeName, forKey: themeNameKey)
         
         dict.setObject(gamesPlayed, forKey: gamesPlayedKey)
         dict.setObject(redWinCount, forKey: redWinCountKey)
@@ -128,6 +138,11 @@ class GameDataManager {
         
         // write to GameData.plist
         dict.writeToFile(path, atomically: false)
+    }
+    
+    func changeTheme(theme: Theme) {
+        themeName = theme.name
+        self.theme = theme
     }
     
     func setMusic(musicMuted: Bool) {
@@ -155,28 +170,19 @@ class GameDataManager {
             // Check achievement: Money in the Bank
             Achievements.update(.MoneyInTheBank)
             
-            var value = 0
+            var index = 0
 
-            if highscore >= 1000000 {
-                value = 7
-            } else if highscore >= 100000 {
-                value = 6
-            } else if highscore >= 10000 {
-                value = 5
-            } else if highscore >= 5000 {
-                value = 4
-            } else if highscore >= 1000 {
-                value = 3
-            } else if highscore >= 200 {
-                value = 2
-            } else if highscore >= 100 {
-                value = 1
+            for value in Constant.CoinUnlockedAt {                
+                if highscore >= value {
+                    index = 1 + Constant.CoinUnlockedAt.indexOf(value)!
+                } else {
+                    break
+                }
             }
             
-            // DELETE: Debug this code
-            while value > coinsUnlocked {
+            while index > coinsUnlocked {
                 coinsUnlocked += 1
-                showUnlockedCoinHandler!()
+                unlockedCoinHandler!()
             }
             
             // Check achievement: Coin Collector
@@ -211,9 +217,14 @@ class GameDataManager {
             purpleWinCount += 1
             Achievements.update(.PurpleWin)
         }
-                
-        // DELETE: Need to check if new level is reached whenever func is called
-        // DELETE: Need to pop node when new level is reached
+    }
+    
+    func updateHighestWager(wager: Int) {
+        if wager > highestWager {
+            highestWager = wager
+    
+            Achievements.update(.HighestWager)
+        }
     }
 }
 

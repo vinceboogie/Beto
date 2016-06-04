@@ -81,19 +81,32 @@ class GameHUD {
         
         // Add gameHUD to the layer node
         layer.addChild(gameHUD)
-        
+
         return layer
     }
     
     func displayStore() {
-        let store = Store()
-        let layer = store.createLayer()
+        // DELETE: BEGIN UNIT TEST
+//        var index = 0
+//        
+//        while index < 50 {
+//            GameData.incrementWinCount(Color.Cyan)
+//            index += 1
+//        }
+//
+//        GameData.addCoins(500000)
+//
+//        scene.showUnlockedNodes()
+//
+//        let store = Store()
+//        let layer = store.createLayer()
+//        
+//        scene.addChild(layer)
         
-        scene.addChild(layer)
-        
-        // DELETE: Placeholder for In-App Purchases
-        GameData.addCoins(20)
+        GameData.addCoins(100)
         GameData.save()
+        
+        // END UNIT TEST
         
         coinsLabel.text = "\(GameData.coins)"
         highscoreLabel.text = "\(GameData.highscore)"

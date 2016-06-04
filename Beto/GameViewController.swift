@@ -12,11 +12,9 @@ import SpriteKit
 class GameViewController: UIViewController {
     var gameScene: GameScene!
     var boardScene: BoardScene!
-    
     var panGesture = UIPanGestureRecognizer.self()
     var tapGesture = UITapGestureRecognizer.self()
     var tapRecognizer = UITapGestureRecognizer.self()
-    
     var touchCount = 0.0
     
     override func shouldAutorotate() -> Bool {
@@ -40,7 +38,7 @@ class GameViewController: UIViewController {
         
         // Configure the scene
         gameScene = GameScene()
-        gameScene.resolveGameplayHandler = handleResolveGameplay
+        gameScene.resolveGameplayHandler = { [unowned self] in self.handleResolveGameplay() }
         
         // Configure the view
         let sceneView = self.view as! SCNView
@@ -52,7 +50,7 @@ class GameViewController: UIViewController {
         
         // Custom background contents for iPhone 5 (Screen size: 320 x 480)
         if UIScreen.mainScreen().bounds.height == 568 {
-            gameScene.background.contents = UIImage(named: "background")
+            gameScene.background.contents = UIImage(named: GameData.theme.background)
         } else {
             gameScene.background.contents = boardScene
         }
@@ -64,7 +62,7 @@ class GameViewController: UIViewController {
         tapRecognizer.numberOfTapsRequired = 1
         tapRecognizer.numberOfTouchesRequired = 1
         
-        // Subtract wagers from GameData
+        // Subtract wagers from GameData        
         GameData.subtractCoins(boardScene.board.getWagers())
     }
     
@@ -95,7 +93,6 @@ class GameViewController: UIViewController {
             let winningColor = gameScene.getWinningColor(node)
             let didWin = boardScene.board.payout(winningColor)
             
-            // DELETE: Test that winCount only registered once per gameplay
             if didWin && !winningColors.contains(winningColor) {
                 GameData.incrementWinCount(winningColor)
                 winningColors.append(winningColor)
@@ -105,14 +102,14 @@ class GameViewController: UIViewController {
             
             delay(1.0) {}
         }
-        
+            
         boardScene.board.resolveWagers()
         boardScene.board.toggleReplayButton()
         
         GameData.save()
         
         delay(1.0) {
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismissViewControllerAnimated(true, completion: self.boardScene.showUnlockedNodes)
         }
     }
     
@@ -120,3 +117,4 @@ class GameViewController: UIViewController {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), closure)
     }
 }
+

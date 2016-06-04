@@ -7,14 +7,9 @@
 //
 
 import SpriteKit
-import iAd
-import GoogleMobileAds
 
-class MenuViewController: UIViewController, ADBannerViewDelegate {
+class MenuViewController: UIViewController {
     var scene: SKScene!
-    
-    @IBOutlet var adBannerView: ADBannerView?
-    @IBOutlet var gAdBannerView: GADBannerView!
     
     override func shouldAutorotate() -> Bool {
         return true
@@ -46,10 +41,6 @@ class MenuViewController: UIViewController, ADBannerViewDelegate {
         
         // Present the scene.
         skView.presentScene(scene)
-        
-        self.canDisplayBannerAds = true
-        adBannerView?.delegate = self
-        self.gAdBannerView.hidden = true
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -59,19 +50,5 @@ class MenuViewController: UIViewController, ADBannerViewDelegate {
                 destinationVC.boardScene = boardScene
             }
         }
-    }
-    
-    
-    func bannerView(banner: ADBannerView!, didFailToReceiveAdWithError error: NSError!) {
-        //Switches to AdMob when iAd fails:
-        
-        //GAD Info: Ad unit name: BottomBanner
-        //GAD Info: Ad unit ID: ca-app-pub-2442145650959654/8984886127
-        
-        adBannerView?.hidden = true
-        gAdBannerView.hidden = false
-        gAdBannerView.adUnitID = "ca-app-pub-2442145650959654/8984886127"
-        gAdBannerView.rootViewController = self
-        gAdBannerView.loadRequest(GADRequest())
     }
 }

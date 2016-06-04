@@ -6,8 +6,6 @@
 //  Copyright © 2016 redgarage. All rights reserved.
 //
 
-import Foundation
-
 enum AchievementName: String {
     case GamesPlayed = "I think I'm Addicted"
     case HighestWager = "Stakes are high"
@@ -76,7 +74,13 @@ class AchievementsManager {
         coinCollector.level = coinCollector.calculateLevel!()
         
         coinCollector.calculateProgress = { () -> Double in
-            let progress = Double(GameData.coinsUnlocked) / Double(coinCollector.requirementValues[coinCollector.level])
+            var progress = 0.0
+            
+            if coinCollector.level == 3 {
+                progress = 1.0
+            } else {
+                progress = Double(GameData.coinsUnlocked) / Double(coinCollector.requirementValues[coinCollector.level])
+            }
             
             return progress
         }
@@ -102,7 +106,13 @@ class AchievementsManager {
         blueWin.level = blueWin.calculateLevel!()
         
         blueWin.calculateProgress = { () -> Double in
-            let progress = Double(GameData.blueWinCount) / Double(blueWin.requirementValues[blueWin.level])
+            var progress = 0.0
+            
+            if blueWin.level == 3 {
+                progress = 1.0
+            } else {
+                progress = Double(GameData.blueWinCount) / Double(blueWin.requirementValues[blueWin.level])
+            }
             
             return progress
         }
@@ -125,7 +135,13 @@ class AchievementsManager {
         redWin.level = redWin.calculateLevel!()
         
         redWin.calculateProgress = { () -> Double in
-            let progress = Double(GameData.redWinCount) / Double(redWin.requirementValues[redWin.level])
+            var progress = 0.0
+            
+            if redWin.level == 3 {
+                progress = 1.0
+            } else {
+                progress = Double(GameData.redWinCount) / Double(redWin.requirementValues[redWin.level])
+            }
             
             return progress
         }
@@ -148,7 +164,13 @@ class AchievementsManager {
         greenWin.level = greenWin.calculateLevel!()
         
         greenWin.calculateProgress = { () -> Double in
-            let progress = Double(GameData.greenWinCount) / Double(greenWin.requirementValues[greenWin.level])
+            var progress = 0.0
+            
+            if greenWin.level == 3 {
+                progress = 1.0
+            } else {
+                progress = Double(GameData.greenWinCount) / Double(greenWin.requirementValues[greenWin.level])
+            }
             
             return progress
         }
@@ -171,7 +193,13 @@ class AchievementsManager {
         yellowWin.level = yellowWin.calculateLevel!()
         
         yellowWin.calculateProgress = { () -> Double in
-            let progress = Double(GameData.yellowWinCount) / Double(yellowWin.requirementValues[yellowWin.level])
+            var progress = 0.0
+            
+            if yellowWin.level == 3 {
+                progress = 1.0
+            } else {
+                progress = Double(GameData.yellowWinCount) / Double(yellowWin.requirementValues[yellowWin.level])
+            }
             
             return progress
         }
@@ -194,7 +222,13 @@ class AchievementsManager {
         cyanWin.level = cyanWin.calculateLevel!()
         
         cyanWin.calculateProgress = { () -> Double in
-            let progress = Double(GameData.cyanWinCount) / Double(cyanWin.requirementValues[cyanWin.level])
+            var progress = 0.0
+            
+            if cyanWin.level == 3 {
+                progress = 1.0
+            } else {
+                progress = Double(GameData.cyanWinCount) / Double(cyanWin.requirementValues[cyanWin.level])
+            }
             
             return progress
         }
@@ -217,7 +251,13 @@ class AchievementsManager {
         purpleWin.level = purpleWin.calculateLevel!()
         
         purpleWin.calculateProgress = { () -> Double in
-            let progress = Double(GameData.purpleWinCount) / Double(purpleWin.requirementValues[purpleWin.level])
+            var progress = 0.0
+            
+            if purpleWin.level == 3 {
+                progress = 1.0
+            } else {
+                progress = Double(GameData.purpleWinCount) / Double(purpleWin.requirementValues[purpleWin.level])
+            }
             
             return progress
         }
@@ -251,7 +291,13 @@ class AchievementsManager {
         gamesPlayed.level = gamesPlayed.calculateLevel!()
         
         gamesPlayed.calculateProgress = { () -> Double in
-            let progress = Double(GameData.gamesPlayed) / Double(gamesPlayed.requirementValues[gamesPlayed.level])
+            var progress = 0.0
+            
+            if gamesPlayed.level == 3 {
+                progress = 1.0
+            } else {
+                progress = Double(GameData.gamesPlayed) / Double(gamesPlayed.requirementValues[gamesPlayed.level])
+            }
     
             return progress
         }
@@ -262,7 +308,7 @@ class AchievementsManager {
         
         
         /********** AchievementName: MoneyInTheBank ***********/
-        let moneyValues = [10000, 100000, 1000000]
+        let moneyValues = [10000, 50000, 100000]
         let moneyInTheBank = Achievement(name: AchievementName.MoneyInTheBank.rawValue,
                                  requirementValues: moneyValues,
                                  requirements: ["Reach a highscore of \(moneyValues[0])", "Reach a highscore of \(moneyValues[1])", "Reach a highscore of \(moneyValues[2])"],
@@ -285,7 +331,13 @@ class AchievementsManager {
         moneyInTheBank.level = moneyInTheBank.calculateLevel!()
         
         moneyInTheBank.calculateProgress = { () -> Double in
-            let progress = Double(GameData.highscore) / Double(moneyInTheBank.requirementValues[moneyInTheBank.level])
+            var progress = 0.0
+            
+            if moneyInTheBank.level == 3 {
+                progress = 1.0
+            } else {
+                progress = Double(GameData.highscore) / Double(moneyInTheBank.requirementValues[moneyInTheBank.level])
+            }
             
             return progress
         }
@@ -296,7 +348,7 @@ class AchievementsManager {
         
         
         /********** AchievementName: HighestWager ***********/
-        let highestWagerValues = [1000, 10000, 100000]
+        let highestWagerValues = [100, 500, 1000]
         let highestWager = Achievement(name: AchievementName.HighestWager.rawValue,
                                        requirementValues: highestWagerValues,
                                        requirements: ["Place a \(highestWagerValues[0]) bet on any color", "Place a \(highestWagerValues[1]) bet on any color", "Place a \(highestWagerValues[2]) bet on any color"],
@@ -319,7 +371,13 @@ class AchievementsManager {
         highestWager.level = highestWager.calculateLevel!()
         
         highestWager.calculateProgress = { () -> Double in
-            let progress = Double(GameData.highestWager) / Double(gamesPlayed.requirementValues[gamesPlayed.level])
+            var progress = 0.0
+            
+            if highestWager.level == 3 {
+                progress = 1.0
+            } else {
+                progress = Double(GameData.highestWager) / Double(highestWager.requirementValues[highestWager.level])
+            }
             
             return progress
         }
@@ -331,11 +389,19 @@ class AchievementsManager {
     }
     
     func update(name: AchievementName) {
+        if let achievement = get(name) {
+            achievement.update()
+        }
+    }
+    
+    func get(name: AchievementName) -> Achievement! {
         for achievement in list {
             if achievement.name == name.rawValue {
-                achievement.update()
+                return achievement
             }
         }
+        
+        return nil
     }
     
     private func colorWinRequirements(color: Color, values: [Int]) -> [String]{

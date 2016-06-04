@@ -15,6 +15,7 @@ let Achievements = AchievementsManager()
 
 struct Constant {
     static let Denominations = [1, 5, 10, 50, 100, 1000, 10000, 100000]
+    static let CoinUnlockedAt = [100, 500, 1000, 5000, 10000, 100000, 1000000]
     static let Margin: CGFloat = 10
     static let ScaleFactor: CGFloat = UIScreen.mainScreen().bounds.width / 320
     static let FontName = "Futura Medium"
@@ -29,7 +30,12 @@ struct ScreenSize {
 }
 
 enum Color: String {
-    case Blue = "Blue", Red = "Red", Green = "Green", Yellow = "Yellow", Cyan = "Cyan", Purple = "Purple"
+    case Blue
+    case Red
+    case Green
+    case Yellow
+    case Cyan
+    case Purple
     
     static let allValues = [Blue, Red, Green, Yellow, Cyan, Purple]
 }
