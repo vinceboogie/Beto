@@ -20,8 +20,8 @@ class MenuScene: SKScene {
         layer.setScale(Constant.ScaleFactor)
         
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        
-        let background = SKSpriteNode(imageNamed: "menuBackground")
+                
+        let background = SKSpriteNode(imageNamed: GameData.theme.background)
         background.size = self.frame.size
         
         // Start Game Button
@@ -36,10 +36,11 @@ class MenuScene: SKScene {
         let wobble = SKAction.repeatActionForever(cycle)
         startGameButton.runAction(wobble, withKey: "wobble")
         
-        // Customize Button
-        let customizeButton = ButtonNode(defaultButtonImage: "customizeButton")
-        customizeButton.size = CGSize(width: 44, height: 45)
-        customizeButton.position = CGPoint(x: -60, y: -100)
+        // Themes Button
+        let themesButton = ButtonNode(defaultButtonImage: "themesButton")
+        themesButton.size = CGSize(width: 44, height: 45)
+        themesButton.position = CGPoint(x: -60, y: -100)
+        themesButton.action = presentThemesScene
         
         // Achievements Button
         let achievementsButton = ButtonNode(defaultButtonImage: "achievementsButton")
@@ -55,7 +56,7 @@ class MenuScene: SKScene {
         
         // Add nodes
         layer.addChild(startGameButton)
-        layer.addChild(customizeButton)
+        layer.addChild(themesButton)
         layer.addChild(achievementsButton)
         layer.addChild(settingsButton)
         
@@ -69,6 +70,14 @@ class MenuScene: SKScene {
         boardScene.scaleMode = .AspectFill
         
         view!.presentScene(boardScene, transition: transition)
+    }
+    
+    func presentThemesScene() {
+        let transition = SKTransition.flipVerticalWithDuration(0.4)
+        let themesScene = ThemesScene(size: self.size)
+        themesScene.scaleMode = .AspectFill
+        
+        view!.presentScene(themesScene, transition: transition)
     }
     
     func displayAchievements() {

@@ -25,14 +25,17 @@ class Square: ButtonNode {
         
         
         label = SKLabelNode(fontNamed: Constant.FontNameCondensed)
-        label.text = "\(wager)"
         label.hidden = true
+        label.horizontalAlignmentMode = .Center
+        label.verticalAlignmentMode = .Center
         
         let activeButtonImage = defaultButtonImage + "_active"
         
         super.init(defaultButtonImage: defaultButtonImage, activeButtonImage: activeButtonImage)
-        
+
+        self.updateLabel()
         addChild(label)
+        
         self.action = squarePressed
     }
 
@@ -42,5 +45,15 @@ class Square: ButtonNode {
 
     func squarePressed() {
         placeBetHandler!(self)
+    }
+    
+    func updateLabel() {
+        if wager >= 1000000 {
+            label.fontSize = 24
+        } else {
+            label.fontSize = 32
+        }
+        
+        label.text = "\(wager)"
     }
 }

@@ -28,27 +28,27 @@ class GeometryNodes {
         cameraNode.eulerAngles = SCNVector3Make(Float(-M_PI/2), 0, 0)
         
         let blueSide = SCNMaterial()
-        blueSide.diffuse.contents = UIImage(named: "blueCube")
+        blueSide.diffuse.contents = UIImage(named: "defaultBlueFace")
         blueSide.locksAmbientWithDiffuse = false
         
         let redSide = SCNMaterial()
-        redSide.diffuse.contents = UIImage(named: "redCube")
+        redSide.diffuse.contents = UIImage(named: "defaultRedFace")
         redSide.locksAmbientWithDiffuse = false
         
         let yellowSide = SCNMaterial()
-        yellowSide.diffuse.contents = UIImage(named: "yellowCube")
+        yellowSide.diffuse.contents = UIImage(named: "defaultYellowFace")
         yellowSide.locksAmbientWithDiffuse = false
         
         let greenSide = SCNMaterial()
-        greenSide.diffuse.contents = UIImage(named: "greenCube")
+        greenSide.diffuse.contents = UIImage(named: "defaultGreenFace")
         greenSide.locksAmbientWithDiffuse = false
         
         let purpleSide = SCNMaterial()
-        purpleSide.diffuse.contents = UIImage(named: "purpleCube")
+        purpleSide.diffuse.contents = UIImage(named: "defaultPurpleFace")
         purpleSide.locksAmbientWithDiffuse = false
         
         let cyanSide = SCNMaterial()
-        cyanSide.diffuse.contents = UIImage(named: "cyanCube")
+        cyanSide.diffuse.contents = UIImage(named: "defaultCyanFace")
         cyanSide.locksAmbientWithDiffuse = false
         
         let cubeMaterials = [yellowSide, cyanSide, purpleSide, blueSide, redSide, greenSide]

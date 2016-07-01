@@ -62,7 +62,7 @@ class AchievementNode: SKNode {
             completedLabel.fontSize = 12
             completedLabel.position = CGPoint(x: 0, y: -30)
             
-            let completedShadow = createLabelShadow(completedLabel)
+            let completedShadow = completedLabel.createLabelShadow()
             
             details.addChild(completedShadow)
             details.addChild(completedLabel)
@@ -83,7 +83,7 @@ class AchievementNode: SKNode {
             details.addChild(progressBar)
         }
         
-        let titleShadow = createLabelShadow(titleLabel)
+        let titleShadow = titleLabel.createLabelShadow()
         
         details.addChild(titleShadow)
         details.addChild(titleLabel)
@@ -96,16 +96,6 @@ class AchievementNode: SKNode {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func createLabelShadow(labelNode: SKLabelNode) -> SKLabelNode {
-        let shadow = SKLabelNode(text: labelNode.text)
-        shadow.fontName = labelNode.fontName
-        shadow.fontColor = UIColor.darkGrayColor()
-        shadow.fontSize = labelNode.fontSize
-        shadow.position = CGPoint(x: labelNode.position.x + 1, y: labelNode.position.y - 1)
-        
-        return shadow
     }
     
     func pointForLevel(level: Int) -> CGPoint {

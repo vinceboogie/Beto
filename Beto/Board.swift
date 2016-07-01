@@ -38,7 +38,7 @@ class Board {
             layer.setScale(Constant.ScaleFactor)
         }
         
-        boardNode = SKSpriteNode(imageNamed: "board")
+        boardNode = SKSpriteNode(imageNamed: GameData.theme.board)
         boardNode.size = CGSize(width: 300, height: 280)
         
         playButton = ButtonNode(defaultButtonImage: "playButton", activeButtonImage: "playButton_active")
@@ -54,8 +54,6 @@ class Board {
         coinVaultButton.size = CGSize(width: 38, height: 39)
         
         // Initialize the squares
-        
-        
         for color in Color.allValues {
             let square = Square(color: color)
             square.size = CGSize(width: squareSize, height: squareSize)
@@ -104,6 +102,8 @@ class Board {
     func handlePlaceBet(square: Square) {
         let coinsAvailable = GameData.coins - getWagers()
         
+        // DELETE: After tutorial is done
+        
         // Limit selected squares to 3 colors
         if !square.selected && maxColorsSelected() {
             let testNode = SKLabelNode(text: "SELECT UP TO 3 COLORS!")
@@ -122,10 +122,12 @@ class Board {
             return
         }
         
+        // DELETE: After tutorial is done
+
         // Check if there are coins available to wager
         if GameData.betDenomination <= coinsAvailable  {
             square.wager += GameData.betDenomination
-            
+                        
             // In order to safe guard from crashes, we don't subtract the coins
             // from the GameData until after we roll the cubes
             let coins = GameData.coins - getWagers()
@@ -133,7 +135,7 @@ class Board {
             scene.runAction(Audio.placeBetSound)
             
             square.label.hidden = false
-            square.label.text = "\(square.wager)"
+            square.updateLabel()
             square.selected = true
             
         } else {
@@ -171,6 +173,8 @@ class Board {
     }
     
     func replayButtonPressed() {
+        clearButtonPressed()
+        
         for previousBet in previousBets {
             if let index = squares.indexOf(squareWithColor(previousBet.color)) {
                 squares[index].wager = previousBet.wager
@@ -219,10 +223,16 @@ class Board {
     }
     
     func resolveWagers() {
+        var highestWager = 0
+        
         // Add winning wagers back to GameData.coins, clear the board
         for square in squares {
             if winningSquares.contains(square) {
                 GameData.addCoins(square.wager)
+            }
+            
+            if square.wager > highestWager {
+                highestWager = square.wager
             }
             
             let scaleAction = SKAction.scaleTo(0.0, duration: 0.3)
@@ -239,6 +249,9 @@ class Board {
             scene.gameHUD.coinsLabel.text = "\(GameData.coins)"
             scene.gameHUD.highscoreLabel.text = "\(GameData.highscore)"
         }
+        
+        // Check Achievement: HighestWager
+        GameData.updateHighestWager(highestWager)
         
         // Reset winning squares
         winningSquares = []
@@ -258,7 +271,9 @@ class Board {
     
     func coinVaultButtonPressed() {
         let coinVault = CoinVault()
-        coinVault.changeDenominationHandler = { self.coinVaultButton.changeTexture("coin\(GameData.betDenomination)") }
+        coinVault.changeDenominationHandler = {
+            self.coinVaultButton.changeTexture("coin\(GameData.betDenomination)")
+        }
         
         let vaultLayer = coinVault.createLayer()
         scene.addChild(vaultLayer)

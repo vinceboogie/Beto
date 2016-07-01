@@ -27,8 +27,7 @@
 		00543B011C92AD44006C3B52 /* Boundary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00543B001C92AD44006C3B52 /* Boundary.swift */; };
 		B93465A21C7D2B32008CDA26 /* GameDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93465A11C7D2B32008CDA26 /* GameDataManager.swift */; };
 		B9450B0B1C7FB51F00AB5AE3 /* GameHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9450B0A1C7FB51F00AB5AE3 /* GameHUD.swift */; };
-		B946FD6B1CCC20DB005E984E /* Achievements.plist in Resources */ = {isa = PBXBuildFile; fileRef = B946FD6A1CCC20DB005E984E /* Achievements.plist */; };
-		B947ABA01C9124FF00720E2F /* Rewards.swift in Sources */ = {isa = PBXBuildFile; fileRef = B947AB9F1C9124FF00720E2F /* Rewards.swift */; };
+		B947ABA01C9124FF00720E2F /* Reward.swift in Sources */ = {isa = PBXBuildFile; fileRef = B947AB9F1C9124FF00720E2F /* Reward.swift */; };
 		B94F774B1C63FB7F00B3A78C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94F774A1C63FB7F00B3A78C /* AppDelegate.swift */; };
 		B94F774F1C63FB7F00B3A78C /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94F774E1C63FB7F00B3A78C /* GameScene.swift */; };
 		B94F77511C63FB7F00B3A78C /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94F77501C63FB7F00B3A78C /* GameViewController.swift */; };
@@ -45,12 +44,17 @@
 		B94F77981C645C7D00B3A78C /* Mining by Moonlight.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B94F77921C645C7D00B3A78C /* Mining by Moonlight.mp3 */; };
 		B94F77991C645C7D00B3A78C /* Scrape.wav in Resources */ = {isa = PBXBuildFile; fileRef = B94F77931C645C7D00B3A78C /* Scrape.wav */; };
 		B950AF9C1C8A50EE00A74054 /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950AF9B1C8A50EE00A74054 /* Coin.swift */; };
-		B95511DA1CF8301E005DB77E /* LevelUnlocked.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95511D91CF8301E005DB77E /* LevelUnlocked.swift */; };
+		B95511DA1CF8301E005DB77E /* UnlockedLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95511D91CF8301E005DB77E /* UnlockedLevel.swift */; };
 		B969C0FC1C7E8B2A00B24CDB /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = B969C0FB1C7E8B2A00B24CDB /* Constant.swift */; };
+		B972CFFB1D124A9F0030119D /* DropdownNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B972CFFA1D124A9F0030119D /* DropdownNode.swift */; };
+		B972CFFD1D1254E30030119D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B972CFFC1D1254E30030119D /* Extensions.swift */; };
 		B973BA101CBE3A0700FF90F9 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B973BA0F1CBE3A0700FF90F9 /* AudioManager.swift */; };
 		B981110F1C7D650600E118EC /* GameData.plist in Resources */ = {isa = PBXBuildFile; fileRef = B981110E1C7D650600E118EC /* GameData.plist */; };
 		B982DFC91C9266ED00D89ED5 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B982DFC81C9266ED00D89ED5 /* MenuViewController.swift */; };
 		B982E8FC1CB8DC5B00700002 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = B982E8FB1CB8DC5B00700002 /* Store.swift */; };
+		B983ED271D02283B00A9507F /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B983ED261D02283B00A9507F /* Theme.swift */; };
+		B983ED291D022A7F00A9507F /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B983ED281D022A7F00A9507F /* ThemeManager.swift */; };
+		B983ED2B1D0293D200A9507F /* ThemesScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B983ED2A1D0293D200A9507F /* ThemesScene.swift */; };
 		B988697B1CB99CFE0017577D /* BoardScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B988697A1CB99CFE0017577D /* BoardScene.swift */; };
 		B9A182021CF7C319004AA111 /* Achievement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A182011CF7C319004AA111 /* Achievement.swift */; };
 		B9A3BA4C1C6470C00006400D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9A3BA4B1C6470C00006400D /* Assets.xcassets */; };
@@ -107,8 +111,7 @@
 		00543B001C92AD44006C3B52 /* Boundary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Boundary.swift; sourceTree = "<group>"; };
 		B93465A11C7D2B32008CDA26 /* GameDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameDataManager.swift; sourceTree = "<group>"; };
 		B9450B0A1C7FB51F00AB5AE3 /* GameHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameHUD.swift; sourceTree = "<group>"; };
-		B946FD6A1CCC20DB005E984E /* Achievements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Achievements.plist; sourceTree = "<group>"; };
-		B947AB9F1C9124FF00720E2F /* Rewards.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rewards.swift; sourceTree = "<group>"; };
+		B947AB9F1C9124FF00720E2F /* Reward.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reward.swift; sourceTree = "<group>"; };
 		B94F77471C63FB7F00B3A78C /* Beto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Beto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B94F774A1C63FB7F00B3A78C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B94F774E1C63FB7F00B3A78C /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -131,12 +134,17 @@
 		B94F77921C645C7D00B3A78C /* Mining by Moonlight.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Mining by Moonlight.mp3"; sourceTree = "<group>"; };
 		B94F77931C645C7D00B3A78C /* Scrape.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Scrape.wav; sourceTree = "<group>"; };
 		B950AF9B1C8A50EE00A74054 /* Coin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
-		B95511D91CF8301E005DB77E /* LevelUnlocked.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelUnlocked.swift; sourceTree = "<group>"; };
+		B95511D91CF8301E005DB77E /* UnlockedLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnlockedLevel.swift; sourceTree = "<group>"; };
 		B969C0FB1C7E8B2A00B24CDB /* Constant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		B972CFFA1D124A9F0030119D /* DropdownNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropdownNode.swift; sourceTree = "<group>"; };
+		B972CFFC1D1254E30030119D /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		B973BA0F1CBE3A0700FF90F9 /* AudioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		B981110E1C7D650600E118EC /* GameData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GameData.plist; sourceTree = "<group>"; };
 		B982DFC81C9266ED00D89ED5 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		B982E8FB1CB8DC5B00700002 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		B983ED261D02283B00A9507F /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		B983ED281D022A7F00A9507F /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		B983ED2A1D0293D200A9507F /* ThemesScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemesScene.swift; sourceTree = "<group>"; };
 		B988697A1CB99CFE0017577D /* BoardScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardScene.swift; sourceTree = "<group>"; };
 		B9A182011CF7C319004AA111 /* Achievement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Achievement.swift; sourceTree = "<group>"; };
 		B9A3BA4B1C6470C00006400D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Sounds/Assets.xcassets; sourceTree = "<group>"; };
@@ -226,7 +234,7 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		B912C4771CDD8D5700049595 /* Nodes */ = {
+		B912C4771CDD8D5700049595 /* BoardNodes */ = {
 			isa = PBXGroup;
 			children = (
 				B9450B0A1C7FB51F00AB5AE3 /* GameHUD.swift */,
@@ -235,17 +243,13 @@
 				B9F1D2791C75AE6700E242F7 /* ButtonNode.swift */,
 				B950AF9B1C8A50EE00A74054 /* Coin.swift */,
 				B9C7E2C31C8B88A300879014 /* CoinVault.swift */,
-				B947AB9F1C9124FF00720E2F /* Rewards.swift */,
-				00543AFA1C92ACCC006C3B52 /* Cube.swift */,
-				00543AFE1C92AD25006C3B52 /* GeometryNodes.swift */,
-				00543B001C92AD44006C3B52 /* Boundary.swift */,
-				B9CDB80E1CB8593C00BC8A57 /* Settings.swift */,
-				B95511D91CF8301E005DB77E /* LevelUnlocked.swift */,
+				B95511D91CF8301E005DB77E /* UnlockedLevel.swift */,
 				B9C067281CF009170021AE6E /* AchievementNode.swift */,
 				B9C0672A1CF0094F0021AE6E /* AchievementsListNode.swift */,
 				B982E8FB1CB8DC5B00700002 /* Store.swift */,
+				B972CFFA1D124A9F0030119D /* DropdownNode.swift */,
 			);
-			name = Nodes;
+			name = BoardNodes;
 			sourceTree = "<group>";
 		};
 		B94F773E1C63FB7F00B3A78C = {
@@ -282,7 +286,6 @@
 				B94F77571C63FB7F00B3A78C /* LaunchScreen.storyboard */,
 				B94F775A1C63FB7F00B3A78C /* Info.plist */,
 				B981110E1C7D650600E118EC /* GameData.plist */,
-				B946FD6A1CCC20DB005E984E /* Achievements.plist */,
 			);
 			path = Beto;
 			sourceTree = "<group>";
@@ -308,12 +311,18 @@
 		B94F77881C642CF100B3A78C /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				B912C4771CDD8D5700049595 /* Nodes */,
+				B96C2A161D1287F900E63117 /* MenuNodes */,
+				B96C2A151D1287C100E63117 /* GameNodes */,
+				B912C4771CDD8D5700049595 /* BoardNodes */,
 				B969C0FB1C7E8B2A00B24CDB /* Constant.swift */,
+				B947AB9F1C9124FF00720E2F /* Reward.swift */,
+				B983ED261D02283B00A9507F /* Theme.swift */,
+				B983ED281D022A7F00A9507F /* ThemeManager.swift */,
 				B9A182011CF7C319004AA111 /* Achievement.swift */,
 				B9C0672C1CF0423D0021AE6E /* AchievementsManager.swift */,
 				B973BA0F1CBE3A0700FF90F9 /* AudioManager.swift */,
 				B93465A11C7D2B32008CDA26 /* GameDataManager.swift */,
+				B972CFFC1D1254E30030119D /* Extensions.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -324,6 +333,7 @@
 				B94F774E1C63FB7F00B3A78C /* GameScene.swift */,
 				B9F1D26F1C7571BC00E242F7 /* MenuScene.swift */,
 				B988697A1CB99CFE0017577D /* BoardScene.swift */,
+				B983ED2A1D0293D200A9507F /* ThemesScene.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -348,6 +358,24 @@
 				B94F77931C645C7D00B3A78C /* Scrape.wav */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		B96C2A151D1287C100E63117 /* GameNodes */ = {
+			isa = PBXGroup;
+			children = (
+				00543AFA1C92ACCC006C3B52 /* Cube.swift */,
+				00543AFE1C92AD25006C3B52 /* GeometryNodes.swift */,
+				00543B001C92AD44006C3B52 /* Boundary.swift */,
+			);
+			name = GameNodes;
+			sourceTree = "<group>";
+		};
+		B96C2A161D1287F900E63117 /* MenuNodes */ = {
+			isa = PBXGroup;
+			children = (
+				B9CDB80E1CB8593C00BC8A57 /* Settings.swift */,
+			);
+			name = MenuNodes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -461,7 +489,6 @@
 				B94F77981C645C7D00B3A78C /* Mining by Moonlight.mp3 in Resources */,
 				B94F77951C645C7D00B3A78C /* Drip.wav in Resources */,
 				B9A3BA4C1C6470C00006400D /* Assets.xcassets in Resources */,
-				B946FD6B1CCC20DB005E984E /* Achievements.plist in Resources */,
 				B94F77971C645C7D00B3A78C /* Ka-Ching.wav in Resources */,
 				B94F77961C645C7D00B3A78C /* Error.wav in Resources */,
 				B94F77591C63FB7F00B3A78C /* LaunchScreen.storyboard in Resources */,
@@ -491,12 +518,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B947ABA01C9124FF00720E2F /* Rewards.swift in Sources */,
+				B983ED271D02283B00A9507F /* Theme.swift in Sources */,
+				B947ABA01C9124FF00720E2F /* Reward.swift in Sources */,
 				B94F77811C641CA600B3A78C /* Square.swift in Sources */,
-				B95511DA1CF8301E005DB77E /* LevelUnlocked.swift in Sources */,
+				B95511DA1CF8301E005DB77E /* UnlockedLevel.swift in Sources */,
 				B982E8FC1CB8DC5B00700002 /* Store.swift in Sources */,
 				B973BA101CBE3A0700FF90F9 /* AudioManager.swift in Sources */,
 				B9A182021CF7C319004AA111 /* Achievement.swift in Sources */,
+				B983ED2B1D0293D200A9507F /* ThemesScene.swift in Sources */,
 				B9F1D2701C7571BC00E242F7 /* MenuScene.swift in Sources */,
 				B969C0FC1C7E8B2A00B24CDB /* Constant.swift in Sources */,
 				B9450B0B1C7FB51F00AB5AE3 /* GameHUD.swift in Sources */,
@@ -505,8 +534,10 @@
 				B988697B1CB99CFE0017577D /* BoardScene.swift in Sources */,
 				B94F77511C63FB7F00B3A78C /* GameViewController.swift in Sources */,
 				B94F77871C64265F00B3A78C /* Board.swift in Sources */,
+				B972CFFB1D124A9F0030119D /* DropdownNode.swift in Sources */,
 				B982DFC91C9266ED00D89ED5 /* MenuViewController.swift in Sources */,
 				00543B011C92AD44006C3B52 /* Boundary.swift in Sources */,
+				B972CFFD1D1254E30030119D /* Extensions.swift in Sources */,
 				B93465A21C7D2B32008CDA26 /* GameDataManager.swift in Sources */,
 				B94F774B1C63FB7F00B3A78C /* AppDelegate.swift in Sources */,
 				00543AFF1C92AD25006C3B52 /* GeometryNodes.swift in Sources */,
@@ -517,6 +548,7 @@
 				B9F1D27A1C75AE6700E242F7 /* ButtonNode.swift in Sources */,
 				B9C7E2C41C8B88A300879014 /* CoinVault.swift in Sources */,
 				B9CDB80F1CB8593C00BC8A57 /* Settings.swift in Sources */,
+				B983ED291D022A7F00A9507F /* ThemeManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
