@@ -8,6 +8,22 @@
 
 import SpriteKit
 
-class Reward {
-  
+struct Reward {
+    let bonusPayoutHours: Int
+    let themesUnlocked: Int
+    
+    init(bonusPayoutHours: Int, themesUnlocked: Int) {
+        self.bonusPayoutHours = bonusPayoutHours
+        self.themesUnlocked = themesUnlocked
+    }
+    
+    init(bonusPayoutHours: Int) {
+        self.bonusPayoutHours = bonusPayoutHours
+        themesUnlocked = 0
+    }
+    
+    init(themesUnlocked: Int) {
+        self.themesUnlocked = themesUnlocked
+        bonusPayoutHours = 0
+    }
 }

@@ -210,6 +210,11 @@ class Board {
         // Add winnings
         if winningSquare.wager > 0 {
             GameData.addCoins(winningSquare.wager)
+
+            if GameData.shouldPayBonus {
+                GameData.addCoins(winningSquare.wager)
+            }
+            
             scene.runAction(Audio.winSound)
             
             didWin = true

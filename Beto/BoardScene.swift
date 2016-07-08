@@ -14,6 +14,8 @@ class BoardScene: SKScene {
     var boardLayer: SKNode!
     var gameHUDLayer: SKNode!
     var dropdownQueue: [DropdownNode]!
+    var bonusDisplayButton: SKSpriteNode!
+    var bonusTimer: SKLabelNode!
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
@@ -35,10 +37,21 @@ class BoardScene: SKScene {
         board = Board(scene: self)
         boardLayer = board.createLayer()
         
+        board.toggleReplayButton()
+        
         gameHUD = GameHUD(scene: self)
         gameHUDLayer = gameHUD.createLayer()
         
-        board.toggleReplayButton()
+        bonusDisplayButton = SKSpriteNode(imageNamed: "bonusPayoutIcon")
+        bonusDisplayButton.size = CGSize(width: 39, height: 47)
+        bonusDisplayButton.position = CGPoint(x: 30 - ScreenSize.Width/2, y: ScreenSize.Height/2 - 70)
+        
+        bonusTimer = SKLabelNode()
+        bonusTimer.fontColor = UIColor.whiteColor()
+        bonusTimer.fontName = Constant.FontName
+        bonusTimer.fontSize = 18
+        bonusTimer.horizontalAlignmentMode = .Left
+        bonusTimer.position = CGPoint(x: 50 - ScreenSize.Width/2, y: ScreenSize.Height/2 - 80)
         
         if !Audio.musicMuted {
             runAction(SKAction.waitForDuration(0.5), completion: {
@@ -49,8 +62,32 @@ class BoardScene: SKScene {
         addChild(background)
         addChild(gameHUDLayer)
         addChild(boardLayer)
+        addChild(bonusDisplayButton)
+        addChild(bonusTimer)
     }
     
+    override func update(currentTime: NSTimeInterval) {
+        let interval = Int(GameData.bonusTimeLeft())
+        
+        let seconds = interval % 60
+        let minutes = (interval / 60) % 60
+        let hours = interval / 3600
+        
+        if hours == 0 {
+            bonusTimer.text = String(format: "%02d:%02d", minutes, seconds)
+        } else {
+            bonusTimer.text = String(format: "%2d:%02d:%02d", hours, minutes, seconds)
+        }
+    
+        if GameData.bonusPayoutEnabled() {
+            bonusDisplayButton.hidden = false
+            bonusTimer.hidden = false
+        } else {
+            bonusDisplayButton.hidden = true
+            bonusTimer.hidden = true
+        }
+    }    
+
     func addToDropdownQueue(achievement: Achievement) {
         let unlocked = UnlockedLevel(achievement: achievement)
         dropdownQueue.append(unlocked)
@@ -142,9 +179,23 @@ class BoardScene: SKScene {
     
     func showUnlockedNodes() {
         if GameData.coins == 0 {            
-            let container = SKSpriteNode(imageNamed: "goldenTicket")
-            container.size = CGSize(width: 226, height: 120)
+            let container = SKSpriteNode(imageNamed: "goldenTicketBackground")
+            container.size = CGSize(width: 304, height: 267)
             container.position = CGPoint(x: 0, y: ScreenSize.Height)
+            
+            let titleLabel = SKLabelNode(text: "WHO DOESN'T LOVE FREE STUFF")
+            titleLabel.fontName = Constant.FontNameExtraBold
+            titleLabel.fontColor = UIColor.whiteColor()
+            titleLabel.fontSize = 14
+            titleLabel.position = CGPoint(x: 0, y: 65)
+            
+            let titleShadow = titleLabel.createLabelShadow()
+            
+            container.addChild(titleShadow)
+            container.addChild(titleLabel)
+            
+            let ticket = SKSpriteNode(imageNamed: "goldenTicket")
+            container.addChild(ticket)
             
             // Claim button
             let claimButton = ButtonNode(defaultButtonImage: "claimButton", activeButtonImage: "claimButton_active")

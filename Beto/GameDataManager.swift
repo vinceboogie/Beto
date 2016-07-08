@@ -17,6 +17,9 @@ class GameDataManager {
     private(set) var musicMuted: Bool
     private(set) var themeName: String
     private(set) var theme: Theme
+    private(set) var bonusPayoutEndTime: NSDate
+    
+    var shouldPayBonus: Bool
     
     private(set) var gamesPlayed: Int
     private(set) var redWinCount: Int
@@ -38,6 +41,7 @@ class GameDataManager {
     private let soundMutedKey = "soundMuted"
     private let musicMutedKey = "musicMuted"
     private let themeNameKey = "themeName"
+    private let bonusPayoutEndTimeKey = "bonusPayoutEndTime"
 
     private let gamesPlayedKey = "gamesPlayed"
     private let redWinCountKey = "redWinCount"
@@ -79,6 +83,7 @@ class GameDataManager {
             soundMuted = dict.objectForKey(soundMutedKey) as! Bool
             musicMuted = dict.objectForKey(musicMutedKey) as! Bool
             themeName = dict.objectForKey(themeNameKey) as! String
+            bonusPayoutEndTime = dict.objectForKey(bonusPayoutEndTimeKey) as! NSDate
             
             gamesPlayed = dict.objectForKey(gamesPlayedKey) as! Int
             redWinCount = dict.objectForKey(redWinCountKey) as! Int
@@ -98,6 +103,7 @@ class GameDataManager {
             soundMuted = true
             musicMuted = true
             themeName = "Default"
+            bonusPayoutEndTime = NSDate()
             
             gamesPlayed = 0
             redWinCount = 0
@@ -110,6 +116,7 @@ class GameDataManager {
         }
         
         theme = Theme(themeName: themeName, unlocked: true)
+        shouldPayBonus = false
     }
     
     func save() {
@@ -126,6 +133,7 @@ class GameDataManager {
         dict.setObject(soundMuted, forKey: soundMutedKey)
         dict.setObject(musicMuted, forKey: musicMutedKey)
         dict.setObject(themeName, forKey: themeNameKey)
+        dict.setObject(bonusPayoutEndTime, forKey: bonusPayoutEndTimeKey)
         
         dict.setObject(gamesPlayed, forKey: gamesPlayedKey)
         dict.setObject(redWinCount, forKey: redWinCountKey)
@@ -226,5 +234,52 @@ class GameDataManager {
             Achievements.update(.HighestWager)
         }
     }
+    
+    func setBonusPayoutTime(hours: Int) {
+        let timeInterval: Double = 60 * 60 * Double(hours)
+        
+        if bonusPayoutEnabled() {
+            bonusPayoutEndTime = bonusPayoutEndTime.dateByAddingTimeInterval(timeInterval)
+        } else {
+            bonusPayoutEndTime = NSDate().dateByAddingTimeInterval(timeInterval)
+        }
+    }
+    
+    func bonusTimeLeft() -> NSTimeInterval {
+       return bonusPayoutEndTime.timeIntervalSinceDate(NSDate())
+    }
+    
+    func bonusPayoutEnabled() -> Bool {
+        if NSDate().compare(bonusPayoutEndTime) == .OrderedAscending {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    // DELETE: Test
+//    func bonusPayoutTest() {
+//        let currentTime = NSDate()
+//
+//        let formatter = NSDateFormatter()
+//        formatter.locale = NSLocale.currentLocale()
+//        formatter.dateStyle = .LongStyle
+//        formatter.timeStyle = .MediumStyle
+//        
+//        // DELETE: Test
+//        let current = NSDate()
+//        let interval = Int(bonusPayoutEndTime.timeIntervalSinceDate(current))
+//
+//        let seconds = interval % 60
+//        let minutes = (interval / 60) % 60
+//        let hours = interval / 3600
+//        
+//        print("\(hours):\(minutes):\(seconds)")
+//        
+//        print(formatter.stringFromDate(currentTime))
+//        print(formatter.stringFromDate(bonusPayoutEndTime))
+//        print(bonusPayoutEnabled())
+//        
+//    }
 }
 

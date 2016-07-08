@@ -18,13 +18,7 @@ class Theme {
         name = themeName
         
         background = "\(name.lowercaseString)Background"
-        
-        // DELETE: Temporary
-        if name == "Default" {
-            board = "\(name.lowercaseString)Board"
-        } else {
-            board = "whiteBoard"
-        }
+        board = "\(name.lowercaseString)Board"
         
         self.unlocked = unlocked
     }

@@ -7,13 +7,21 @@
 //
 
 import SceneKit
+import UIKit
 
 class GeometryNodes {
     private let boundary: Boundary
     private let cameraNode: SCNNode
     let floorNode: SCNNode
     let cubesNode: SCNNode
-
+    
+    var yellowFace = "defaultYellowFace"
+    var cyanFace = "defaultCyanFace"
+    var purpleFace = "defaultPurpleFace"
+    var blueFace = "defaultBlueFace"
+    var redFace = "defaultRedFace"
+    var greenFace = "defaultGreenFace"
+    
     init () {
         cubesNode = SCNNode()
         boundary = Boundary()
@@ -27,28 +35,42 @@ class GeometryNodes {
         cameraNode.camera = SCNCamera()
         cameraNode.eulerAngles = SCNVector3Make(Float(-M_PI/2), 0, 0)
         
+        if GameData.bonusPayoutEnabled() {
+            yellowFace = "doubleYellowFace"
+            cyanFace = "doubleCyanFace"
+            purpleFace = "doublePurpleFace"
+            blueFace = "doubleBlueFace"
+            redFace = "doubleRedFace"
+            greenFace = "doubleGreenFace"
+            
+            GameData.shouldPayBonus = true
+        } else {
+            GameData.shouldPayBonus = false
+        }
+        
+        
         let blueSide = SCNMaterial()
-        blueSide.diffuse.contents = UIImage(named: "defaultBlueFace")
+        blueSide.diffuse.contents = UIImage(named: blueFace)
         blueSide.locksAmbientWithDiffuse = false
         
         let redSide = SCNMaterial()
-        redSide.diffuse.contents = UIImage(named: "defaultRedFace")
+        redSide.diffuse.contents = UIImage(named: redFace)
         redSide.locksAmbientWithDiffuse = false
         
         let yellowSide = SCNMaterial()
-        yellowSide.diffuse.contents = UIImage(named: "defaultYellowFace")
+        yellowSide.diffuse.contents = UIImage(named: yellowFace)
         yellowSide.locksAmbientWithDiffuse = false
         
         let greenSide = SCNMaterial()
-        greenSide.diffuse.contents = UIImage(named: "defaultGreenFace")
+        greenSide.diffuse.contents = UIImage(named: greenFace)
         greenSide.locksAmbientWithDiffuse = false
         
         let purpleSide = SCNMaterial()
-        purpleSide.diffuse.contents = UIImage(named: "defaultPurpleFace")
+        purpleSide.diffuse.contents = UIImage(named: purpleFace)
         purpleSide.locksAmbientWithDiffuse = false
         
         let cyanSide = SCNMaterial()
-        cyanSide.diffuse.contents = UIImage(named: "defaultCyanFace")
+        cyanSide.diffuse.contents = UIImage(named: cyanFace)
         cyanSide.locksAmbientWithDiffuse = false
         
         let cubeMaterials = [yellowSide, cyanSide, purpleSide, blueSide, redSide, greenSide]

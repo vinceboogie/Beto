@@ -89,19 +89,23 @@ class GameHUD {
         // DELETE: BEGIN UNIT TEST
 //        var index = 0
 //        
-//        while index < 50 {
+//        while index < 40 {
 //            GameData.incrementWinCount(Color.Cyan)
 //            index += 1
 //        }
 //
 //        GameData.addCoins(500000)
 //
+//        GameData.setBonusPayoutTime(1)
 //        scene.showUnlockedNodes()
 //
 //        let store = Store()
 //        let layer = store.createLayer()
 //        
 //        scene.addChild(layer)
+        
+//        scene.showUnlockedNodes()
+//        GameData.setBonusPayoutTime(2)
         
         GameData.addCoins(100)
         GameData.save()
