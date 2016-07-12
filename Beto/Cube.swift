@@ -16,7 +16,7 @@ class Cube {
         cube.name = name
         cube.position = SCNVector3(position, 0.15, 1.15)
         
-        cube.geometry = SCNBox (width: cubeSize, height: cubeSize, length: cubeSize, chamferRadius: cubeSize/6)
+        cube.geometry = SCNBox(width: cubeSize, height: cubeSize, length: cubeSize, chamferRadius: cubeSize/6)
         cube.eulerAngles = SCNVector3Make(Float(M_PI/2 * Double(arc4random()%4)), Float(M_PI/2 * Double(arc4random()%4)),Float(M_PI/2 * Double(arc4random()%4)))
         cube.opacity = 1.0
         cube.geometry!.materials = cubeMaterials

@@ -10,14 +10,14 @@ class Achievement {
     let name: String
     let requirementValues: [Int]
     let requirements: [String]
-    let rewards: [Int] // DELETE: For now it's coins
+    let rewards: [Reward]
     var level: Int
     var progress: Double
     
     var calculateLevel: (() -> (Int))?
     var calculateProgress: (() -> (Double))?
     
-    init(name: String, requirementValues: [Int], requirements: [String], rewards: [Int]) {
+    init(name: String, requirementValues: [Int], requirements: [String], rewards: [Reward]) {
         self.name = name
         self.requirementValues = requirementValues
         self.requirements = requirements
@@ -29,14 +29,13 @@ class Achievement {
     
     func update() {
         var oldLevel = 0
-        var newLevel = 0
         
         oldLevel = level
         level = calculateLevel!()
-        newLevel = level
         
-        if newLevel > oldLevel {
+        if level > oldLevel {
             GameData.unlockedLevelHandler!(self)
+            GameData.setBonusPayoutTime(rewards[level-1].bonusPayoutHours)
         }
         
         progress = calculateProgress!()

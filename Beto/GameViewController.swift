@@ -12,11 +12,13 @@ import SpriteKit
 class GameViewController: UIViewController {
     var gameScene: GameScene!
     var boardScene: BoardScene!
+    var backButton: UIButton!
+
     var panGesture = UIPanGestureRecognizer.self()
     var tapGesture = UITapGestureRecognizer.self()
     var tapRecognizer = UITapGestureRecognizer.self()
     var touchCount = 0.0
-    
+        
     override func shouldAutorotate() -> Bool {
         return true
     }
@@ -36,6 +38,11 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        backButton = UIButton(frame: CGRect(x: 15, y: 15, width: 38, height: 39))
+        backButton.setImage(UIImage(named: "replayButton"), forState: .Normal)
+        backButton.addTarget(self, action: #selector(buttonAction), forControlEvents: .TouchUpInside)
+        self.view.addSubview(backButton)
+        
         // Configure the scene
         gameScene = GameScene()
         gameScene.resolveGameplayHandler = { [unowned self] in self.handleResolveGameplay() }
@@ -48,22 +55,15 @@ class GameViewController: UIViewController {
         sceneView.backgroundColor = UIColor.clearColor()
         sceneView.antialiasingMode = SCNAntialiasingMode.Multisampling4X
         
-        // Custom background contents for iPhone 5 (Screen size: 320 x 480)
-        if UIScreen.mainScreen().bounds.height == 568 {
-            gameScene.background.contents = UIImage(named: GameData.theme.background)
-        } else {
-            gameScene.background.contents = boardScene
-        }
+        // Configure the background
+        gameScene.background.contents = UIImage(named: GameData.theme.background)
         
         // Configure the gestures
-        panGesture = UIPanGestureRecognizer(target: self, action: #selector(GameViewController.handlePan(_:)))
+        panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         view.addGestureRecognizer(panGesture)
         
         tapRecognizer.numberOfTapsRequired = 1
         tapRecognizer.numberOfTouchesRequired = 1
-        
-        // Subtract wagers from GameData        
-        GameData.subtractCoins(boardScene.board.getWagers())
     }
     
     func handlePan(gesture:UIPanGestureRecognizer) {
@@ -80,11 +80,15 @@ class GameViewController: UIViewController {
                 touchCount += 1
             }
         } else if touchCount == 2 {
+            backButton.hidden = true
             gameScene.shouldCheckMovement = true
         }
     }
     
     func handleResolveGameplay() {
+        // Subtract wagers from GameData
+        GameData.subtractCoins(boardScene.board.getWagers())
+        
         GameData.incrementGamesPlayed()
         
         var winningColors: [Color] = []
@@ -111,6 +115,10 @@ class GameViewController: UIViewController {
         delay(1.0) {
             self.dismissViewControllerAnimated(true, completion: self.boardScene.showUnlockedNodes)
         }
+    }
+    
+    func buttonAction(sender: UIButton) {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func delay(delay: Double, closure: ()->()) {
