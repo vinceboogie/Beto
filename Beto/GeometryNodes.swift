@@ -35,19 +35,18 @@ class GeometryNodes {
         cameraNode.camera = SCNCamera()
         cameraNode.eulerAngles = SCNVector3Make(Float(-M_PI/2), 0, 0)
         
-        if GameData.bonusPayoutEnabled() {
+        /*** Determine cube face ***/
+        
+        GameData.setPayBonusStatus()
+        
+        if GameData.shouldPayBonus {
             yellowFace = "doubleYellowFace"
             cyanFace = "doubleCyanFace"
             purpleFace = "doublePurpleFace"
             blueFace = "doubleBlueFace"
             redFace = "doubleRedFace"
             greenFace = "doubleGreenFace"
-            
-            GameData.shouldPayBonus = true
-        } else {
-            GameData.shouldPayBonus = false
         }
-        
         
         let blueSide = SCNMaterial()
         blueSide.diffuse.contents = UIImage(named: blueFace)
@@ -75,13 +74,30 @@ class GeometryNodes {
         
         let cubeMaterials = [yellowSide, cyanSide, purpleSide, blueSide, redSide, greenSide]
         
-        let cube1 = Cube(name: "cube1", position: -0.2, cubeMaterials: cubeMaterials)
-        let cube2 = Cube(name: "cube2", position: 0.0, cubeMaterials: cubeMaterials)
-        let cube3 = Cube(name: "cube3", position: 0.2, cubeMaterials: cubeMaterials)
+        /*** Determine cube count ***/
         
-        cube1.addNodesTo(cubesNode)
-        cube2.addNodesTo(cubesNode)
-        cube3.addNodesTo(cubesNode)
+        let count = 3 + GameData.getBonusDice()
+        var cubeSize: CGFloat = 0.33
+        
+        if count == 6 {
+            cubeSize = 0.28
+        }
+    
+        for num in 1...count {
+            let xoffset = CGFloat(num % 3)
+            let xposition: CGFloat = -0.2 + (0.2 * xoffset)
+                        
+            var yposition: CGFloat = 0.15
+            
+            if num > 3 {
+                yposition = 1.15
+            }
+            
+            let position = SCNVector3(xposition, yposition, 1.15)
+            let cube = Cube(name: "cube\(num)", position: position, cubeMaterials: cubeMaterials, size: cubeSize)
+            
+            cube.addNodeTo(cubesNode)
+        }
     }
     
     func addNodesTo(parentNode:SCNNode) {

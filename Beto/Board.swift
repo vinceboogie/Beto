@@ -23,6 +23,8 @@ class Board {
     private var winningSquares: [Square]
     private var previousBets: [(color: Color, wager: Int)]
     
+    var colorsSelected = 0
+    
     init(scene: BoardScene) {
         self.scene = scene
         
@@ -105,7 +107,7 @@ class Board {
         // DELETE: After tutorial is done
         
         // Limit selected squares to 3 colors
-        if !square.selected && maxColorsSelected() {
+        if !square.selected && colorsSelected == 3 {
             let testNode = SKLabelNode(text: "SELECT UP TO 3 COLORS!")
             testNode.fontSize = 16
             testNode.color = SKColor.blueColor()
@@ -131,13 +133,16 @@ class Board {
             // In order to safe guard from crashes, we don't subtract the coins
             // from the GameData until after we roll the cubes
             let coins = GameData.coins - getWagers()
-            scene.gameHUD.coinsLabel.text = "\(coins)"
+            scene.gameHUD.updateCoinsLabel(coins)
             scene.runAction(Audio.placeBetSound)
             
-            square.label.hidden = false
             square.updateLabel()
-            square.selected = true
             
+            if !square.selected {
+                square.label.hidden = false
+                square.selected = true
+                colorsSelected += 1
+            }
         } else {
             scene.runAction(Audio.lostSound)
             
@@ -156,7 +161,7 @@ class Board {
         }
     }
     
-    func playButtonPressed() {
+    func playButtonPressed() {        
         if getWagers() > 0 {
             // Reset previousBets
             previousBets = []
@@ -167,7 +172,7 @@ class Board {
                     previousBets.append((color: square.color, wager: square.wager))
                 }
             }
-            
+    
             scene.presentGameScene()
         }
     }
@@ -179,15 +184,17 @@ class Board {
             if let index = squares.indexOf(squareWithColor(previousBet.color)) {
                 squares[index].wager = previousBet.wager
                 squares[index].label.hidden = false
-                squares[index].label.text = "\(squares[index].wager)"
+                squares[index].updateLabel()
                 squares[index].selected = true
+                
+                colorsSelected += 1
             }
         }
         
         // In order to safe guard from crashes, we don't subtract the coins
         // from the GameData until after we roll the cubes
         let coins = GameData.coins - getWagers()
-        scene.gameHUD.coinsLabel.text = "\(coins)"
+        scene.gameHUD.updateCoinsLabel(coins)
     }
     
     func payout(winningColor: Color) -> Bool {
@@ -220,8 +227,8 @@ class Board {
             didWin = true
             
             // Update labels
-            scene.gameHUD.coinsLabel.text = "\(GameData.coins)"
-            scene.gameHUD.highscoreLabel.text = "\(GameData.highscore)"
+            scene.gameHUD.updateCoinsLabel(GameData.coins)
+            scene.gameHUD.updateHighscoreLabel(GameData.highscore)
         }
         
         return didWin
@@ -251,8 +258,8 @@ class Board {
             square.selected = false
             
             // Update labels
-            scene.gameHUD.coinsLabel.text = "\(GameData.coins)"
-            scene.gameHUD.highscoreLabel.text = "\(GameData.highscore)"
+            scene.gameHUD.updateCoinsLabel(GameData.coins)
+            scene.gameHUD.updateHighscoreLabel(GameData.highscore)
         }
         
         // Check Achievement: HighestWager
@@ -270,8 +277,10 @@ class Board {
             square.selected = false
         }
         
+        colorsSelected = 0
+        
         scene.runAction(Audio.clearBetSound)
-        scene.gameHUD.coinsLabel.text = "\(GameData.coins )"
+        scene.gameHUD.updateCoinsLabel(GameData.coins)
     }
     
     func coinVaultButtonPressed() {
@@ -325,19 +334,7 @@ class Board {
         
         return wagers
     }
-    
-    func maxColorsSelected() -> Bool {
-        var total = 0
-        
-        for square in squares {
-            if square.selected {
-                total += 1
-            }
-        }
-        
-        // Max color is 3
-        return (total >= 3)
-    }
+
     
     func toggleReplayButton() {
         var wagers = 0

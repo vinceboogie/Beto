@@ -54,11 +54,9 @@ class AchievementNode: SKNode {
         
         // Add progress bar or achievements completed label 
         if achievement.level == 3 {
-            let betoGreen = UIColor(red: 126/255, green: 211/255, blue: 33/255, alpha: 1)
-            
             let completedLabel = SKLabelNode(text: "Achievement Completed")
             completedLabel.fontName = Constant.FontNameExtraBold
-            completedLabel.fontColor = betoGreen
+            completedLabel.fontColor = Constant.BetoGreen
             completedLabel.fontSize = 12
             completedLabel.position = CGPoint(x: 0, y: -30)
             

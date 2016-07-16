@@ -16,10 +16,9 @@ class GameDataManager {
     private(set) var soundMuted: Bool
     private(set) var musicMuted: Bool
     private(set) var themeName: String
-    private(set) var theme: Theme
     private(set) var bonusPayoutEndTime: NSDate
-    
-    var shouldPayBonus: Bool
+    private(set) var bonusDiceEndTime: NSDate
+    private(set) var bonusDice: Int
     
     private(set) var gamesPlayed: Int
     private(set) var redWinCount: Int
@@ -29,6 +28,11 @@ class GameDataManager {
     private(set) var cyanWinCount: Int
     private(set) var purpleWinCount: Int
     private(set) var highestWager: Int
+    
+    // Non-plist variables
+    private(set) var shouldPayBonus: Bool
+    private(set) var theme: Theme
+    private(set) var rewardChance: Int
     
     var unlockedCoinHandler: (() -> ())?
     var unlockedLevelHandler: ((Achievement) -> ())?
@@ -42,6 +46,8 @@ class GameDataManager {
     private let musicMutedKey = "musicMuted"
     private let themeNameKey = "themeName"
     private let bonusPayoutEndTimeKey = "bonusPayoutEndTime"
+    private let bonusDiceEndTimeKey = "bonusDiceEndTime"
+    private let bonusDiceKey = "bonusDice"
 
     private let gamesPlayedKey = "gamesPlayed"
     private let redWinCountKey = "redWinCount"
@@ -84,6 +90,8 @@ class GameDataManager {
             musicMuted = dict.objectForKey(musicMutedKey) as! Bool
             themeName = dict.objectForKey(themeNameKey) as! String
             bonusPayoutEndTime = dict.objectForKey(bonusPayoutEndTimeKey) as! NSDate
+            bonusDiceEndTime = dict.objectForKey(bonusDiceEndTimeKey) as! NSDate
+            bonusDice = dict.objectForKey(bonusDiceKey) as! Int
             
             gamesPlayed = dict.objectForKey(gamesPlayedKey) as! Int
             redWinCount = dict.objectForKey(redWinCountKey) as! Int
@@ -104,6 +112,8 @@ class GameDataManager {
             musicMuted = true
             themeName = "Default"
             bonusPayoutEndTime = NSDate()
+            bonusDiceEndTime = NSDate()
+            bonusDice = 0
             
             gamesPlayed = 0
             redWinCount = 0
@@ -117,6 +127,7 @@ class GameDataManager {
         
         theme = Theme(themeName: themeName, unlocked: true)
         shouldPayBonus = false
+        rewardChance = 0
     }
     
     func save() {
@@ -134,6 +145,8 @@ class GameDataManager {
         dict.setObject(musicMuted, forKey: musicMutedKey)
         dict.setObject(themeName, forKey: themeNameKey)
         dict.setObject(bonusPayoutEndTime, forKey: bonusPayoutEndTimeKey)
+        dict.setObject(bonusDiceEndTime, forKey: bonusDiceEndTimeKey)
+        dict.setObject(bonusDice, forKey: bonusDiceKey)
         
         dict.setObject(gamesPlayed, forKey: gamesPlayedKey)
         dict.setObject(redWinCount, forKey: redWinCountKey)
@@ -170,7 +183,15 @@ class GameDataManager {
     }
     
     func addCoins(amount: Int) {
-        coins += amount
+        let max = 999999999
+        
+        if (coins + amount) > max {
+            coins = max
+            
+            // DELETE: Add ultimate reward when player reach max
+        } else {
+            coins += amount
+        }
         
         if coins > highscore {
             highscore = coins
@@ -196,6 +217,14 @@ class GameDataManager {
             // Check achievement: Coin Collector
             Achievements.update(.CoinCollector)
         }
+    }
+    
+    func incrementRewardChance(num: Int) {
+        rewardChance += num
+    }
+    
+    func resetRewardChance() {
+        rewardChance = 0
     }
     
     func incrementGamesPlayed() {
@@ -235,8 +264,9 @@ class GameDataManager {
         }
     }
     
-    func setBonusPayoutTime(hours: Int) {
-        let timeInterval: Double = 60 * 60 * Double(hours)
+    /*** Bonus Payout ***/
+    func addBonusPayoutTime(min: Int) {
+        let timeInterval: Double = Double(60 * min)
         
         if bonusPayoutEnabled() {
             bonusPayoutEndTime = bonusPayoutEndTime.dateByAddingTimeInterval(timeInterval)
@@ -245,7 +275,7 @@ class GameDataManager {
         }
     }
     
-    func bonusTimeLeft() -> NSTimeInterval {
+    func bonusPayoutTimeLeft() -> NSTimeInterval {
        return bonusPayoutEndTime.timeIntervalSinceDate(NSDate())
     }
     
@@ -256,30 +286,45 @@ class GameDataManager {
             return false
         }
     }
+    
+    func setPayBonusStatus() {
+        shouldPayBonus = bonusPayoutEnabled()
+    }
 
-    // DELETE: Test
-//    func bonusPayoutTest() {
-//        let currentTime = NSDate()
-//
-//        let formatter = NSDateFormatter()
-//        formatter.locale = NSLocale.currentLocale()
-//        formatter.dateStyle = .LongStyle
-//        formatter.timeStyle = .MediumStyle
-//        
-//        // DELETE: Test
-//        let current = NSDate()
-//        let interval = Int(bonusPayoutEndTime.timeIntervalSinceDate(current))
-//
-//        let seconds = interval % 60
-//        let minutes = (interval / 60) % 60
-//        let hours = interval / 3600
-//        
-//        print("\(hours):\(minutes):\(seconds)")
-//        
-//        print(formatter.stringFromDate(currentTime))
-//        print(formatter.stringFromDate(bonusPayoutEndTime))
-//        print(bonusPayoutEnabled())
-//        
-//    }
+    /*** Bonus Dice ***/
+    func addBonusDiceTime(minutes: Int) {
+        let timeInterval: Double = Double(60 * minutes)
+        
+        if bonusDiceEnabled() {
+            bonusDiceEndTime = bonusDiceEndTime.dateByAddingTimeInterval(timeInterval)
+        } else {
+            bonusDiceEndTime = NSDate().dateByAddingTimeInterval(timeInterval)
+        }
+    }
+    
+    func addDice(num: Int) {
+        if bonusDice < 3 {
+            bonusDice += 1
+        }
+    }
+    
+    func getBonusDice() -> Int {
+        if !bonusDiceEnabled() {
+            bonusDice = 0
+        }
+        
+        return bonusDice
+    }
+    
+    func bonusDiceTimeLeft() -> NSTimeInterval {
+        return bonusDiceEndTime.timeIntervalSinceDate(NSDate())
+    }
+    
+    func bonusDiceEnabled() -> Bool {
+        if NSDate().compare(bonusDiceEndTime) == .OrderedAscending {
+            return true
+        } else {
+            return false
+        }
+    }
 }
-
