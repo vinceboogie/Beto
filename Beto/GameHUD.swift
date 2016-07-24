@@ -34,7 +34,7 @@ class GameHUD {
         coinsNode = ButtonNode(defaultButtonImage: "buyCoinsButton")
         coinsNode.size = CGSize(width: 100, height: 25)
         
-        coinsLabel = SKLabelNode(text: "\(GameData.coins)")
+        coinsLabel = SKLabelNode()
         coinsLabel.fontName = Constant.FontNameCondensed
         coinsLabel.fontSize = 14
         coinsLabel.horizontalAlignmentMode = .Center
@@ -43,11 +43,14 @@ class GameHUD {
         highscoreNode = ButtonNode(defaultButtonImage: "highscoreButton")
         highscoreNode.size = CGSize(width: 100, height: 25)
         
-        highscoreLabel = SKLabelNode(text: "\(GameData.highscore)")
+        highscoreLabel = SKLabelNode()
         highscoreLabel.fontName = Constant.FontNameCondensed
         highscoreLabel.fontSize = 14
         highscoreLabel.horizontalAlignmentMode = .Center
         highscoreLabel.verticalAlignmentMode = .Center
+        
+        updateCoinsLabel(GameData.coins)
+        updateHighscoreLabel(GameData.highscore)
     }
     
     func createLayer() -> SKNode {
@@ -85,6 +88,38 @@ class GameHUD {
         return layer
     }
     
+    func updateCoinsLabel(coins: Int) {
+        coinsLabel.text = formatStringFromNumber(coins)
+    }
+    
+    func updateHighscoreLabel(highscore: Int) {
+        highscoreLabel.text = formatStringFromNumber(highscore)
+    }
+    
+    private func formatStringFromNumber(number: Int) -> String {
+        let formatter = NSNumberFormatter()
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 2
+        
+//        if number >= 1000000000 {
+//            let newNumber: Double = floor(Double(number) / 1000000) / 1000.0
+//            let formattedNumber = formatter.stringFromNumber(newNumber)!
+//            
+//            print(number)
+//            print(formattedNumber)
+//            
+//            return "\(formattedNumber)B"
+//        } else if number >= 1000000 {
+        if number >= 1000000 {
+            let newNumber: Double = floor(Double(number) / 10000) / 100.0
+            let formattedNumber = formatter.stringFromNumber(newNumber)!
+            
+            return "\(formattedNumber)M"
+        } else {
+            return "\(number)"
+        }
+    }
+    
     func displayStore() {
         // DELETE: BEGIN UNIT TEST
 //        var index = 0
@@ -107,13 +142,13 @@ class GameHUD {
 //        scene.showUnlockedNodes()
 //        GameData.setBonusPayoutTime(2)
         
-        GameData.addCoins(100)
-        GameData.save()
+        GameData.addCoins(500000000)
+//        GameData.save()
         
         // END UNIT TEST
         
-        coinsLabel.text = "\(GameData.coins)"
-        highscoreLabel.text = "\(GameData.highscore)"
+        updateCoinsLabel(GameData.coins)
+        updateHighscoreLabel(GameData.highscore)
     }
     
     func displayAchievements() {

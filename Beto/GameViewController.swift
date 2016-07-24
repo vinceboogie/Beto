@@ -38,8 +38,8 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        backButton = UIButton(frame: CGRect(x: 15, y: 15, width: 38, height: 39))
-        backButton.setImage(UIImage(named: "replayButton"), forState: .Normal)
+        backButton = UIButton(frame: CGRect(x: 5, y: 7, width: 60, height: 25))
+        backButton.setImage(UIImage(named: "backButton"), forState: .Normal)
         backButton.addTarget(self, action: #selector(buttonAction), forControlEvents: .TouchUpInside)
         self.view.addSubview(backButton)
         
@@ -74,13 +74,13 @@ class GameViewController: UIViewController {
             if translationY < -100 {
                 for node in gameScene.geometryNodes.cubesNode.childNodes {
                     node.physicsBody!.applyTorque(SCNVector4(1,1,1,(translationY/400-1)), impulse: true) // Perfect spin
-                    node.physicsBody!.applyForce(SCNVector3(translationX/17,(-translationY/130)+9,(translationY/5)-11), impulse: true) //MIN (0,17,-31) MAX (0,21,-65)
+                    node.physicsBody!.applyForce(SCNVector3(translationX/17,(-translationY/130)+9,(translationY/5)-11), impulse: true) // MIN (0,17,-31) MAX (0,21,-65)
                 }
                 
                 touchCount += 1
             }
         } else if touchCount == 2 {
-            backButton.hidden = true
+            backButton.enabled = false
             gameScene.shouldCheckMovement = true
         }
     }
@@ -92,10 +92,16 @@ class GameViewController: UIViewController {
         GameData.incrementGamesPlayed()
         
         var winningColors: [Color] = []
+        var shouldCheckForReward = false
+        // DELETE: change % based on color selected (ex. 1 color = 3, 3 color = 1)
         
         for node in gameScene.geometryNodes.cubesNode.childNodes {
             let winningColor = gameScene.getWinningColor(node)
             let didWin = boardScene.board.payout(winningColor)
+            
+            if !shouldCheckForReward {
+                shouldCheckForReward = didWin
+            }
             
             if didWin && !winningColors.contains(winningColor) {
                 GameData.incrementWinCount(winningColor)
@@ -109,6 +115,18 @@ class GameViewController: UIViewController {
             
         boardScene.board.resolveWagers()
         boardScene.board.toggleReplayButton()
+        
+        if shouldCheckForReward {
+            let num = 4 - boardScene.board.colorsSelected
+            
+            GameData.incrementRewardChance(num)
+            boardScene.resolveRandomReward()
+        } else {
+            GameData.resetRewardChance()
+        }
+        
+        // Reset colorsSelected
+        boardScene.board.colorsSelected = 0
         
         GameData.save()
         

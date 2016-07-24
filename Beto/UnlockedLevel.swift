@@ -39,10 +39,9 @@ class UnlockedLevel: DropdownNode {
 
         let titleShadow = titleLabel.createLabelShadow()
 
-        let betoGreen = UIColor(red: 126/255, green: 211/255, blue: 33/255, alpha: 1)
         let rewardsLabel = SKLabelNode(text: "REWARDS")
         rewardsLabel.fontName = Constant.FontNameExtraBold
-        rewardsLabel.fontColor = betoGreen
+        rewardsLabel.fontColor = Constant.BetoGreen
         rewardsLabel.fontSize = 14
         rewardsLabel.position = CGPoint(x: 0, y: 30)
 
@@ -61,7 +60,7 @@ class UnlockedLevel: DropdownNode {
             label.fontSize = 14
             label.position = CGPoint(x: 35, y: -5)
 
-            if rewards.bonusPayoutHours > 0 {
+            if rewards.bonusPayoutMinutes > 0 {
                 sprite.position = CGPoint(x: -50, y: 0)
             }
             
@@ -69,13 +68,13 @@ class UnlockedLevel: DropdownNode {
             rewardsNode.addChild(sprite)
         }
         
-        if rewards.bonusPayoutHours > 0 {
+        if rewards.bonusPayoutMinutes > 0 {
             let sprite = SKSpriteNode(imageNamed: "bonusPayoutIcon")
             sprite.size = CGSize(width: 39, height: 47)
             
-            var text = "+\(rewards.bonusPayoutHours)hr"
+            var text = "+\(rewards.bonusPayoutMinutes)min"
             
-            if rewards.bonusPayoutHours > 1 {
+            if rewards.bonusPayoutMinutes > 1 {
                 text += "s"
             }
             
@@ -92,6 +91,9 @@ class UnlockedLevel: DropdownNode {
             sprite.addChild(label)
             rewardsNode.addChild(sprite)
         }
+        
+        // DELETE: Add bonusDiceMinutes condition
+        
         
         // Add labels
         details.addChild(titleShadow)

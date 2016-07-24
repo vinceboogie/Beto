@@ -29,7 +29,7 @@ class AchievementsManager {
          let sample = Achievement(name: "Achievement Template",
          requirementValues: sampleValues,
          requirements: ["This is an example \(sampleValues[0])", "This is an example \(sampleValues[1])", "This is an example \(sampleValues[2])"],
-                                          rewards: [Reward(bonusPayoutHours: 1), Reward(bonusPayoutHours: 2), Reward(bonusPayoutHours: 4)])
+                                          rewards: [Reward(bonusPayoutMinutes: 1), Reward(bonusPayoutMinutes: 2), Reward(bonusPayoutMinutes: 4)])
          
          sample.calculateLevel = { () -> Int in
          var level = 0
@@ -55,7 +55,7 @@ class AchievementsManager {
         let coinCollector = Achievement(name: AchievementName.CoinCollector.rawValue,
                                  requirementValues: coinValues,
                                  requirements: ["Unlock a coin", "Unlock \(coinValues[1]) coins", "Unlock all coins"],
-                                 rewards: [Reward(bonusPayoutHours: 1), Reward(bonusPayoutHours: 2), Reward(bonusPayoutHours: 4)])
+                                 rewards: [Reward(bonusPayoutMinutes: 1), Reward(bonusPayoutMinutes: 2), Reward(bonusPayoutMinutes: 5)])
         
         coinCollector.calculateLevel = { () -> Int in
             var level = 0
@@ -91,13 +91,13 @@ class AchievementsManager {
         
         
         /********** Color Achievements ***********/
-        let colorWinValues = [10, 50, 100]
+        let colorWinValues = [10, 100, 1000]
         
         /********** AchievementName: BlueWin ***********/
         let blueWin = Achievement(name: AchievementName.BlueWin.rawValue,
                                   requirementValues: colorWinValues,
                                   requirements: colorWinRequirements(Color.Blue, values: colorWinValues),
-                                  rewards: [Reward(bonusPayoutHours: 1), Reward(bonusPayoutHours: 2), Reward(bonusPayoutHours: 4, themesUnlocked: 1)])
+                                  rewards: [Reward(bonusPayoutMinutes: 1), Reward(bonusPayoutMinutes: 2), Reward(bonusPayoutMinutes: 5, themesUnlocked: 1)])
         
         blueWin.calculateLevel = { () -> Int in
             return self.colorWinLevel(GameData.blueWinCount, values: colorWinValues)
@@ -126,7 +126,7 @@ class AchievementsManager {
         let redWin = Achievement(name: AchievementName.RedWin.rawValue,
                                  requirementValues: colorWinValues,
                                  requirements: colorWinRequirements(Color.Red, values: colorWinValues),
-                                 rewards: [Reward(bonusPayoutHours: 1), Reward(bonusPayoutHours: 2), Reward(bonusPayoutHours: 4, themesUnlocked: 1)])
+                                 rewards: [Reward(bonusPayoutMinutes: 1), Reward(bonusPayoutMinutes: 2), Reward(bonusPayoutMinutes: 5, themesUnlocked: 1)])
         
         redWin.calculateLevel = { () -> Int in
             return self.colorWinLevel(GameData.redWinCount, values: colorWinValues)
@@ -155,7 +155,7 @@ class AchievementsManager {
         let greenWin = Achievement(name: AchievementName.GreenWin.rawValue,
                                    requirementValues: colorWinValues,
                                    requirements: colorWinRequirements(Color.Green, values: colorWinValues),
-                                   rewards: [Reward(bonusPayoutHours: 1), Reward(bonusPayoutHours: 2), Reward(bonusPayoutHours: 4, themesUnlocked: 1)])
+                                   rewards: [Reward(bonusPayoutMinutes: 1), Reward(bonusPayoutMinutes: 2), Reward(bonusPayoutMinutes: 5, themesUnlocked: 1)])
         
         greenWin.calculateLevel = { () -> Int in
             return self.colorWinLevel(GameData.greenWinCount, values: colorWinValues)
@@ -184,7 +184,7 @@ class AchievementsManager {
         let yellowWin = Achievement(name: AchievementName.YellowWin.rawValue,
                                     requirementValues: colorWinValues,
                                     requirements: colorWinRequirements(Color.Yellow, values: colorWinValues),
-                                    rewards: [Reward(bonusPayoutHours: 1), Reward(bonusPayoutHours: 2), Reward(bonusPayoutHours: 4, themesUnlocked: 1)])
+                                    rewards: [Reward(bonusPayoutMinutes: 1), Reward(bonusPayoutMinutes: 2), Reward(bonusPayoutMinutes: 5, themesUnlocked: 1)])
         
         yellowWin.calculateLevel = { () -> Int in
             return self.colorWinLevel(GameData.yellowWinCount, values: colorWinValues)
@@ -213,7 +213,7 @@ class AchievementsManager {
         let cyanWin = Achievement(name: AchievementName.CyanWin.rawValue,
                                   requirementValues: colorWinValues,
                                   requirements: colorWinRequirements(Color.Cyan, values: colorWinValues),
-                                  rewards: [Reward(bonusPayoutHours: 1), Reward(bonusPayoutHours: 2), Reward(bonusPayoutHours: 4, themesUnlocked: 1)])
+                                  rewards: [Reward(bonusPayoutMinutes: 1), Reward(bonusPayoutMinutes: 2), Reward(bonusPayoutMinutes: 5, themesUnlocked: 1)])
         
         cyanWin.calculateLevel = { () -> Int in
             return self.colorWinLevel(GameData.cyanWinCount, values: colorWinValues)
@@ -242,7 +242,7 @@ class AchievementsManager {
         let purpleWin = Achievement(name: AchievementName.PurpleWin.rawValue,
                                     requirementValues: colorWinValues,
                                     requirements: colorWinRequirements(Color.Purple, values: colorWinValues),
-                                    rewards: [Reward(bonusPayoutHours: 1), Reward(bonusPayoutHours: 2), Reward(bonusPayoutHours: 4, themesUnlocked: 1)])
+                                    rewards: [Reward(bonusPayoutMinutes: 1), Reward(bonusPayoutMinutes: 2), Reward(bonusPayoutMinutes: 5, themesUnlocked: 1)])
         
         purpleWin.calculateLevel = { () -> Int in
             return self.colorWinLevel(GameData.purpleWinCount, values: colorWinValues)
@@ -272,7 +272,7 @@ class AchievementsManager {
         let gamesPlayed = Achievement(name: AchievementName.GamesPlayed.rawValue,
                                       requirementValues: gamesPlayedValues,
                                       requirements: ["Play \(gamesPlayedValues[0]) times", "Play \(gamesPlayedValues[1]) times", "Play \(gamesPlayedValues[2]) times"],
-                                      rewards: [Reward(bonusPayoutHours: 1), Reward(bonusPayoutHours: 2), Reward(bonusPayoutHours: 4)])
+                                      rewards: [Reward(bonusPayoutMinutes: 1), Reward(bonusPayoutMinutes: 2), Reward(bonusPayoutMinutes: 5)])
         
         gamesPlayed.calculateLevel = { () -> Int in
             var level = 0
@@ -312,7 +312,7 @@ class AchievementsManager {
         let moneyInTheBank = Achievement(name: AchievementName.MoneyInTheBank.rawValue,
                                  requirementValues: moneyValues,
                                  requirements: ["Reach a highscore of \(moneyValues[0])", "Reach a highscore of \(moneyValues[1])", "Reach a highscore of \(moneyValues[2])"],
-                                 rewards: [Reward(bonusPayoutHours: 1), Reward(bonusPayoutHours: 2), Reward(bonusPayoutHours: 4)])
+                                 rewards: [Reward(bonusPayoutMinutes: 1), Reward(bonusPayoutMinutes: 2), Reward(bonusPayoutMinutes: 5)])
         
         moneyInTheBank.calculateLevel = { () -> Int in
             var level = 0
@@ -352,7 +352,7 @@ class AchievementsManager {
         let highestWager = Achievement(name: AchievementName.HighestWager.rawValue,
                                        requirementValues: highestWagerValues,
                                        requirements: ["Place a \(highestWagerValues[0]) bet on any color", "Place a \(highestWagerValues[1]) bet on any color", "Place a \(highestWagerValues[2]) bet on any color"],
-                                       rewards: [Reward(bonusPayoutHours: 1), Reward(bonusPayoutHours: 2), Reward(bonusPayoutHours: 4)])
+                                       rewards: [Reward(bonusPayoutMinutes: 1), Reward(bonusPayoutMinutes: 2), Reward(bonusPayoutMinutes: 5)])
         
         highestWager.calculateLevel = { () -> Int in
             var level = 0

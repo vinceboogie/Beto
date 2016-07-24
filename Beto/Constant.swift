@@ -21,6 +21,8 @@ struct Constant {
     static let FontName = "Futura Medium"
     static let FontNameCondensed = "Futura Condensed Medium"
     static let FontNameExtraBold = "Futura-CondensedExtraBold"
+    
+    static let BetoGreen = UIColor(red: 126/255, green: 211/255, blue: 33/255, alpha: 1)
 }
 
 struct ScreenSize {

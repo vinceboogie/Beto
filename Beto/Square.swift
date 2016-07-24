@@ -48,12 +48,35 @@ class Square: ButtonNode {
     }
     
     func updateLabel() {
-        if wager >= 1000000 {
-            label.fontSize = 24
-        } else {
-            label.fontSize = 32
-        }
+        // DELETE: Resize label vs format large numbers
+//        if wager >= 1000000 {
+//            label.fontSize = 24
+//        } else {
+//            label.fontSize = 32
+//        }
         
-        label.text = "\(wager)"
+        label.text = formatStringFromNumber(wager)
     }
+    
+    private func formatStringFromNumber(number: Int) -> String {
+        if number >= 1000000 {
+            let formatter = NSNumberFormatter()
+            formatter.minimumFractionDigits = 0
+            formatter.maximumFractionDigits = 2
+            
+            let newNumber: Double = floor(Double(number) / 10000) / 100.0
+            var formattedNumber = formatter.stringFromNumber(newNumber)!
+            
+            if number >= 1000000000 {
+                formattedNumber += "B"
+            } else {
+                formattedNumber += "M"
+            }
+            
+            return formattedNumber
+        } else {
+            return "\(number)"
+        }
+    }
+    
 }
