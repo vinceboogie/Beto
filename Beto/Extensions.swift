@@ -19,3 +19,7 @@ extension SKLabelNode {
         return shadow
     }
 }
+
+extension String {
+    var count: Int { return self.characters.count }
+}

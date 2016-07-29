@@ -14,15 +14,13 @@ class BoardScene: SKScene {
     var boardLayer: SKNode!
     var gameHUDLayer: SKNode!
     var dropdownQueue: [DropdownNode]!
-    var bonusPayoutNode: SKSpriteNode!
-    var bonusPayoutTimer: SKLabelNode!
-    var bonusDiceNode: SKSpriteNode!
+    var bonusPayoutNode: SKSpriteNode! // DELETE: Change to double?
+    var bonusPayoutLabel: SKLabelNode!
+    var bonusDiceNode: SKSpriteNode! // DELETE: Change to double?
     var bonusDiceLabel: SKLabelNode!
-    var bonusDiceLabelShadow: SKLabelNode!
-    var bonusDiceTimer: SKLabelNode!
-    
+        
     private var shouldAddReward = false
-    private var rewardType = -1
+    private var rewardType = 99
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
@@ -50,85 +48,72 @@ class BoardScene: SKScene {
         gameHUDLayer = gameHUD.createLayer()
         
         bonusPayoutNode = SKSpriteNode(imageNamed: "bonusPayoutIcon")
-        bonusPayoutNode.size = CGSize(width: 39, height: 47)
-        bonusPayoutNode.position = CGPoint(x: 30 - ScreenSize.Width/2, y: ScreenSize.Height/2 - 70)
+        bonusPayoutNode.size = CGSize(width: 31, height: 36)
+        bonusPayoutNode.position = CGPoint(x: 30 - ScreenSize.Width/2, y: ScreenSize.Height/2 - 60)
         
-        bonusPayoutTimer = SKLabelNode()
-        bonusPayoutTimer.fontName = Constant.FontName
-        bonusPayoutTimer.fontSize = 14
-        bonusPayoutTimer.horizontalAlignmentMode = .Center
-        bonusPayoutTimer.position = CGPoint(x: 32 - ScreenSize.Width/2, y: ScreenSize.Height/2 - 110)
+        bonusPayoutLabel = SKLabelNode()
+        bonusPayoutLabel.fontName = Constant.FontNameExtraBold
+        bonusPayoutLabel.fontSize = 14
+        bonusPayoutLabel.horizontalAlignmentMode = .Center
+        bonusPayoutLabel.position = CGPoint(x: 32 - ScreenSize.Width/2, y: ScreenSize.Height/2 - 95)
         
         bonusDiceNode = SKSpriteNode(imageNamed: "bonusDice")
         bonusDiceNode.size = CGSize(width: 48, height: 38)
-        bonusDiceNode.position = CGPoint(x: ScreenSize.Width/2 - 30, y: ScreenSize.Height/2 - 70)
+        bonusDiceNode.position = CGPoint(x: ScreenSize.Width/2 - 30, y: ScreenSize.Height/2 - 60)
         
-        bonusDiceLabel = SKLabelNode(text: "+\(GameData.bonusDice)")
+        // DELETE: Dumbed down bonus dice for now
+        let label = SKLabelNode(text: "+3")
+        label.fontName = Constant.FontNameExtraBold
+        label.fontSize = 24
+        label.position = CGPoint(x: 10, y: -20)
+        
+        let labelShadow = label.createLabelShadow()
+        
+        bonusDiceLabel = SKLabelNode()
         bonusDiceLabel.fontName = Constant.FontNameExtraBold
-        bonusDiceLabel.fontSize = 24
-        bonusDiceLabel.position = CGPoint(x: ScreenSize.Width/2 - 18, y: ScreenSize.Height/2 - 90)
-        
-        bonusDiceLabelShadow = bonusDiceLabel.createLabelShadow()
-        
-        bonusDiceTimer = SKLabelNode()
-        bonusDiceTimer.fontName = Constant.FontName
-        bonusDiceTimer.fontSize = 14
-        bonusDiceTimer.horizontalAlignmentMode = .Center
-        bonusDiceTimer.position = CGPoint(x: ScreenSize.Width/2 - 32, y: ScreenSize.Height/2 - 105)
+        bonusDiceLabel.fontSize = 18
+        bonusDiceLabel.horizontalAlignmentMode = .Center
+        bonusDiceLabel.position = CGPoint(x: ScreenSize.Width/2 - 32, y: ScreenSize.Height/2 - 95)
     
-        
         if !Audio.musicMuted {
             runAction(SKAction.waitForDuration(0.5), completion: {
                 self.addChild(Audio.backgroundMusic)
             })
         }
-    
+        
+        bonusDiceNode.addChild(labelShadow)
+        bonusDiceNode.addChild(label)
+        
         addChild(background)
         addChild(gameHUDLayer)
         addChild(boardLayer)
+        
         addChild(bonusPayoutNode)
-        addChild(bonusPayoutTimer)
+        addChild(bonusPayoutLabel)
         addChild(bonusDiceNode)
-        addChild(bonusDiceLabelShadow)
         addChild(bonusDiceLabel)
-        addChild(bonusDiceTimer)
+                
+        updateRewards()
     }
     
-    override func update(currentTime: NSTimeInterval) {
-        if GameData.bonusPayoutEnabled() {
-            setTimerText(Int(GameData.bonusPayoutTimeLeft()), timer: bonusPayoutTimer)
-            bonusPayoutNode.hidden = false
-            bonusPayoutTimer.hidden = false
-        } else {
+    func updateRewards() {
+        bonusPayoutLabel.text = "\(GameData.doublePayout)"
+        bonusDiceLabel.text = "\(GameData.doubleDice)"
+        
+        if GameData.doublePayout == 0 {
             bonusPayoutNode.hidden = true
-            bonusPayoutTimer.hidden = true
+            bonusPayoutLabel.hidden = true
+        } else {
+            bonusPayoutNode.hidden = false
+            bonusPayoutLabel.hidden = false
         }
         
-        if GameData.bonusDiceEnabled() {
-            setTimerText(Int(GameData.bonusDiceTimeLeft()), timer: bonusDiceTimer)
-            bonusDiceNode.hidden = false
-            bonusDiceLabel.hidden = false
-            bonusDiceLabelShadow.hidden = false
-            bonusDiceTimer.hidden = false
-        } else {
+        if GameData.doubleDice == 0 {
             bonusDiceNode.hidden = true
             bonusDiceLabel.hidden = true
-            bonusDiceLabelShadow.hidden = true
-            bonusDiceTimer.hidden = true
-        }
-    }
-    
-    func setTimerText(interval: Int, timer: SKLabelNode) {
-        let seconds = interval % 60
-        let minutes = (interval / 60) % 60
-        let hours = interval / 3600
-        
-        if hours > 0 {
-            timer.text = String(format: "%2d:%02d:%02d", hours, minutes, seconds)
-        } else if minutes > 0 {
-            timer.text = String(format: "%2d:%02d", minutes, seconds)
         } else {
-            timer.text = String(format: ":%02d", seconds)
+            bonusDiceNode.hidden = false
+            bonusDiceLabel.hidden = false
         }
     }
     
@@ -143,13 +128,6 @@ class BoardScene: SKScene {
         } else {
             shouldAddReward = false
         }
-        
-        // DELETE
-//        print("Reward Type: \(rewardType)")
-//        print("My num: \(rand)")
-//        print("Reward chance: \(GameData.rewardChance)")
-//        let percentage = (Double(GameData.rewardChance) / 300.0) * 100
-//        print("Reward %: \(percentage)")
     }
     
     func addToDropdownQueue(achievement: Achievement) {
@@ -252,25 +230,27 @@ class BoardScene: SKScene {
             
             let rewardsLabelShadow = rewardsLabel.createLabelShadow()
             
-            let sprite = SKSpriteNode(imageNamed: "bonusDice")
-            sprite.size = CGSize(width: 48, height: 38)
+            var imageName = ""
+            var tempText = 5
             
-            // DELETE: Temp
-            let text = "+\(rewardType + 1) min"
+            // DELETE: Temp rewards
+            if rewardType == 0 {
+                imageName = "starCoin"
+                tempText = 1
+            } else if rewardType == 1 {
+                imageName = "bonusPayoutIcon"
+            } else if rewardType == 2 {
+                imageName = "bonusDice"
+            }
             
-//            if self.rewardType == 0 {
-//                text = "+1 dice / +1 min"
-//            } else if self.rewardType == 1 {
-//                text = "+1 min"
-//            } else if self.rewardType == 2 {
-//                text = "+2 min"
-//            }
+            let sprite = SKSpriteNode(imageNamed: imageName)
             
-            let label = SKLabelNode(text: text)
+            // DELETE: Temp text
+            let label = SKLabelNode(text: "x\(tempText)")
             label.fontName = Constant.FontName
             label.fontColor = UIColor.darkGrayColor()
             label.fontSize = 14
-            label.position = CGPoint(x: 45, y: -5)
+            label.position = CGPoint(x: 40, y: -5)
             
             // Claim button
             let claimButton = ButtonNode(defaultButtonImage: "claimButton", activeButtonImage: "claimButton_active")
@@ -288,32 +268,49 @@ class BoardScene: SKScene {
             let randomReward = DropdownNode(container: container)
             
             claimButton.action = {
-                randomReward.close()
-                
                 if self.rewardType == 0 {
-                    GameData.addDice(1)
-                    GameData.addBonusDiceTime(1)
+                    GameData.addStarCoins(1)
                 } else if self.rewardType == 1 {
-                    GameData.addDice(1)
-                    GameData.addBonusDiceTime(2)
+                    GameData.addPayoutReward(5)
                 } else if self.rewardType == 2 {
-                    GameData.addDice(1)
-                    GameData.addBonusDiceTime(3)
+                    GameData.addDiceReward(5)
                 }
                 
-                self.bonusDiceLabel.text = "+\(GameData.bonusDice)"
-                self.bonusDiceLabelShadow.text = "+\(GameData.bonusDice)"
+                GameData.save()
+                
+                self.updateRewards()
+                
+                randomReward.close()
             }
             
             addChild(randomReward.createLayer())
         }
         
-        if GameData.coins == 0 {            
+        if GameData.coins == 0 {
             let container = SKSpriteNode(imageNamed: "goldenTicketBackground")
             container.size = CGSize(width: 304, height: 267)
             container.position = CGPoint(x: 0, y: ScreenSize.Height)
             
-            let titleLabel = SKLabelNode(text: "WHO DOESN'T LOVE FREE STUFF")
+            var text = ""
+            
+            let rand = Int(arc4random_uniform(5))
+            
+            switch rand {
+            case 0:
+                text = "WHO DOESN'T LOVE FREE STUFF"
+            case 1:
+                text = "I THINK YOU DROPPED THIS"
+            case 2:
+                text = "AWWW, STOP CRYING. HERE TAKE THIS"
+            case 3:
+                text = "OUCH! CONSOLATION PRIZE?"
+            case 4:
+                text = "YOU INHERIT 100 BETO COINS"
+            default:
+                text = "WHO DOESN'T LOVE FREE STUFF"
+            }
+            
+            let titleLabel = SKLabelNode(text: text)
             titleLabel.fontName = Constant.FontNameExtraBold
             titleLabel.fontColor = UIColor.whiteColor()
             titleLabel.fontSize = 14
@@ -340,6 +337,7 @@ class BoardScene: SKScene {
             claimButton.action = {
                 goldenTicket.close()
                 GameData.addCoins(100)
+                GameData.save()
                 
                 // Update labels
                 self.gameHUD.updateCoinsLabel(GameData.coins)

@@ -25,13 +25,13 @@ class GameHUD {
         layer = SKNode()
         layer.setScale(Constant.ScaleFactor)
         
-        gameHUD = SKSpriteNode(imageNamed: "gameHUD")
+        gameHUD = SKSpriteNode(imageNamed: "headerBackground")
         gameHUD.size = CGSize(width: 320, height: 38)
         
         menuButton = ButtonNode(defaultButtonImage: "menuButton", activeButtonImage: "menuButton_active")
         menuButton.size = CGSize(width: 60, height: 25)
         
-        coinsNode = ButtonNode(defaultButtonImage: "buyCoinsButton")
+        coinsNode = ButtonNode(defaultButtonImage: "betoCoinsButton")
         coinsNode.size = CGSize(width: 100, height: 25)
         
         coinsLabel = SKLabelNode()
@@ -57,7 +57,7 @@ class GameHUD {
         // Assign actions
         menuButton.action = scene.presentMenuScene
         highscoreNode.action = displayAchievements
-        coinsNode.action = displayStore
+        coinsNode.action = displayShop
         
         // Designate positions
         var gameHUDPosition: CGFloat = 266.0
@@ -97,20 +97,11 @@ class GameHUD {
     }
     
     private func formatStringFromNumber(number: Int) -> String {
-        let formatter = NSNumberFormatter()
-        formatter.minimumFractionDigits = 0
-        formatter.maximumFractionDigits = 2
-        
-//        if number >= 1000000000 {
-//            let newNumber: Double = floor(Double(number) / 1000000) / 1000.0
-//            let formattedNumber = formatter.stringFromNumber(newNumber)!
-//            
-//            print(number)
-//            print(formattedNumber)
-//            
-//            return "\(formattedNumber)B"
-//        } else if number >= 1000000 {
         if number >= 1000000 {
+            let formatter = NSNumberFormatter()
+            formatter.minimumFractionDigits = 0
+            formatter.maximumFractionDigits = 2
+            
             let newNumber: Double = floor(Double(number) / 10000) / 100.0
             let formattedNumber = formatter.stringFromNumber(newNumber)!
             
@@ -120,35 +111,62 @@ class GameHUD {
         }
     }
     
-    func displayStore() {
-        // DELETE: BEGIN UNIT TEST
-//        var index = 0
-//        
-//        while index < 40 {
-//            GameData.incrementWinCount(Color.Cyan)
-//            index += 1
-//        }
-//
-//        GameData.addCoins(500000)
-//
-//        GameData.setBonusPayoutTime(1)
-//        scene.showUnlockedNodes()
-//
-//        let store = Store()
-//        let layer = store.createLayer()
-//        
-//        scene.addChild(layer)
+    func displayShop() {
+        let closeButton = ButtonNode(defaultButtonImage: "closeButton")
+        closeButton.size = CGSize(width: 44, height: 45)
+        closeButton.position = CGPoint(x: 140, y: 190)
         
-//        scene.showUnlockedNodes()
-//        GameData.setBonusPayoutTime(2)
+        let container = SKSpriteNode(imageNamed: "shopBackground")
+        container.size = CGSize(width: 304, height: 412)
+        container.position = CGPoint(x: 0, y: ScreenSize.Height)
+
+        let coinsBackground = SKSpriteNode(imageNamed: "coinsBackground")
+        coinsBackground.size = CGSize(width: 276, height: 55)
+        coinsBackground.position = CGPoint(x: 0, y: 124)
         
-        GameData.addCoins(500000000)
-//        GameData.save()
+        let numberFormatter = NSNumberFormatter()
+        numberFormatter.groupingSeparator = " "
+        numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
+        let coins = numberFormatter.stringFromNumber(GameData.coins)
         
-        // END UNIT TEST
+        let coinsLabel = SKLabelNode(text: coins)
+        coinsLabel.fontName = Constant.FontNameCondensed
+        coinsLabel.fontSize = 28
+        coinsLabel.horizontalAlignmentMode = .Center
+        coinsLabel.verticalAlignmentMode = .Center
         
-        updateCoinsLabel(GameData.coins)
-        updateHighscoreLabel(GameData.highscore)
+        coinsBackground.addChild(coinsLabel)
+        
+        // DELETE: Add buy rewardsDice action, need to update labels after buying
+        
+        let buyBasic = ButtonNode(defaultButtonImage: "buyPlaceholder")
+        buyBasic.size = CGSize(width: 137, height: 124)
+        buyBasic.position = CGPoint(x: -69, y: 33)
+        
+        let buyDeluxe = ButtonNode(defaultButtonImage: "buyPlaceholder")
+        buyDeluxe.size = CGSize(width: 137, height: 124)
+        buyDeluxe.position = CGPoint(x: 69, y: 33)
+        
+        let buyPremium = ButtonNode(defaultButtonImage: "buyPlaceholder")
+        buyPremium.size = CGSize(width: 137, height: 124)
+        buyPremium.position = CGPoint(x: -69, y: -92)
+        
+        let buyPremiumPlus = ButtonNode(defaultButtonImage: "buyPlaceholder")
+        buyPremiumPlus.size = CGSize(width: 137, height: 124)
+        buyPremiumPlus.position = CGPoint(x: 69, y: -92)
+        
+        // Add nodes
+        container.addChild(closeButton)
+        container.addChild(coinsBackground)
+        container.addChild(buyBasic)
+        container.addChild(buyDeluxe)
+        container.addChild(buyPremium)
+        container.addChild(buyPremiumPlus)
+        
+        let shopNode = DropdownNode(container: container)
+        closeButton.action = shopNode.close
+        
+        scene.addChild(shopNode.createLayer())
     }
     
     func displayAchievements() {

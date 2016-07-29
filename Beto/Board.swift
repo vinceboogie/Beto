@@ -33,12 +33,7 @@ class Board {
         previousBets = []
         
         layer = SKNode()
-        
-        if UIScreen.mainScreen().bounds.height == 480 {
-            layer.setScale(0.84507042) // Custom board scale for iPhone 4 (Screen size: 320 x 480)
-        } else {
-            layer.setScale(Constant.ScaleFactor)
-        }
+        layer.setScale(Constant.ScaleFactor)
         
         boardNode = SKSpriteNode(imageNamed: GameData.theme.board)
         boardNode.size = CGSize(width: 300, height: 280)
@@ -71,8 +66,15 @@ class Board {
         replayButton.action = replayButtonPressed
         coinVaultButton.action = coinVaultButtonPressed
         
+        var boardPosition = CGPoint(x: 0, y: -80)
+
+        // Custom board position for iPhone 4
+        if UIScreen.mainScreen().bounds.height == 480 {
+            boardPosition = CGPoint(x: 0, y: -50)
+        }
+        
         // Designate positions
-        boardNode.position = CGPoint(x: 0, y: -80)
+        boardNode.position = boardPosition
         playButton.position = CGPoint(x: (-boardNode.size.width + playButton.size.width) / 2 + Constant.Margin,
                                       y: (-boardNode.size.height + playButton.size.height) / 2 + Constant.Margin)
         clearButton.position = CGPoint(x: (boardNode.size.width - clearButton.size.width) / 2 - Constant.Margin,
@@ -104,64 +106,59 @@ class Board {
     func handlePlaceBet(square: Square) {
         let coinsAvailable = GameData.coins - getWagers()
         
-        // DELETE: After tutorial is done
+        if coinsAvailable == 0 {
+            scene.runAction(Audio.lostSound)
+            return
+        }
         
         // Limit selected squares to 3 colors
         if !square.selected && colorsSelected == 3 {
-            let testNode = SKLabelNode(text: "SELECT UP TO 3 COLORS!")
-            testNode.fontSize = 16
-            testNode.color = SKColor.blueColor()
-            testNode.colorBlendFactor = 1
+            let testNode = SKLabelNode(text: "SELECT UP TO 3 COLORS")
             testNode.fontName = Constant.FontName
-            testNode.blendMode = SKBlendMode.Multiply
-            testNode.colorBlendFactor = 0.6
-            testNode.position = CGPoint(x: (0), y: (boardNode.size.height) / 2 + Constant.Margin * 2)
+            
+            if UIScreen.mainScreen().bounds.height == 480 {
+                testNode.fontSize = 14
+                testNode.position = CGPoint(x: (0), y: (boardNode.size.height) / 2 + Constant.Margin)
+            } else {
+                testNode.fontSize = 16
+                testNode.position = CGPoint(x: (0), y: (boardNode.size.height) / 2 + Constant.Margin * 2)
+            }
+            
             boardNode.addChild(testNode)
             
             let fade = SKAction.fadeOutWithDuration(1.0)
-            testNode.runAction(fade)
+            let actions = SKAction.sequence([fade, SKAction.removeFromParent()])
+            
+            testNode.runAction(actions)
+            
+            scene.runAction(Audio.lostSound)
             
             return
         }
         
-        // DELETE: After tutorial is done
-
-        // Check if there are coins available to wager
+        // Wager all remaining coins if less than betDenomination
         if GameData.betDenomination <= coinsAvailable  {
             square.wager += GameData.betDenomination
-                        
-            // In order to safe guard from crashes, we don't subtract the coins
-            // from the GameData until after we roll the cubes
-            let coins = GameData.coins - getWagers()
-            scene.gameHUD.updateCoinsLabel(coins)
-            scene.runAction(Audio.placeBetSound)
-            
-            square.updateLabel()
-            
-            if !square.selected {
-                square.label.hidden = false
-                square.selected = true
-                colorsSelected += 1
-            }
         } else {
-            scene.runAction(Audio.lostSound)
+            square.wager += coinsAvailable
+        }
+       
+        // In order to safe guard from crashes, we don't subtract the coins
+        // from the GameData until after we roll the cubes
+        let coins = GameData.coins - getWagers()
+        scene.gameHUD.updateCoinsLabel(coins)
+        scene.runAction(Audio.placeBetSound)
             
-            let testNode = SKLabelNode(text: "NOT ENOUGH COINS!")
-            testNode.fontSize = 16
-            testNode.color = SKColor.blueColor()
-            testNode.colorBlendFactor = 1
-            testNode.fontName = Constant.FontName
-            testNode.blendMode = SKBlendMode.Multiply
-            testNode.colorBlendFactor = 0.6
-            testNode.position = CGPoint(x: (0), y: (boardNode.size.height) / 2 + Constant.Margin * 2)
-            boardNode.addChild(testNode)
+        square.updateLabel()
             
-            let fade = SKAction.fadeOutWithDuration(1.0)
-            testNode.runAction(fade)
+        if !square.selected {
+            square.label.hidden = false
+            square.selected = true
+            colorsSelected += 1
         }
     }
     
-    func playButtonPressed() {        
+    func playButtonPressed() {
         if getWagers() > 0 {
             // Reset previousBets
             previousBets = []
@@ -172,7 +169,7 @@ class Board {
                     previousBets.append((color: square.color, wager: square.wager))
                 }
             }
-    
+            
             scene.presentGameScene()
         }
     }
@@ -218,7 +215,8 @@ class Board {
         if winningSquare.wager > 0 {
             GameData.addCoins(winningSquare.wager)
 
-            if GameData.shouldPayBonus {
+            // DELETE: Temp
+            if GameData.doublePayout > 0 {
                 GameData.addCoins(winningSquare.wager)
             }
             

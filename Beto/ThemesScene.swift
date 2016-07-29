@@ -9,6 +9,15 @@
 import SpriteKit
 
 class ThemesScene: SKScene {
+    private var background: SKSpriteNode!
+    private var container: SKSpriteNode!
+    private var themePreviews: [ButtonNode]!
+    private var starCoinsLabel: SKLabelNode!
+    
+    private var currentPage = 0
+    private var perPageCount = 12
+    private var themeManager = ThemeManager()
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
@@ -17,70 +26,214 @@ class ThemesScene: SKScene {
         super.init(size: size)
         
         let layer = SKNode()
-        
-        if UIScreen.mainScreen().bounds.height == 480 {
-            layer.setScale(0.84507042) // Custom scale for iPhone 4 (Screen size: 320 x 480)
-        } else {
-            layer.setScale(Constant.ScaleFactor)
-        }
+        layer.setScale(Constant.ScaleFactor)
         
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
-        let background = SKSpriteNode(imageNamed: GameData.theme.background)
+        // Default values
+        var containerHeight = 401
+        var headerPosition = 266
+        var previousButtonPosition = CGPoint(x: -25, y: -206)
+        var nextButtonPosition = CGPoint(x: 25, y: -206)
+
+        // Custom values for iPhone4
+        if UIScreen.mainScreen().bounds.height == 480 {
+            containerHeight = 303
+            headerPosition = 221
+            previousButtonPosition = CGPoint(x: -25, y: -160)
+            nextButtonPosition = CGPoint(x: 25, y: -160)
+            perPageCount = 9
+        }
+        
+        background = SKSpriteNode(imageNamed: GameData.theme.background)
         background.size = self.frame.size
         
+        container = SKSpriteNode(imageNamed: "themesContainer")
+        container.size = CGSize(width: 300, height: containerHeight)
+        container.position = CGPoint(x: 0, y: 20)
+        
+        themePreviews = []
+        createPage(currentPage)
+        
+        // Header
+        let header = SKSpriteNode(imageNamed: "headerBackground")
+        header.size = CGSize(width: 320, height: 38)
+        header.position = CGPoint(x: 0, y: headerPosition)
+        
+        // Menu Button
+        let menuButton = ButtonNode(defaultButtonImage: "menuButton", activeButtonImage: "menuButton_active")
+        menuButton.size = CGSize(width: 60, height: 25)
+        menuButton.action = presentMenuScene
+        menuButton.position = CGPoint(x: (-header.size.width + menuButton.size.width + Constant.Margin) / 2 , y: 0)
+        
+        // Title label
         let titleLabel = SKLabelNode(text: "THEMES")
         titleLabel.fontName = Constant.FontNameCondensed
         titleLabel.fontColor = UIColor.whiteColor()
         titleLabel.fontSize = 24
-        titleLabel.position = CGPoint(x: 0, y: 240)
+        titleLabel.horizontalAlignmentMode = .Center
+        titleLabel.verticalAlignmentMode = .Center
+        titleLabel.position = CGPoint(x: 0, y: 0)
         
-        let titleShadow = SKLabelNode(text: titleLabel.text)
-        titleShadow.fontName = titleLabel.fontName
-        titleShadow.fontColor = UIColor.darkGrayColor()
-        titleShadow.fontSize = titleLabel.fontSize
-        titleShadow.position = CGPoint(x: titleLabel.position.x + 1, y: titleLabel.position.y - 1)
+        let titleShadow = titleLabel.createLabelShadow()
+        titleShadow.horizontalAlignmentMode = .Center
+        titleShadow.verticalAlignmentMode = .Center
         
-        let menuButton = ButtonNode(defaultButtonImage: "menuButton", activeButtonImage: "menuButton_active")
-        menuButton.size = CGSize(width: 60, height: 25)
-        menuButton.position = CGPoint(x: -120, y: 250) // DELETE: May have to tweak for iPhone4
-        menuButton.action = presentMenuScene
+        // Star Coins Button
+        let starCoinsNode = ButtonNode(defaultButtonImage: "starCoinsButton")
+        starCoinsNode.size = CGSize(width: 80, height: 25)
+        starCoinsNode.position = CGPoint(x: (header.size.width - starCoinsNode.size.width) / 2 - Constant.Margin, y: 0)
         
-        let container = SKSpriteNode(imageNamed: "themesContainer")
-        container.size = CGSize(width: 300, height: 401)
-        container.position = CGPoint(x: 0, y: 20)
+        starCoinsLabel = SKLabelNode(text: "\(GameData.starCoins)")
+        starCoinsLabel.fontName = Constant.FontNameCondensed
+        starCoinsLabel.fontSize = 14
+        starCoinsLabel.horizontalAlignmentMode = .Center
+        starCoinsLabel.verticalAlignmentMode = .Center
+        starCoinsLabel.position = CGPoint(x: 5, y: 0)
         
-        let themeManager = ThemeManager()
-        var position = 0
+        // Add labels to star node
+        starCoinsNode.addChild(starCoinsLabel)
         
-        for theme in themeManager.themes {
-            let sprite = ButtonNode(defaultButtonImage: "\(theme.name.lowercaseString)Preview")
-            sprite.size = CGSize(width: 92, height: 92)
-            sprite.position = pointForPosition(position, size: container.size)
-            
-            if theme.unlocked {
-                sprite.action = {
-                    GameData.changeTheme(theme)
-                    GameData.save()
-                    
-                    background.texture = SKTexture(imageNamed: theme.background)
-                }
-            } else {
-                let lockSprite = SKSpriteNode(imageNamed: "themeLocked")
-                sprite.addChild(lockSprite)
-            }
-            
-            container.addChild(sprite)
-            position += 1
-        }
+        // Add nodes to header
+        header.addChild(menuButton)
+        header.addChild(titleShadow)
+        header.addChild(titleLabel)
+        header.addChild(starCoinsNode)
         
-        layer.addChild(titleShadow)
-        layer.addChild(titleLabel)
+        // Navigation buttons
+        let previousButton = ButtonNode(defaultButtonImage: "previousButton")
+        previousButton.size = CGSize(width: 34, height: 35)
+        previousButton.action = previousPage
+        previousButton.position = previousButtonPosition
+        
+        let nextButton = ButtonNode(defaultButtonImage: "nextButton")
+        nextButton.size = CGSize(width: 34, height: 35)
+        nextButton.action = nextPage
+        nextButton.position = nextButtonPosition
+        
+        layer.addChild(header)
         layer.addChild(container)
-        layer.addChild(menuButton)
+        layer.addChild(previousButton)
+        layer.addChild(nextButton)
         
         addChild(background)
         addChild(layer)
+    }
+    
+    func previousPage() {
+        if currentPage > 0 {
+            currentPage -= 1
+            createPage(currentPage)
+        }
+    }
+    
+    func nextPage() {
+        var lastPage = themeManager.themes.count / perPageCount
+
+        if themeManager.themes.count % perPageCount == 0 {
+            lastPage += 1
+        }
+        
+        if currentPage < lastPage {
+            currentPage += 1
+            createPage(currentPage)
+        }
+    }
+    
+    func createPage(pageNumber: Int) {
+        for preview in themePreviews {
+            preview.removeFromParent()
+        }
+        
+        themePreviews = []
+        
+        for index in 0...perPageCount - 1 {
+            let position = index + (perPageCount * pageNumber)
+            
+            if position < themeManager.themes.count {
+                let theme = themeManager.themes[position]
+                
+                let sprite = ButtonNode(defaultButtonImage: "\(theme.name.lowercaseString)Preview")
+                sprite.size = CGSize(width: 92, height: 92)
+                sprite.position = pointForPosition(position % perPageCount, size: container.size)
+                sprite.action = {
+                    GameData.changeTheme(theme)
+                    GameData.save()
+                        
+                    self.background.texture = SKTexture(imageNamed: theme.background)
+                }
+                
+                if !theme.unlocked {
+                    let lockSprite = ButtonNode(defaultButtonImage: "themeLocked")
+                    lockSprite.action = {
+                        let container = SKSpriteNode(imageNamed: "buyThemeBackground")
+                        container.size = CGSize(width: 304, height: 467)
+                            
+                        var containerPosition = CGPoint(x: 0, y: ScreenSize.Height)
+                        
+                        if UIScreen.mainScreen().bounds.height == 480 {
+                            container.setScale(0.81)
+                            containerPosition = CGPoint(x: 0, y: ScreenSize.Height + 40)
+                        }
+                        
+                        container.position = containerPosition
+                        
+                        let closeButton = ButtonNode(defaultButtonImage: "closeButton")
+                        closeButton.size = CGSize(width: 44, height: 45)
+                        closeButton.position = CGPoint(x: 140, y: 220)
+                        
+                        let preview = SKSpriteNode(imageNamed: theme.background)
+                        preview.size = CGSize(width: 189, height: 336)
+                        preview.position = CGPoint(x: 0, y: -4)
+                        
+                        let overlay = SKSpriteNode(imageNamed: "buyThemeOverlay")
+                        overlay.position = CGPoint(x: 1, y: -3)
+                        
+                        let buyThemeButton = ButtonNode(defaultButtonImage: "buyThemeButton")
+                        buyThemeButton.size = CGSize(width: 100, height: 30)
+                        buyThemeButton.position = CGPoint(x: 0, y: -200)
+                        
+                        let priceLabel = SKLabelNode(text: "\(theme.price)")
+                        priceLabel.fontName = Constant.FontNameCondensed
+                        priceLabel.fontSize = 18
+                        priceLabel.horizontalAlignmentMode = .Center
+                        priceLabel.verticalAlignmentMode = .Center
+                        priceLabel.position = CGPoint(x: 10, y: 0)
+                        
+                        buyThemeButton.addChild(priceLabel)
+                        
+                        container.addChild(closeButton)
+                        container.addChild(preview)
+                        container.addChild(overlay)
+                        container.addChild(buyThemeButton)
+                        
+                        let node = DropdownNode(container: container)
+                        
+                        closeButton.action = node.close
+                        
+                        if GameData.starCoins >= theme.price {
+                            overlay.hidden = true
+                            
+                            buyThemeButton.action = {
+                                theme.purchase()
+                                    
+                                self.starCoinsLabel.text = "\(GameData.starCoins)"
+                                lockSprite.removeFromParent()
+                                node.close()
+                            }
+                        }
+                        self.addChild(node.createLayer())
+                    }
+                    sprite.addChild(lockSprite)
+                }
+                
+                themePreviews.append(sprite)
+            }
+        }
+        
+        for preview in themePreviews {
+            container.addChild(preview)
+        }
     }
     
     func presentMenuScene() {
