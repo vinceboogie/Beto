@@ -12,30 +12,44 @@ class ThemeManager {
     private(set) var themes = [Theme]()
 
     init() {
-        let defaultTheme = Theme(themeName: "Default", unlocked: true)
+        let defaultTheme = Theme(themeName: "Default")
         themes.append(defaultTheme)
         
-        let blueTheme = Theme(themeName: "Blue", unlocked: Achievements.get(AchievementName.BlueWin).level == 3)
+        let blueTheme = Theme(themeName: "Blue")
+        blueTheme.setPrice(.Basic)
         themes.append(blueTheme)
         
-        let redTheme = Theme(themeName: "Red", unlocked: Achievements.get(AchievementName.RedWin).level == 3)
+        let redTheme = Theme(themeName: "Red")
+        redTheme.setPrice(.Basic)
         themes.append(redTheme)
         
-        let greenTheme = Theme(themeName: "Green", unlocked: Achievements.get(AchievementName.GreenWin).level == 3)
+        let greenTheme = Theme(themeName: "Green")
+        greenTheme.setPrice(.Basic)
         themes.append(greenTheme)
         
-        let yellowTheme = Theme(themeName: "Yellow", unlocked: Achievements.get(AchievementName.YellowWin).level == 3)
-        themes.append(yellowTheme)
-        
-        let cyanTheme = Theme(themeName: "Cyan", unlocked: Achievements.get(AchievementName.CyanWin).level == 3)
-        themes.append(cyanTheme)
-        
-        let purpleTheme = Theme(themeName: "Purple", unlocked: Achievements.get(AchievementName.PurpleWin).level == 3)
+        let purpleTheme = Theme(themeName: "Purple")
+        purpleTheme.setPrice(.Basic)
         themes.append(purpleTheme)
         
-        let blackTheme = Theme(themeName: "Black", unlocked: true)
+        let yellowTheme = Theme(themeName: "Yellow")
+        yellowTheme.setPrice(.Premium)
+        themes.append(yellowTheme)
+        
+        let cyanTheme = Theme(themeName: "Cyan")
+        cyanTheme.setPrice(.Premium)
+        themes.append(cyanTheme)
+        
+        let blackTheme = Theme(themeName: "Black")
+        blackTheme.setPrice(.Premium)
         themes.append(blackTheme)
         
+        let azulTheme = Theme(themeName: "Azul")
+        azulTheme.setPrice(ThemePrice.Legendary)
+        themes.append(azulTheme)
+        
+        let midnightTheme = Theme(themeName: "Midnight")
+        midnightTheme.setPrice(ThemePrice.Legendary)
+        themes.append(midnightTheme)
     }
 
     func getTheme(themeName: String) -> Theme {

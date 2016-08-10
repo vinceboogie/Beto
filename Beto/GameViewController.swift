@@ -93,7 +93,6 @@ class GameViewController: UIViewController {
         
         var winningColors: [Color] = []
         var shouldCheckForReward = false
-        // DELETE: change % based on color selected (ex. 1 color = 3, 3 color = 1)
         
         for node in gameScene.geometryNodes.cubesNode.childNodes {
             let winningColor = gameScene.getWinningColor(node)
@@ -128,13 +127,24 @@ class GameViewController: UIViewController {
         // Reset colorsSelected
         boardScene.board.colorsSelected = 0
         
+        // DELETE: Temp. Subtract rewards
+        if GameData.doublePayout > 0 {
+            GameData.subtractPayoutReward(1)
+        }
+        
+        if GameData.doubleDice > 0 {
+            GameData.subtractDiceReward(1)
+        }
+        
+        boardScene.updateRewards()
+        
         GameData.save()
         
         delay(1.0) {
             self.dismissViewControllerAnimated(true, completion: self.boardScene.showUnlockedNodes)
         }
     }
-    
+        
     func buttonAction(sender: UIButton) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }

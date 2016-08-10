@@ -37,9 +37,7 @@ class GeometryNodes {
         
         /*** Determine cube face ***/
         
-        GameData.setPayBonusStatus()
-        
-        if GameData.shouldPayBonus {
+        if GameData.doublePayout > 0 {
             yellowFace = "doubleYellowFace"
             cyanFace = "doubleCyanFace"
             purpleFace = "doublePurpleFace"
@@ -75,14 +73,14 @@ class GeometryNodes {
         let cubeMaterials = [yellowSide, cyanSide, purpleSide, blueSide, redSide, greenSide]
         
         /*** Determine cube count ***/
-        
-        let count = 3 + GameData.getBonusDice()
+        var count = 3
         var cubeSize: CGFloat = 0.33
         
-        if count == 6 {
+        if GameData.doubleDice > 0 {
+            count = 6
             cubeSize = 0.28
         }
-    
+        
         for num in 1...count {
             let xoffset = CGFloat(num % 3)
             let xposition: CGFloat = -0.2 + (0.2 * xoffset)

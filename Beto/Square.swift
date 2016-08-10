@@ -48,14 +48,15 @@ class Square: ButtonNode {
     }
     
     func updateLabel() {
-        // DELETE: Resize label vs format large numbers
-//        if wager >= 1000000 {
-//            label.fontSize = 24
-//        } else {
-//            label.fontSize = 32
-//        }
+        let formattedWager = formatStringFromNumber(wager)
+
+        if wager >= 1000000 && formattedWager.count > 5 {
+            label.fontSize = 28
+        } else {
+            label.fontSize = 32
+        }
         
-        label.text = formatStringFromNumber(wager)
+        label.text = formattedWager
     }
     
     private func formatStringFromNumber(number: Int) -> String {
@@ -65,18 +66,11 @@ class Square: ButtonNode {
             formatter.maximumFractionDigits = 2
             
             let newNumber: Double = floor(Double(number) / 10000) / 100.0
-            var formattedNumber = formatter.stringFromNumber(newNumber)!
+            let formattedNumber = formatter.stringFromNumber(newNumber)!
             
-            if number >= 1000000000 {
-                formattedNumber += "B"
-            } else {
-                formattedNumber += "M"
-            }
-            
-            return formattedNumber
+            return "\(formattedNumber)M"
         } else {
             return "\(number)"
         }
     }
-    
 }

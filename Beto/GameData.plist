@@ -2,13 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>bonusDice</key>
+	<key>doubleDice</key>
 	<integer>0</integer>
-	<key>bonusDiceEndTime</key>
-	<date>2016-03-25T07:11:50Z</date>
-	<key>bonusPayoutEndTime</key>
-	<date>2016-03-25T07:34:01Z</date>
-	<key>themeName</key>
+	<key>doublePayout</key>
+	<integer>0</integer>
+	<key>unlockedThemes</key>
+	<array>
+		<string>Default</string>
+	</array>
+	<key>currentThemeName</key>
 	<string>Default</string>
 	<key>highestWager</key>
 	<integer>0</integer>
@@ -38,6 +40,8 @@
 	<integer>50</integer>
 	<key>coins</key>
 	<integer>50</integer>
+	<key>starCoins</key>
+	<integer>0</integer>
 	<key>XInitializerItem</key>
 	<string>DoNotEverChangeMe</string>
 </dict>

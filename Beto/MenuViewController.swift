@@ -7,9 +7,13 @@
 //
 
 import SpriteKit
+import GoogleMobileAds
 
-class MenuViewController: UIViewController {
+class MenuViewController: UIViewController, GADInterstitialDelegate {
     var scene: SKScene!
+    var interstitialAd: GADInterstitial!
+
+    @IBOutlet weak var bannerView: GADBannerView!
     
     override func shouldAutorotate() -> Bool {
         return true
@@ -28,6 +32,12 @@ class MenuViewController: UIViewController {
         return true
     }
     
+    override func viewDidAppear(animated: Bool) {
+        if GameData.gamesPlayed % 10 == 0 || GameData.coins == 0 { 
+            showInterstitialAD()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
                 
@@ -41,6 +51,36 @@ class MenuViewController: UIViewController {
         
         // Present the scene.
         skView.presentScene(scene)
+        
+        // DELETE: Use TEST Ads during dev and testing. Change to live only on launch
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        bannerView.rootViewController = self
+        let test = GADRequest()
+        test.testDevices = ["57738ac8abf9499b8b4df6e379d05c76"]
+        bannerView.loadRequest(test)
+        
+        interstitialAd = reloadInterstitialAd()
+    }
+    
+    func reloadInterstitialAd() -> GADInterstitial {
+        // DELETE: Test only. Change unit ID to real one
+        let interstitial = GADInterstitial(adUnitID: "ca-app-pub-3940256099942544/4411468910")
+        let request = GADRequest()
+//        request.testDevices = ["57738ac8abf9499b8b4df6e379d05c76"]
+        interstitial.delegate = self
+        interstitial.loadRequest(request)
+        
+        return interstitial
+    }
+    
+    func interstitialDidDismissScreen(ad: GADInterstitial!) {
+        self.interstitialAd = reloadInterstitialAd()
+    }
+    
+    func showInterstitialAD() {
+        if interstitialAd.isReady {
+            self.interstitialAd.presentFromRootViewController(self)
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

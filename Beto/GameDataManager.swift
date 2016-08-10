@@ -9,16 +9,42 @@
 import Foundation
 
 class GameDataManager {
+    // Keys
+    private let starCoinsKey = "starCoins"
+    private let coinsKey = "coins"
+    private let highscoreKey = "highscore"
+    private let betDenominationKey = "betDenomination"
+    private let coinsUnlockedKey = "coinsUnlocked"
+    private let soundMutedKey = "soundMuted"
+    private let musicMutedKey = "musicMuted"
+    private let currentThemeNameKey = "currentThemeName"
+    private let unlockedThemesKey = "unlockedThemes"
+    
+    private let doubleDiceKey = "doubleDice"
+    private let doublePayoutKey = "doublePayout"
+    
+    private let gamesPlayedKey = "gamesPlayed"
+    private let redWinCountKey = "redWinCount"
+    private let blueWinCountKey = "blueWinCount"
+    private let greenWinCountKey = "greenWinCount"
+    private let yellowWinCountKey = "yellowWinCount"
+    private let cyanWinCountKey = "cyanWinCount"
+    private let purpleWinCountKey = "purpleWinCount"
+    private let highestWagerKey = "highestWager"
+    
+    // Plist Variables
+    private(set) var starCoins: Int
     private(set) var coins: Int
     private(set) var highscore: Int
     private(set) var betDenomination: Int
     private(set) var coinsUnlocked: Int
     private(set) var soundMuted: Bool
     private(set) var musicMuted: Bool
-    private(set) var themeName: String
-    private(set) var bonusPayoutEndTime: NSDate
-    private(set) var bonusDiceEndTime: NSDate
-    private(set) var bonusDice: Int
+    private(set) var currentThemeName: String
+    private(set) var unlockedThemes: [String]
+    
+    private(set) var doubleDice: Int
+    private(set) var doublePayout: Int
     
     private(set) var gamesPlayed: Int
     private(set) var redWinCount: Int
@@ -30,33 +56,11 @@ class GameDataManager {
     private(set) var highestWager: Int
     
     // Non-plist variables
-    private(set) var shouldPayBonus: Bool
     private(set) var theme: Theme
     private(set) var rewardChance: Int
     
     var unlockedCoinHandler: (() -> ())?
     var unlockedLevelHandler: ((Achievement) -> ())?
-    
-    // keys
-    private let coinsKey = "coins"
-    private let highscoreKey = "highscore"
-    private let betDenominationKey = "betDenomination"
-    private let coinsUnlockedKey = "coinsUnlocked"
-    private let soundMutedKey = "soundMuted"
-    private let musicMutedKey = "musicMuted"
-    private let themeNameKey = "themeName"
-    private let bonusPayoutEndTimeKey = "bonusPayoutEndTime"
-    private let bonusDiceEndTimeKey = "bonusDiceEndTime"
-    private let bonusDiceKey = "bonusDice"
-
-    private let gamesPlayedKey = "gamesPlayed"
-    private let redWinCountKey = "redWinCount"
-    private let blueWinCountKey = "blueWinCount"
-    private let greenWinCountKey = "greenWinCount"
-    private let yellowWinCountKey = "yellowWinCount"
-    private let cyanWinCountKey = "cyanWinCount"
-    private let purpleWinCountKey = "purpleWinCount"
-    private let highestWagerKey = "highestWager"
         
     init() {
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
@@ -82,16 +86,18 @@ class GameDataManager {
         
         if let dict = myDict {
             // load values
+            starCoins = dict.objectForKey(starCoinsKey) as! Int
             coins = dict.objectForKey(coinsKey) as! Int
             highscore = dict.objectForKey(highscoreKey) as! Int
             betDenomination = dict.objectForKey(betDenominationKey) as! Int
             coinsUnlocked = dict.objectForKey(coinsUnlockedKey) as! Int
             soundMuted = dict.objectForKey(soundMutedKey) as! Bool
             musicMuted = dict.objectForKey(musicMutedKey) as! Bool
-            themeName = dict.objectForKey(themeNameKey) as! String
-            bonusPayoutEndTime = dict.objectForKey(bonusPayoutEndTimeKey) as! NSDate
-            bonusDiceEndTime = dict.objectForKey(bonusDiceEndTimeKey) as! NSDate
-            bonusDice = dict.objectForKey(bonusDiceKey) as! Int
+            currentThemeName = dict.objectForKey(currentThemeNameKey) as! String
+            unlockedThemes = dict.objectForKey(unlockedThemesKey) as! [String]
+            
+            doubleDice = dict.objectForKey(doubleDiceKey) as! Int
+            doublePayout = dict.objectForKey(doublePayoutKey) as! Int
             
             gamesPlayed = dict.objectForKey(gamesPlayedKey) as! Int
             redWinCount = dict.objectForKey(redWinCountKey) as! Int
@@ -101,19 +107,20 @@ class GameDataManager {
             cyanWinCount = dict.objectForKey(cyanWinCountKey) as! Int
             purpleWinCount = dict.objectForKey(purpleWinCountKey) as! Int
             highestWager = dict.objectForKey(highestWagerKey) as! Int
-
         } else {
             // set failsafe default values
+            starCoins = 0
             coins = 50
             highscore = 50
             betDenomination = 1
             coinsUnlocked = 0
             soundMuted = true
             musicMuted = true
-            themeName = "Default"
-            bonusPayoutEndTime = NSDate()
-            bonusDiceEndTime = NSDate()
-            bonusDice = 0
+            currentThemeName = "Default"
+            unlockedThemes = ["Default"]
+            
+            doubleDice = 0
+            doublePayout = 0
             
             gamesPlayed = 0
             redWinCount = 0
@@ -124,9 +131,8 @@ class GameDataManager {
             purpleWinCount = 0
             highestWager = 0
         }
-        
-        theme = Theme(themeName: themeName, unlocked: true)
-        shouldPayBonus = false
+    
+        theme = Theme(themeName: currentThemeName, unlocked: true)
         rewardChance = 0
     }
     
@@ -137,16 +143,18 @@ class GameDataManager {
         let dict: NSMutableDictionary = ["XInitializerItem": "DoNotEverChangeMe"]
         
         // save values
+        dict.setObject(starCoins, forKey: starCoinsKey)
         dict.setObject(coins, forKey: coinsKey)
         dict.setObject(highscore, forKey: highscoreKey)
         dict.setObject(betDenomination, forKey: betDenominationKey)
         dict.setObject(coinsUnlocked, forKey: coinsUnlockedKey)
         dict.setObject(soundMuted, forKey: soundMutedKey)
         dict.setObject(musicMuted, forKey: musicMutedKey)
-        dict.setObject(themeName, forKey: themeNameKey)
-        dict.setObject(bonusPayoutEndTime, forKey: bonusPayoutEndTimeKey)
-        dict.setObject(bonusDiceEndTime, forKey: bonusDiceEndTimeKey)
-        dict.setObject(bonusDice, forKey: bonusDiceKey)
+        dict.setObject(currentThemeName, forKey: currentThemeNameKey)
+        dict.setObject(unlockedThemes, forKey: unlockedThemesKey)
+        
+        dict.setObject(doubleDice, forKey: doubleDiceKey)
+        dict.setObject(doublePayout, forKey: doublePayoutKey)
         
         dict.setObject(gamesPlayed, forKey: gamesPlayedKey)
         dict.setObject(redWinCount, forKey: redWinCountKey)
@@ -162,8 +170,12 @@ class GameDataManager {
     }
     
     func changeTheme(theme: Theme) {
-        themeName = theme.name
+        currentThemeName = theme.name
         self.theme = theme
+    }
+    
+    func addPurchasedTheme(themeName: String) {
+        unlockedThemes.append(themeName)
     }
     
     func setMusic(musicMuted: Bool) {
@@ -176,6 +188,14 @@ class GameDataManager {
     
     func setDenomination(value: Int) {
         betDenomination = value
+    }
+    
+    func addStarCoins(amount: Int) {
+        starCoins += amount
+    }
+    
+    func subtractStarCoins(amount: Int) {
+        starCoins -= amount
     }
     
     func subtractCoins(amount: Int) {
@@ -220,7 +240,10 @@ class GameDataManager {
     }
     
     func incrementRewardChance(num: Int) {
-        rewardChance += num
+        // Cap the reward chance to 25%
+        if rewardChance + num <= 75 {
+            rewardChance += num
+        }
     }
     
     func resetRewardChance() {
@@ -265,66 +288,20 @@ class GameDataManager {
     }
     
     /*** Bonus Payout ***/
-    func addBonusPayoutTime(min: Int) {
-        let timeInterval: Double = Double(60 * min)
-        
-        if bonusPayoutEnabled() {
-            bonusPayoutEndTime = bonusPayoutEndTime.dateByAddingTimeInterval(timeInterval)
-        } else {
-            bonusPayoutEndTime = NSDate().dateByAddingTimeInterval(timeInterval)
-        }
+    func addPayoutReward(num: Int) {
+        doublePayout += num
     }
     
-    func bonusPayoutTimeLeft() -> NSTimeInterval {
-       return bonusPayoutEndTime.timeIntervalSinceDate(NSDate())
-    }
-    
-    func bonusPayoutEnabled() -> Bool {
-        if NSDate().compare(bonusPayoutEndTime) == .OrderedAscending {
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    func setPayBonusStatus() {
-        shouldPayBonus = bonusPayoutEnabled()
+    func subtractPayoutReward(num: Int) {
+        doublePayout -= num
     }
 
     /*** Bonus Dice ***/
-    func addBonusDiceTime(minutes: Int) {
-        let timeInterval: Double = Double(60 * minutes)
-        
-        if bonusDiceEnabled() {
-            bonusDiceEndTime = bonusDiceEndTime.dateByAddingTimeInterval(timeInterval)
-        } else {
-            bonusDiceEndTime = NSDate().dateByAddingTimeInterval(timeInterval)
-        }
+    func addDiceReward(num: Int) {
+        doubleDice += num
     }
     
-    func addDice(num: Int) {
-        if bonusDice < 3 {
-            bonusDice += 1
-        }
-    }
-    
-    func getBonusDice() -> Int {
-        if !bonusDiceEnabled() {
-            bonusDice = 0
-        }
-        
-        return bonusDice
-    }
-    
-    func bonusDiceTimeLeft() -> NSTimeInterval {
-        return bonusDiceEndTime.timeIntervalSinceDate(NSDate())
-    }
-    
-    func bonusDiceEnabled() -> Bool {
-        if NSDate().compare(bonusDiceEndTime) == .OrderedAscending {
-            return true
-        } else {
-            return false
-        }
+    func subtractDiceReward(num: Int) {
+        doubleDice -= num
     }
 }

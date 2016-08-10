@@ -26,8 +26,9 @@ class AchievementsListNode: DropdownNode {
         container = SKSpriteNode(imageNamed: "achievementsListBackground")
         container.size = CGSize(width: 303, height: 413)
 
+        // Custom scale for iPhone 4 (Screen size: 320 x 480)
         if UIScreen.mainScreen().bounds.height == 480 {
-            container.setScale(0.84507042) // Custom scale for iPhone 4 (Screen size: 320 x 480)
+            container.setScale(0.95)
         }
 
         achievementNodes = []
@@ -49,8 +50,8 @@ class AchievementsListNode: DropdownNode {
         
         // Designate positions
         closeButton.position = CGPoint(x: 140, y: 190)
-        previousButton.position = CGPoint(x: -20, y: -180)
-        nextButton.position = CGPoint(x: 20, y: -180)
+        previousButton.position = CGPoint(x: -25, y: -180)
+        nextButton.position = CGPoint(x: 25, y: -180)
         container.position = CGPoint(x: 0, y: ScreenSize.Height)
         
         // Show first 5 achievements

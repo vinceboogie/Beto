@@ -35,11 +35,6 @@ class Achievement {
         
         if level > oldLevel {
             GameData.unlockedLevelHandler!(self)
-            GameData.addBonusPayoutTime(rewards[level-1].bonusPayoutMinutes)
-            
-            if rewards[level-1].bonusDiceMinutes > 0 {
-                GameData.addBonusDiceTime(rewards[level-1].bonusDiceMinutes)
-            }
         }
         
         progress = calculateProgress!()
