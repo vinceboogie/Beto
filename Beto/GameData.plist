@@ -2,10 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>doubleDice</key>
-	<integer>0</integer>
-	<key>doublePayout</key>
-	<integer>0</integer>
+	<key>powerUps</key>
+	<dict>
+		<key>doubleDice</key>
+		<integer>0</integer>
+		<key>doublePayout</key>
+		<integer>0</integer>
+		<key>triplePayout</key>
+		<integer>0</integer>
+		<key>lifeline</key>
+		<integer>0</integer>
+		<key>rewind</key>
+		<integer>0</integer>
+	</dict>
 	<key>unlockedThemes</key>
 	<array>
 		<string>Default</string>

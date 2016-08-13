@@ -71,12 +71,11 @@ class CoinVault: DropdownNode {
             row = 1
             column = position - 4
         }
+
+        let position: CGFloat = 50
         
-        let squareMargin: CGFloat = 10
-        let squareWithMargin = 40 + squareMargin
-        
-        let offsetX = (-squareWithMargin * 1.5) + (squareWithMargin * CGFloat(column))
-        let offsetY = (squareWithMargin / 2) - (squareWithMargin * CGFloat(row)) - 10
+        let offsetX = (-position * 1.5) + (position * CGFloat(column))
+        let offsetY = (position / 2) - (position * CGFloat(row)) - 10
         
         return CGPoint(x: offsetX, y: offsetY)
     }

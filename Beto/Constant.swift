@@ -19,7 +19,7 @@ struct Constant {
     static let Margin: CGFloat = 10
     static let ScaleFactor: CGFloat = UIScreen.mainScreen().bounds.width / 320
     static let FontName = "Futura Medium"
-    static let FontNameCondensed = "Futura Condensed Medium"
+    static let FontNameCondensed = "Futura-CondensedMedium"
     static let FontNameExtraBold = "Futura-CondensedExtraBold"
     
     static let BetoGreen = UIColor(red: 126/255, green: 211/255, blue: 33/255, alpha: 1)

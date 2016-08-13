@@ -20,6 +20,7 @@ class GameDataManager {
     private let currentThemeNameKey = "currentThemeName"
     private let unlockedThemesKey = "unlockedThemes"
     
+    private let powerUpsKey = "powerUps"
     private let doubleDiceKey = "doubleDice"
     private let doublePayoutKey = "doublePayout"
     
@@ -42,9 +43,8 @@ class GameDataManager {
     private(set) var musicMuted: Bool
     private(set) var currentThemeName: String
     private(set) var unlockedThemes: [String]
-    
-    private(set) var doubleDice: Int
-    private(set) var doublePayout: Int
+
+    private(set) var powerUps: [String:Int]
     
     private(set) var gamesPlayed: Int
     private(set) var redWinCount: Int
@@ -82,56 +82,29 @@ class GameDataManager {
             }
         }
         
-        let myDict = NSDictionary(contentsOfFile: path)
+        let dict = NSDictionary(contentsOfFile: path)!
         
-        if let dict = myDict {
-            // load values
-            starCoins = dict.objectForKey(starCoinsKey) as! Int
-            coins = dict.objectForKey(coinsKey) as! Int
-            highscore = dict.objectForKey(highscoreKey) as! Int
-            betDenomination = dict.objectForKey(betDenominationKey) as! Int
-            coinsUnlocked = dict.objectForKey(coinsUnlockedKey) as! Int
-            soundMuted = dict.objectForKey(soundMutedKey) as! Bool
-            musicMuted = dict.objectForKey(musicMutedKey) as! Bool
-            currentThemeName = dict.objectForKey(currentThemeNameKey) as! String
-            unlockedThemes = dict.objectForKey(unlockedThemesKey) as! [String]
-            
-            doubleDice = dict.objectForKey(doubleDiceKey) as! Int
-            doublePayout = dict.objectForKey(doublePayoutKey) as! Int
-            
-            gamesPlayed = dict.objectForKey(gamesPlayedKey) as! Int
-            redWinCount = dict.objectForKey(redWinCountKey) as! Int
-            blueWinCount = dict.objectForKey(blueWinCountKey) as! Int
-            greenWinCount = dict.objectForKey(greenWinCountKey) as! Int
-            yellowWinCount = dict.objectForKey(yellowWinCountKey) as! Int
-            cyanWinCount = dict.objectForKey(cyanWinCountKey) as! Int
-            purpleWinCount = dict.objectForKey(purpleWinCountKey) as! Int
-            highestWager = dict.objectForKey(highestWagerKey) as! Int
-        } else {
-            // set failsafe default values
-            starCoins = 0
-            coins = 50
-            highscore = 50
-            betDenomination = 1
-            coinsUnlocked = 0
-            soundMuted = true
-            musicMuted = true
-            currentThemeName = "Default"
-            unlockedThemes = ["Default"]
-            
-            doubleDice = 0
-            doublePayout = 0
-            
-            gamesPlayed = 0
-            redWinCount = 0
-            blueWinCount = 0
-            greenWinCount = 0
-            yellowWinCount = 0
-            cyanWinCount = 0
-            purpleWinCount = 0
-            highestWager = 0
-        }
-    
+        starCoins = dict.objectForKey(starCoinsKey) as! Int
+        coins = dict.objectForKey(coinsKey) as! Int
+        highscore = dict.objectForKey(highscoreKey) as! Int
+        betDenomination = dict.objectForKey(betDenominationKey) as! Int
+        coinsUnlocked = dict.objectForKey(coinsUnlockedKey) as! Int
+        soundMuted = dict.objectForKey(soundMutedKey) as! Bool
+        musicMuted = dict.objectForKey(musicMutedKey) as! Bool
+        currentThemeName = dict.objectForKey(currentThemeNameKey) as! String
+        unlockedThemes = dict.objectForKey(unlockedThemesKey) as! [String]
+
+        powerUps = dict.objectForKey(powerUpsKey) as! [String:Int]
+        
+        gamesPlayed = dict.objectForKey(gamesPlayedKey) as! Int
+        redWinCount = dict.objectForKey(redWinCountKey) as! Int
+        blueWinCount = dict.objectForKey(blueWinCountKey) as! Int
+        greenWinCount = dict.objectForKey(greenWinCountKey) as! Int
+        yellowWinCount = dict.objectForKey(yellowWinCountKey) as! Int
+        cyanWinCount = dict.objectForKey(cyanWinCountKey) as! Int
+        purpleWinCount = dict.objectForKey(purpleWinCountKey) as! Int
+        highestWager = dict.objectForKey(highestWagerKey) as! Int
+
         theme = Theme(themeName: currentThemeName, unlocked: true)
         rewardChance = 0
     }
@@ -153,8 +126,7 @@ class GameDataManager {
         dict.setObject(currentThemeName, forKey: currentThemeNameKey)
         dict.setObject(unlockedThemes, forKey: unlockedThemesKey)
         
-        dict.setObject(doubleDice, forKey: doubleDiceKey)
-        dict.setObject(doublePayout, forKey: doublePayoutKey)
+        dict.setObject(powerUps, forKey: powerUpsKey)
         
         dict.setObject(gamesPlayed, forKey: gamesPlayedKey)
         dict.setObject(redWinCount, forKey: redWinCountKey)
@@ -166,7 +138,7 @@ class GameDataManager {
         dict.setObject(highestWager, forKey: highestWagerKey)
         
         // write to GameData.plist
-        dict.writeToFile(path, atomically: false)
+        dict.writeToFile(path, atomically: true)
     }
     
     func changeTheme(theme: Theme) {
@@ -215,8 +187,6 @@ class GameDataManager {
         
         if coins > highscore {
             highscore = coins
-
-            // Check achievement: Money in the Bank
             Achievements.update(.MoneyInTheBank)
             
             var index = 0
@@ -234,15 +204,16 @@ class GameDataManager {
                 unlockedCoinHandler!()
             }
             
-            // Check achievement: Coin Collector
             Achievements.update(.CoinCollector)
-        }
+            }
     }
     
     func incrementRewardChance(num: Int) {
-        // Cap the reward chance to 25%
-        if rewardChance + num <= 75 {
+        // DELETE: Tweak tweak
+        if rewardChance + num <= 5 {
             rewardChance += num
+        } else {
+            rewardChance = 5
         }
     }
     
@@ -252,7 +223,6 @@ class GameDataManager {
     
     func incrementGamesPlayed() {
         gamesPlayed += 1
-        
         Achievements.update(.GamesPlayed)
     }
     
@@ -282,26 +252,19 @@ class GameDataManager {
     func updateHighestWager(wager: Int) {
         if wager > highestWager {
             highestWager = wager
-    
             Achievements.update(.HighestWager)
         }
     }
     
-    /*** Bonus Payout ***/
-    func addPayoutReward(num: Int) {
-        doublePayout += num
+    func addPowerUpCount(powerUpKey: String, num: Int) {
+        if let value = powerUps[powerUpKey] {
+            powerUps[powerUpKey] = value + num
+        }
     }
     
-    func subtractPayoutReward(num: Int) {
-        doublePayout -= num
-    }
-
-    /*** Bonus Dice ***/
-    func addDiceReward(num: Int) {
-        doubleDice += num
-    }
-    
-    func subtractDiceReward(num: Int) {
-        doubleDice -= num
+    func subtractPowerUpCount(powerUpKey: String, num: Int) {
+        if let value = powerUps[powerUpKey] {
+            powerUps[powerUpKey] = value - num
+        }
     }
 }
