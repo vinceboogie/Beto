@@ -81,7 +81,7 @@ class UnlockedLevel: DropdownNode {
 //        }
         
 //        if rewards.bonusPayoutMinutes > 0 {
-//            let sprite = SKSpriteNode(imageNamed: "bonusPayoutIcon")
+//            let sprite = SKSpriteNode(imageNamed: "bonusPayout")
 //            sprite.size = CGSize(width: 39, height: 47)
 //            
 //            var text = "+\(rewards.bonusPayoutMinutes)min"

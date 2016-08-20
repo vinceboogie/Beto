@@ -28,7 +28,7 @@ class AchievementsListNode: DropdownNode {
 
         // Custom scale for iPhone 4 (Screen size: 320 x 480)
         if UIScreen.mainScreen().bounds.height == 480 {
-            container.setScale(0.95)
+            container.setScale(0.93)
         }
 
         achievementNodes = []
