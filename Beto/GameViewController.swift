@@ -142,7 +142,7 @@ class GameViewController: UIViewController {
         // Subtract wagers from GameData
         GameData.subtractCoins(boardScene.getWagers())
         
-        GameData.incrementGamesPlayed()
+        GameData.incrementAchievement(.GamesPlayed)
         
         var winningColors: [Color] = []
         var didWin = false
@@ -156,7 +156,21 @@ class GameViewController: UIViewController {
             }
             
             if didPayout && !winningColors.contains(winningColor) {
-                GameData.incrementWinCount(winningColor)
+                switch winningColor {
+                case .Blue:
+                    GameData.incrementAchievement(.BlueWin)
+                case .Red:
+                    GameData.incrementAchievement(.RedWin)
+                case .Green:
+                    GameData.incrementAchievement(.GreenWin)
+                case .Yellow:
+                    GameData.incrementAchievement(.YellowWin)
+                case .Cyan:
+                    GameData.incrementAchievement(.CyanWin)
+                case .Purple:
+                    GameData.incrementAchievement(.PurpleWin)
+                }
+                
                 winningColors.append(winningColor)
             }
             
@@ -168,13 +182,29 @@ class GameViewController: UIViewController {
         boardScene.resolveWagers(didWin)
         boardScene.toggleReplayButton()
         
+        // Increment Achievement
+        switch(boardScene.activePowerUp) {
+        case PowerUpKey.doubleDice.rawValue:
+            GameData.incrementAchievement(.DoubleDice)
+        case PowerUpKey.doublePayout.rawValue:
+            GameData.incrementAchievement(.DoublePayout)
+        case PowerUpKey.triplePayout.rawValue:
+            GameData.incrementAchievement(.TriplePayout)
+        case PowerUpKey.lifeline.rawValue:
+            GameData.incrementAchievement(.Lifeline)
+        case PowerUpKey.rewind.rawValue:
+            GameData.incrementAchievement(.Rewind)
+        default:
+            break
+        }
+        
         GameData.subtractPowerUpCount(boardScene.activePowerUp, num: 1)
         boardScene.deactivatePowerUpButtonPressed()
         
         if didWin {
             let num = 4 - boardScene.squaresSelectedCount
                         
-            GameData.incrementRewardChance(num)
+            GameData.increaseRewardChance(num)
             boardScene.resolveRandomReward()
         } else {
             GameData.resetRewardChance()

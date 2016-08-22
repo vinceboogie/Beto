@@ -27,14 +27,8 @@ class MenuScene: SKScene {
         // Start Game Button
         let startGameButton = ButtonNode(defaultButtonImage: "startGame", activeButtonImage: "startGame_active")
         startGameButton.size = CGSize(width: 86, height: 103)
+        startGameButton.addWobbleAnimation()
         startGameButton.action = presentBoardScene
-        
-        let rotR = SKAction.rotateByAngle(0.15, duration: 0.2)
-        let rotL = SKAction.rotateByAngle(-0.15, duration: 0.2)
-        let pause = SKAction.rotateByAngle(0, duration: 1.0)
-        let cycle = SKAction.sequence([pause, rotR, rotL, rotL, rotR])
-        let wobble = SKAction.repeatActionForever(cycle)
-        startGameButton.runAction(wobble, withKey: "wobble")
         
         // Themes Button
         let themesButton = ButtonNode(defaultButtonImage: "themesButton")

@@ -2,6 +2,21 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>rewardsDice</key>
+	<dict>
+		<key>Bronze</key>
+		<integer>0</integer>
+		<key>Silver</key>
+		<integer>0</integer>
+		<key>Gold</key>
+		<integer>0</integer>
+		<key>Platinum</key>
+		<integer>0</integer>
+		<key>Diamond</key>
+		<integer>0</integer>
+		<key>Ruby</key>
+		<integer>0</integer>
+	</dict>
 	<key>powerUps</key>
 	<dict>
 		<key>doubleDice</key>
@@ -15,36 +30,49 @@
 		<key>rewind</key>
 		<integer>0</integer>
 	</dict>
+	<key>achievementTracker</key>
+	<dict>
+		<key>GamesPlayed</key>
+		<integer>0</integer>
+		<key>HighestWager</key>
+		<integer>0</integer>
+		<key>DoubleDice</key>
+		<integer>0</integer>
+		<key>DoublePayout</key>
+		<integer>0</integer>
+		<key>TriplePayout</key>
+		<integer>0</integer>
+		<key>Lifeline</key>
+		<integer>0</integer>
+		<key>Rewind</key>
+		<integer>0</integer>
+		<key>BlueWin</key>
+		<integer>0</integer>
+		<key>RedWin</key>
+		<integer>0</integer>
+		<key>GreenWin</key>
+		<integer>0</integer>
+		<key>YellowWin</key>
+		<integer>0</integer>
+		<key>CyanWin</key>
+		<integer>0</integer>
+		<key>PurpleWin</key>
+		<integer>0</integer>
+	</dict>
 	<key>unlockedThemes</key>
 	<array>
 		<string>Default</string>
 	</array>
 	<key>currentThemeName</key>
 	<string>Default</string>
-	<key>highestWager</key>
-	<integer>0</integer>
-	<key>coinsUnlocked</key>
-	<integer>0</integer>
-	<key>redWinCount</key>
-	<integer>0</integer>
-	<key>blueWinCount</key>
-	<integer>0</integer>
-	<key>purpleWinCount</key>
-	<integer>0</integer>
-	<key>greenWinCount</key>
-	<integer>0</integer>
-	<key>yellowWinCount</key>
-	<integer>0</integer>
-	<key>cyanWinCount</key>
-	<integer>0</integer>
-	<key>gamesPlayed</key>
-	<integer>0</integer>
 	<key>musicMuted</key>
 	<false/>
 	<key>soundMuted</key>
 	<false/>
 	<key>betDenomination</key>
 	<integer>1</integer>
+	<key>coinsUnlocked</key>
+	<integer>0</integer>
 	<key>highscore</key>
 	<integer>50</integer>
 	<key>coins</key>
