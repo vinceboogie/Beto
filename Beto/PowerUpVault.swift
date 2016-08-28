@@ -8,10 +8,20 @@
 
 import SpriteKit
 
+enum PowerUpKey: String {
+    case doubleDice
+    case doublePayout
+    case triplePayout
+    case lifeline
+    case rewind
+    
+    static let allValues = [doubleDice, doublePayout, triplePayout, lifeline, rewind]
+}
+
 class PowerUpVault: DropdownNode {
     var activatePowerUpHandler: ((PowerUp) -> ())?
     
-    init() {
+    init(activePowerUp: String) {
         let vault = SKSpriteNode(imageNamed: "powerUpVault")
         vault.size = CGSize(width: 304, height: 214)
         
@@ -33,7 +43,13 @@ class PowerUpVault: DropdownNode {
         var position = 0
 
         for key in PowerUpKey.allValues {
-            let button = PowerUp(name: key.rawValue, count: GameData.powerUps[key.rawValue]!)
+            var count = GameData.powerUps[key.rawValue]!
+            
+            if key.rawValue == activePowerUp {
+                count -= 1
+            }
+            
+            let button = PowerUp(name: key.rawValue, count: count)
             button.position = pointForPosition(position)
             button.activatePowerUpHandler = handleActivatePowerUp
             

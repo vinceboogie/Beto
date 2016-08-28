@@ -85,4 +85,14 @@ class ButtonNode: SKNode {
         defaultButton.texture = SKTexture(imageNamed: defaultTexture)
         activeButton.texture = SKTexture(imageNamed: activeTexture)
     }
+    
+    func addWobbleAnimation() {
+        let rotR = SKAction.rotateByAngle(0.15, duration: 0.2)
+        let rotL = SKAction.rotateByAngle(-0.15, duration: 0.2)
+        let pause = SKAction.rotateByAngle(0, duration: 1.0)
+        let cycle = SKAction.sequence([pause, rotR, rotL, rotL, rotR])
+        let wobble = SKAction.repeatActionForever(cycle)
+        
+        self.runAction(wobble, withKey: "wobble")
+    }
 }

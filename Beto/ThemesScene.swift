@@ -131,7 +131,7 @@ class ThemesScene: SKScene {
         var lastPage = themeManager.themes.count / perPageCount
 
         if themeManager.themes.count % perPageCount == 0 {
-            lastPage += 1
+            lastPage -= 1
         }
         
         if currentPage < lastPage {

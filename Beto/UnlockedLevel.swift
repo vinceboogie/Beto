@@ -21,7 +21,7 @@ class UnlockedLevel: DropdownNode {
 
         let details = SKNode()
 
-        var title = achievement.name
+        var title = achievement.displayName
         
         if achievement.level == 1 {
             title += " I"
@@ -48,61 +48,33 @@ class UnlockedLevel: DropdownNode {
         let rewardsLabelShadow = rewardsLabel.createLabelShadow()
 
         let rewardsNode = SKNode()
-//        let rewards = achievement.rewards[achievement.level-1]
+        let rewards = achievement.rewards[achievement.level-1]
         
-        let sprite = SKSpriteNode(imageNamed: "starCoin")
-
-        let label = SKLabelNode(text: "x\(achievement.level)")
-        label.fontName = Constant.FontName
-        label.fontColor = UIColor.darkGrayColor()
-        label.fontSize = 14
-        label.position = CGPoint(x: 35, y: -5)
+        // Display starCoin reward
+        let starSprite = SKSpriteNode(imageNamed: "starCoin")
+        starSprite.position = CGPoint(x: -50, y: 0)
         
-        sprite.addChild(label)
-        rewardsNode.addChild(sprite)
+        let starLabel = SKLabelNode(text: "x\(rewards.starCoins)")
+        starLabel.fontName = Constant.FontName
+        starLabel.fontColor = UIColor.darkGrayColor()
+        starLabel.fontSize = 14
+        starLabel.position = CGPoint(x: 30, y: -5)
         
-        // DELETE: Might need this after the rewards rework
-//        if rewards.themesUnlocked > 0 {
-//            let sprite = SKSpriteNode(imageNamed: "themesButton")
-//            sprite.size = CGSize(width: 44, height: 45)
-//            
-//            let label = SKLabelNode(text: "x\(rewards.themesUnlocked)")
-//            label.fontName = Constant.FontName
-//            label.fontColor = UIColor.darkGrayColor()
-//            label.fontSize = 14
-//            label.position = CGPoint(x: 35, y: -5)
-//
-//            if rewards.bonusPayoutMinutes > 0 {
-//                sprite.position = CGPoint(x: -50, y: 0)
-//            }
-//            
-//            sprite.addChild(label)
-//            rewardsNode.addChild(sprite)
-//        }
+        starSprite.addChild(starLabel)
+        rewardsNode.addChild(starSprite)
         
-//        if rewards.bonusPayoutMinutes > 0 {
-//            let sprite = SKSpriteNode(imageNamed: "bonusPayout")
-//            sprite.size = CGSize(width: 39, height: 47)
-//            
-//            var text = "+\(rewards.bonusPayoutMinutes)min"
-//            
-//            if rewards.bonusPayoutMinutes > 1 {
-//                text += "s"
-//            }
-//            
-//            let label = SKLabelNode(text: text)
-//            label.fontName = Constant.FontName
-//            label.fontColor = UIColor.darkGrayColor()
-//            label.fontSize = 14
-//            label.position = CGPoint(x: 40, y: -5)
-//            
-//            if rewards.themesUnlocked > 0 {
-//                sprite.position = CGPoint(x: 30, y: 0)
-//            }
-//
-//            sprite.addChild(label)
-//            rewardsNode.addChild(sprite)
-//        }
+        // Display rewardsDice reward
+        let diceSprite = SKSpriteNode(imageNamed: rewards.rewardsDice.rawValue.lowercaseString + "Reward")
+        diceSprite.position = CGPoint(x: 30, y: 0)
+    
+        let diceLabel = SKLabelNode(text: "x1")
+        diceLabel.fontName = Constant.FontName
+        diceLabel.fontColor = UIColor.darkGrayColor()
+        diceLabel.fontSize = 14
+        diceLabel.position = CGPoint(x: 30, y: -5)
+        
+        diceSprite.addChild(diceLabel)
+        rewardsNode.addChild(diceSprite)
         
         // Add labels
         details.addChild(titleShadow)
@@ -113,12 +85,12 @@ class UnlockedLevel: DropdownNode {
         
         super.init(container: unlockedNode)
         
+        GameData.addStarCoins(rewards.starCoins)
+        GameData.addRewardsDiceCount(rewards.rewardsDice.rawValue, num: 1)
+        GameData.save()
+        
         // Assign actions
-        claimButton.action = {
-            GameData.addStarCoins(achievement.level)
-            GameData.save()
-            self.close()
-        }
+        claimButton.action = close
 
         // Designate positions
         unlockedNode.position = CGPoint(x: 0, y: ScreenSize.Height)

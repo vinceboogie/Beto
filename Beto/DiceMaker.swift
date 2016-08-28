@@ -10,11 +10,6 @@ import SceneKit
 
 enum DiceType {
     case Default
-//    case BasicReward
-//    case SilverReward
-//    case GoldReward
-//    case PlatinumReward
-    case Rewards
     case DoublePayout
     case TriplePayout
     case DoubleDice
@@ -43,16 +38,6 @@ class DiceMaker {
         switch type {
         case .Default:
             break
-        case .Rewards:
-            break
-//        case .BasicReward:
-//           break
-//        case .SilverReward:
-//            break
-//        case .GoldReward:
-//            break
-//        case .PlatinumReward:
-//            break
         case .DoubleDice:
             count = 6
             size = 0.28
@@ -121,14 +106,5 @@ class DiceMaker {
             
             diceNode.addChildNode(dice)
         }
-    }
-    
-    func faceMaker(backgroundImage: UIImage, rewardImage: UIImage, rewardPoint: CGPoint) -> UIImage {
-        UIGraphicsBeginImageContext(CGSize(width: 80, height: 80))
-        
-        backgroundImage.drawAtPoint(CGPoint(x: 0, y: 0))
-        rewardImage.drawAtPoint(rewardPoint)
-        
-        return UIGraphicsGetImageFromCurrentImageContext()
     }
 }

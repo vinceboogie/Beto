@@ -34,7 +34,7 @@ class AchievementNode: SKNode {
         let details = SKNode()
         details.position = CGPoint(x: 50, y: 10)
         
-        let titleLabel = SKLabelNode(text: achievement.name.uppercaseString)
+        let titleLabel = SKLabelNode(text: achievement.displayName.uppercaseString)
         titleLabel.fontName = Constant.FontNameExtraBold
         titleLabel.fontColor = UIColor.whiteColor()
         titleLabel.fontSize = 14

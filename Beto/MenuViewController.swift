@@ -33,7 +33,10 @@ class MenuViewController: UIViewController, GADInterstitialDelegate {
     }
     
     override func viewDidAppear(animated: Bool) {
-        if GameData.gamesPlayed % 10 == 0 || GameData.coins == 0 { 
+        // DELETE: Move out of achievementTracker?
+        let gamesPlayedKey = AchievementName.GamesPlayed.rawValue
+        
+        if GameData.achievementTracker[gamesPlayedKey]! % 10 == 0 || GameData.coins == 0 {
             showInterstitialAD()
         }
     }

@@ -8,6 +8,7 @@
 
 class Achievement {
     let name: String
+    let displayName: String
     let requirementValues: [Int]
     let requirements: [String]
     let rewards: [Reward]
@@ -17,8 +18,9 @@ class Achievement {
     var calculateLevel: (() -> (Int))?
     var calculateProgress: (() -> (Double))?
     
-    init(name: String, requirementValues: [Int], requirements: [String], rewards: [Reward]) {
+    init(name: String, displayName: String, requirementValues: [Int], requirements: [String], rewards: [Reward]) {
         self.name = name
+        self.displayName = displayName
         self.requirementValues = requirementValues
         self.requirements = requirements
         self.rewards = rewards

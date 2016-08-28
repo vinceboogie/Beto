@@ -13,47 +13,29 @@ class GameDataManager {
     private let starCoinsKey = "starCoins"
     private let coinsKey = "coins"
     private let highscoreKey = "highscore"
-    private let betDenominationKey = "betDenomination"
     private let coinsUnlockedKey = "coinsUnlocked"
+    private let betDenominationKey = "betDenomination"
     private let soundMutedKey = "soundMuted"
     private let musicMutedKey = "musicMuted"
     private let currentThemeNameKey = "currentThemeName"
     private let unlockedThemesKey = "unlockedThemes"
-    
+    private let achievementTrackerKey = "achievementTracker"
     private let powerUpsKey = "powerUps"
-    private let doubleDiceKey = "doubleDice"
-    private let doublePayoutKey = "doublePayout"
-    
-    private let gamesPlayedKey = "gamesPlayed"
-    private let redWinCountKey = "redWinCount"
-    private let blueWinCountKey = "blueWinCount"
-    private let greenWinCountKey = "greenWinCount"
-    private let yellowWinCountKey = "yellowWinCount"
-    private let cyanWinCountKey = "cyanWinCount"
-    private let purpleWinCountKey = "purpleWinCount"
-    private let highestWagerKey = "highestWager"
+    private let rewardsDiceKey = "rewardsDice"
     
     // Plist Variables
     private(set) var starCoins: Int
     private(set) var coins: Int
     private(set) var highscore: Int
-    private(set) var betDenomination: Int
     private(set) var coinsUnlocked: Int
+    private(set) var betDenomination: Int
     private(set) var soundMuted: Bool
     private(set) var musicMuted: Bool
     private(set) var currentThemeName: String
     private(set) var unlockedThemes: [String]
-
+    private(set) var achievementTracker: [String:Int]
     private(set) var powerUps: [String:Int]
-    
-    private(set) var gamesPlayed: Int
-    private(set) var redWinCount: Int
-    private(set) var blueWinCount: Int
-    private(set) var greenWinCount: Int
-    private(set) var yellowWinCount: Int
-    private(set) var cyanWinCount: Int
-    private(set) var purpleWinCount: Int
-    private(set) var highestWager: Int
+    private(set) var rewardsDice: [String:Int]
     
     // Non-plist variables
     private(set) var theme: Theme
@@ -87,23 +69,15 @@ class GameDataManager {
         starCoins = dict.objectForKey(starCoinsKey) as! Int
         coins = dict.objectForKey(coinsKey) as! Int
         highscore = dict.objectForKey(highscoreKey) as! Int
-        betDenomination = dict.objectForKey(betDenominationKey) as! Int
         coinsUnlocked = dict.objectForKey(coinsUnlockedKey) as! Int
+        betDenomination = dict.objectForKey(betDenominationKey) as! Int
         soundMuted = dict.objectForKey(soundMutedKey) as! Bool
         musicMuted = dict.objectForKey(musicMutedKey) as! Bool
         currentThemeName = dict.objectForKey(currentThemeNameKey) as! String
         unlockedThemes = dict.objectForKey(unlockedThemesKey) as! [String]
-
+        achievementTracker = dict.objectForKey(achievementTrackerKey) as! [String:Int]
         powerUps = dict.objectForKey(powerUpsKey) as! [String:Int]
-        
-        gamesPlayed = dict.objectForKey(gamesPlayedKey) as! Int
-        redWinCount = dict.objectForKey(redWinCountKey) as! Int
-        blueWinCount = dict.objectForKey(blueWinCountKey) as! Int
-        greenWinCount = dict.objectForKey(greenWinCountKey) as! Int
-        yellowWinCount = dict.objectForKey(yellowWinCountKey) as! Int
-        cyanWinCount = dict.objectForKey(cyanWinCountKey) as! Int
-        purpleWinCount = dict.objectForKey(purpleWinCountKey) as! Int
-        highestWager = dict.objectForKey(highestWagerKey) as! Int
+        rewardsDice = dict.objectForKey(rewardsDiceKey) as! [String:Int]
 
         theme = Theme(themeName: currentThemeName, unlocked: true)
         rewardChance = 0
@@ -119,23 +93,15 @@ class GameDataManager {
         dict.setObject(starCoins, forKey: starCoinsKey)
         dict.setObject(coins, forKey: coinsKey)
         dict.setObject(highscore, forKey: highscoreKey)
-        dict.setObject(betDenomination, forKey: betDenominationKey)
         dict.setObject(coinsUnlocked, forKey: coinsUnlockedKey)
+        dict.setObject(betDenomination, forKey: betDenominationKey)
         dict.setObject(soundMuted, forKey: soundMutedKey)
         dict.setObject(musicMuted, forKey: musicMutedKey)
         dict.setObject(currentThemeName, forKey: currentThemeNameKey)
         dict.setObject(unlockedThemes, forKey: unlockedThemesKey)
-        
+        dict.setObject(achievementTracker, forKey: achievementTrackerKey)
         dict.setObject(powerUps, forKey: powerUpsKey)
-        
-        dict.setObject(gamesPlayed, forKey: gamesPlayedKey)
-        dict.setObject(redWinCount, forKey: redWinCountKey)
-        dict.setObject(blueWinCount, forKey: blueWinCountKey)
-        dict.setObject(greenWinCount, forKey: greenWinCountKey)
-        dict.setObject(yellowWinCount, forKey: yellowWinCountKey)
-        dict.setObject(cyanWinCount, forKey: cyanWinCountKey)
-        dict.setObject(purpleWinCount, forKey: purpleWinCountKey)
-        dict.setObject(highestWager, forKey: highestWagerKey)
+        dict.setObject(rewardsDice, forKey: rewardsDiceKey)
         
         // write to GameData.plist
         dict.writeToFile(path, atomically: true)
@@ -208,50 +174,29 @@ class GameDataManager {
             }
     }
     
-    func incrementRewardChance(num: Int) {
-        // DELETE: Tweak tweak
-        if rewardChance + num <= 5 {
-            rewardChance += num
-        } else {
-            rewardChance = 5
-        }
+    func increaseRewardChance(num: Int) {
+        // Reward chance increases by 3/6/9 % based on number of colors selected
+        rewardChance += num * 3
     }
     
     func resetRewardChance() {
         rewardChance = 0
     }
     
-    func incrementGamesPlayed() {
-        gamesPlayed += 1
-        Achievements.update(.GamesPlayed)
-    }
-    
-    func incrementWinCount(color: Color) {
-        switch color {
-        case .Blue:
-            blueWinCount += 1
-            Achievements.update(.BlueWin)
-        case .Red:
-            redWinCount += 1
-            Achievements.update(.RedWin)
-        case .Green:
-            greenWinCount += 1
-            Achievements.update(.GreenWin)
-        case .Yellow:
-            yellowWinCount += 1
-            Achievements.update(.YellowWin)
-        case .Cyan:
-            cyanWinCount += 1
-            Achievements.update(.CyanWin)
-        case .Purple:
-            purpleWinCount += 1
-            Achievements.update(.PurpleWin)
+    func incrementAchievement(name: AchievementName) {
+        if let value = achievementTracker[name.rawValue] {
+            achievementTracker[name.rawValue] = value + 1
         }
+        
+        Achievements.update(name)
     }
     
     func updateHighestWager(wager: Int) {
-        if wager > highestWager {
-            highestWager = wager
+        let key = AchievementName.HighestWager.rawValue
+        
+        if wager > achievementTracker[key] {
+            achievementTracker[key] = wager
+            
             Achievements.update(.HighestWager)
         }
     }
@@ -265,6 +210,26 @@ class GameDataManager {
     func subtractPowerUpCount(powerUpKey: String, num: Int) {
         if let value = powerUps[powerUpKey] {
             powerUps[powerUpKey] = value - num
+        }
+    }
+    
+    func getRewardsDiceCount(diceKey: String) -> Int {
+        if let value = rewardsDice[diceKey] {
+            return value
+        } else {
+            return -1
+        }
+    }
+    
+    func addRewardsDiceCount(diceKey: String, num: Int) {
+        if let value = rewardsDice[diceKey] {
+            rewardsDice[diceKey] = value + num
+        }
+    }
+    
+    func subtractRewardsDiceCount(diceKey: String, num: Int) {
+        if let value = rewardsDice[diceKey] {
+            rewardsDice[diceKey] = value - num
         }
     }
 }
