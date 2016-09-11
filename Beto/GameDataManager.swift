@@ -13,11 +13,13 @@ class GameDataManager {
     private let starCoinsKey = "starCoins"
     private let coinsKey = "coins"
     private let highscoreKey = "highscore"
+    private let gamesPlayedKey = "gamesPlayed"
     private let coinsUnlockedKey = "coinsUnlocked"
     private let betDenominationKey = "betDenomination"
     private let soundMutedKey = "soundMuted"
     private let musicMutedKey = "musicMuted"
     private let currentThemeNameKey = "currentThemeName"
+    private let autoLoadEnabledKey = "autoLoadEnabled"
     private let unlockedThemesKey = "unlockedThemes"
     private let achievementTrackerKey = "achievementTracker"
     private let powerUpsKey = "powerUps"
@@ -27,10 +29,12 @@ class GameDataManager {
     private(set) var starCoins: Int
     private(set) var coins: Int
     private(set) var highscore: Int
+    private(set) var gamesPlayed: Int
     private(set) var coinsUnlocked: Int
     private(set) var betDenomination: Int
     private(set) var soundMuted: Bool
     private(set) var musicMuted: Bool
+    private(set) var autoLoadEnabled: Bool
     private(set) var currentThemeName: String
     private(set) var unlockedThemes: [String]
     private(set) var achievementTracker: [String:Int]
@@ -69,10 +73,12 @@ class GameDataManager {
         starCoins = dict.objectForKey(starCoinsKey) as! Int
         coins = dict.objectForKey(coinsKey) as! Int
         highscore = dict.objectForKey(highscoreKey) as! Int
+        gamesPlayed = dict.objectForKey(gamesPlayedKey) as! Int
         coinsUnlocked = dict.objectForKey(coinsUnlockedKey) as! Int
         betDenomination = dict.objectForKey(betDenominationKey) as! Int
         soundMuted = dict.objectForKey(soundMutedKey) as! Bool
         musicMuted = dict.objectForKey(musicMutedKey) as! Bool
+        autoLoadEnabled = dict.objectForKey(autoLoadEnabledKey) as! Bool
         currentThemeName = dict.objectForKey(currentThemeNameKey) as! String
         unlockedThemes = dict.objectForKey(unlockedThemesKey) as! [String]
         achievementTracker = dict.objectForKey(achievementTrackerKey) as! [String:Int]
@@ -93,10 +99,12 @@ class GameDataManager {
         dict.setObject(starCoins, forKey: starCoinsKey)
         dict.setObject(coins, forKey: coinsKey)
         dict.setObject(highscore, forKey: highscoreKey)
+        dict.setObject(gamesPlayed, forKey: gamesPlayedKey)
         dict.setObject(coinsUnlocked, forKey: coinsUnlockedKey)
         dict.setObject(betDenomination, forKey: betDenominationKey)
         dict.setObject(soundMuted, forKey: soundMutedKey)
         dict.setObject(musicMuted, forKey: musicMutedKey)
+        dict.setObject(autoLoadEnabled, forKey: autoLoadEnabledKey)
         dict.setObject(currentThemeName, forKey: currentThemeNameKey)
         dict.setObject(unlockedThemes, forKey: unlockedThemesKey)
         dict.setObject(achievementTracker, forKey: achievementTrackerKey)
@@ -124,6 +132,10 @@ class GameDataManager {
         self.soundMuted = soundMuted
     }
     
+    func toggleAutoLoad() {
+        autoLoadEnabled = !autoLoadEnabled
+    }
+    
     func setDenomination(value: Int) {
         betDenomination = value
     }
@@ -134,10 +146,6 @@ class GameDataManager {
     
     func subtractStarCoins(amount: Int) {
         starCoins -= amount
-    }
-    
-    func subtractCoins(amount: Int) {
-        coins -= amount
     }
     
     func addCoins(amount: Int) {
@@ -174,6 +182,18 @@ class GameDataManager {
             }
     }
     
+    func subtractCoins(amount: Int) {
+        coins -= amount
+    }
+    
+    func incrementGamesPlayed() {
+        gamesPlayed += 1
+    }
+    
+    func decrementGamesPlayed() {
+        gamesPlayed -= 1
+    }
+    
     func increaseRewardChance(num: Int) {
         // Reward chance increases by 3/6/9 % based on number of colors selected
         rewardChance += num * 3
@@ -186,6 +206,14 @@ class GameDataManager {
     func incrementAchievement(name: AchievementName) {
         if let value = achievementTracker[name.rawValue] {
             achievementTracker[name.rawValue] = value + 1
+        }
+        
+        Achievements.update(name)
+    }
+    
+    func decrementAchievement(name: AchievementName) {
+        if let value = achievementTracker[name.rawValue] {
+            achievementTracker[name.rawValue] = value - 1
         }
         
         Achievements.update(name)

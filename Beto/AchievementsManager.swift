@@ -17,11 +17,12 @@ enum AchievementName: String {
     case YellowWin
     case CyanWin
     case PurpleWin
+    case Lifeline
+    case RewardBoost
     case DoubleDice
     case DoublePayout
     case TriplePayout
-    case Lifeline
-    case Rewind
+    case Reroll
 }
 
 class AchievementsManager {
@@ -63,7 +64,7 @@ class AchievementsManager {
         /********** AchievementName: GamesPlayed ***********/
         let gamesPlayedValues = [100, 1000, 10000]
         let gamesPlayed = Achievement(name: AchievementName.GamesPlayed.rawValue,
-                                      displayName: "I Feel Much Beto",
+                                      displayName: "Can't Put It Down",
                                       requirementValues: gamesPlayedValues,
                                       requirements: ["Play \(gamesPlayedValues[0]) times",
                                         "Play \(gamesPlayedValues[1]) times",
@@ -75,11 +76,11 @@ class AchievementsManager {
         gamesPlayed.calculateLevel = { () -> Int in
             var level = 0
             
-            if GameData.achievementTracker[gamesPlayed.name] >= gamesPlayed.requirementValues[2] {
+            if GameData.gamesPlayed >= gamesPlayed.requirementValues[2] {
                 level = 3
-            } else if GameData.achievementTracker[gamesPlayed.name] >= gamesPlayed.requirementValues[1] {
+            } else if GameData.gamesPlayed >= gamesPlayed.requirementValues[1] {
                 level = 2
-            } else if GameData.achievementTracker[gamesPlayed.name] >= gamesPlayed.requirementValues[0] {
+            } else if GameData.gamesPlayed >= gamesPlayed.requirementValues[0] {
                 level = 1
             }
             
@@ -94,7 +95,7 @@ class AchievementsManager {
             if gamesPlayed.level == 3 {
                 progress = 1.0
             } else {
-                progress = Double(GameData.achievementTracker[gamesPlayed.name]!) / Double(gamesPlayed.requirementValues[gamesPlayed.level])
+                progress = Double(GameData.gamesPlayed) / Double(gamesPlayed.requirementValues[gamesPlayed.level])
             }
             
             return progress
@@ -438,9 +439,93 @@ class AchievementsManager {
         /********** Power Up Achievements ***********/
         let powerUpValues = [10, 100, 1000]
         
+        
+        /********** AchievementName: Lifeline ***********/
+        let lifeline = Achievement(name: AchievementName.Lifeline.rawValue,
+                                   displayName: "Half Off",
+                                   requirementValues: powerUpValues,
+                                   requirements: powerUpRequirements(AchievementName.Lifeline.rawValue, values: powerUpValues),
+                                   rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
+                                    Reward(starCoins: 5, rewardsDice: .Platinum),
+                                    Reward(starCoins: 10, rewardsDice: .Diamond)])
+        
+        lifeline.calculateLevel = { () -> Int in
+            var level = 0
+            
+            if GameData.achievementTracker[lifeline.name] >= lifeline.requirementValues[2] {
+                level = 3
+            } else if GameData.achievementTracker[lifeline.name] >= lifeline.requirementValues[1] {
+                level = 2
+            } else if GameData.achievementTracker[lifeline.name] >= lifeline.requirementValues[0] {
+                level = 1
+            }
+            
+            return level
+        }
+        
+        lifeline.level = lifeline.calculateLevel!()
+        
+        lifeline.calculateProgress = { () -> Double in
+            var progress = 0.0
+            
+            if lifeline.level == 3 {
+                progress = 1.0
+            } else {
+                progress = Double(GameData.achievementTracker[lifeline.name]!) / Double(lifeline.requirementValues[lifeline.level])
+            }
+            
+            return progress
+        }
+        
+        lifeline.progress = lifeline.calculateProgress!()
+        
+        list.append(lifeline)
+        
+        /********** AchievementName: RewardBoost ***********/
+        let rewardBoost = Achievement(name: AchievementName.RewardBoost.rawValue,
+                                   displayName: "Finders Keepers",
+                                   requirementValues: powerUpValues,
+                                   requirements: powerUpRequirements(AchievementName.RewardBoost.rawValue, values: powerUpValues),
+                                   rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
+                                    Reward(starCoins: 5, rewardsDice: .Platinum),
+                                    Reward(starCoins: 10, rewardsDice: .Diamond)])
+        
+        rewardBoost.calculateLevel = { () -> Int in
+            var level = 0
+            
+            if GameData.achievementTracker[rewardBoost.name] >= rewardBoost.requirementValues[2] {
+                level = 3
+            } else if GameData.achievementTracker[rewardBoost.name] >= rewardBoost.requirementValues[1] {
+                level = 2
+            } else if GameData.achievementTracker[rewardBoost.name] >= rewardBoost.requirementValues[0] {
+                level = 1
+            }
+            
+            return level
+        }
+        
+        rewardBoost.level = rewardBoost.calculateLevel!()
+        
+        rewardBoost.calculateProgress = { () -> Double in
+            var progress = 0.0
+            
+            if rewardBoost.level == 3 {
+                progress = 1.0
+            } else {
+                progress = Double(GameData.achievementTracker[rewardBoost.name]!) / Double(rewardBoost.requirementValues[rewardBoost.level])
+            }
+            
+            return progress
+        }
+        
+        rewardBoost.progress = rewardBoost.calculateProgress!()
+        
+        list.append(rewardBoost)
+        
+        
         /********** AchievementName: DoubleDice ***********/
         let doubleDice = Achievement(name: AchievementName.DoubleDice.rawValue,
-                                     displayName: "Double My Chances",
+                                     displayName: "Double The Fun",
                                      requirementValues: powerUpValues,
                                      requirements: powerUpRequirements(AchievementName.DoubleDice.rawValue, values: powerUpValues),
                                      rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
@@ -482,7 +567,7 @@ class AchievementsManager {
         
         /********** AchievementName: DoublePayout ***********/
         let doublePayout = Achievement(name: AchievementName.DoublePayout.rawValue,
-                                     displayName: "Winner, Winner",
+                                     displayName: "Double The Pleasure",
                                      requirementValues: powerUpValues,
                                      requirements: powerUpRequirements(AchievementName.DoublePayout.rawValue, values: powerUpValues),
                                      rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
@@ -520,6 +605,7 @@ class AchievementsManager {
         doublePayout.progress = doublePayout.calculateProgress!()
         
         list.append(doublePayout)
+        
         
         /********** AchievementName: TriplePayout ***********/
         let triplePayout = Achievement(name: AchievementName.TriplePayout.rawValue,
@@ -563,88 +649,46 @@ class AchievementsManager {
         list.append(triplePayout)
         
         
-        /********** AchievementName: Lifeline ***********/
-        let lifeline = Achievement(name: AchievementName.Lifeline.rawValue,
-                                       displayName: "Half and Half",
-                                       requirementValues: powerUpValues,
-                                       requirements: powerUpRequirements(AchievementName.Lifeline.rawValue, values: powerUpValues),
-                                       rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
-                                        Reward(starCoins: 5, rewardsDice: .Platinum),
-                                        Reward(starCoins: 10, rewardsDice: .Diamond)])
-        
-        lifeline.calculateLevel = { () -> Int in
-            var level = 0
-            
-            if GameData.achievementTracker[lifeline.name] >= lifeline.requirementValues[2] {
-                level = 3
-            } else if GameData.achievementTracker[lifeline.name] >= lifeline.requirementValues[1] {
-                level = 2
-            } else if GameData.achievementTracker[lifeline.name] >= lifeline.requirementValues[0] {
-                level = 1
-            }
-            
-            return level
-        }
-        
-        lifeline.level = lifeline.calculateLevel!()
-        
-        lifeline.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if lifeline.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.achievementTracker[lifeline.name]!) / Double(lifeline.requirementValues[lifeline.level])
-            }
-            
-            return progress
-        }
-        
-        lifeline.progress = lifeline.calculateProgress!()
-        
-        list.append(lifeline)
-        
-        
-        /********** AchievementName: Rewind ***********/
-        let rewind = Achievement(name: AchievementName.Rewind.rawValue,
-                                   displayName: "Be Kind Rewind",
+        /********** AchievementName: Reroll ***********/
+        let reroll = Achievement(name: AchievementName.Reroll.rawValue,
+                                   displayName: "Baby One More Time",
                                    requirementValues: powerUpValues,
-                                   requirements: powerUpRequirements(AchievementName.Rewind.rawValue, values: powerUpValues),
+                                   requirements: powerUpRequirements(AchievementName.Reroll.rawValue, values: powerUpValues),
                                    rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
                                     Reward(starCoins: 5, rewardsDice: .Platinum),
                                     Reward(starCoins: 10, rewardsDice: .Diamond)])
         
-        rewind.calculateLevel = { () -> Int in
+        reroll.calculateLevel = { () -> Int in
             var level = 0
             
-            if GameData.achievementTracker[rewind.name] >= rewind.requirementValues[2] {
+            if GameData.achievementTracker[reroll.name] >= reroll.requirementValues[2] {
                 level = 3
-            } else if GameData.achievementTracker[rewind.name] >= rewind.requirementValues[1] {
+            } else if GameData.achievementTracker[reroll.name] >= reroll.requirementValues[1] {
                 level = 2
-            } else if GameData.achievementTracker[rewind.name] >= rewind.requirementValues[0] {
+            } else if GameData.achievementTracker[reroll.name] >= reroll.requirementValues[0] {
                 level = 1
             }
             
             return level
         }
         
-        rewind.level = rewind.calculateLevel!()
+        reroll.level = reroll.calculateLevel!()
         
-        rewind.calculateProgress = { () -> Double in
+        reroll.calculateProgress = { () -> Double in
             var progress = 0.0
             
-            if rewind.level == 3 {
+            if reroll.level == 3 {
                 progress = 1.0
             } else {
-                progress = Double(GameData.achievementTracker[rewind.name]!) / Double(rewind.requirementValues[rewind.level])
+                progress = Double(GameData.achievementTracker[reroll.name]!) / Double(reroll.requirementValues[reroll.level])
             }
             
             return progress
         }
         
-        rewind.progress = rewind.calculateProgress!()
+        reroll.progress = reroll.calculateProgress!()
         
-        list.append(rewind)
+        list.append(reroll)
     }
     
     func update(name: AchievementName) {

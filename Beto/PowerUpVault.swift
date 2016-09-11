@@ -9,13 +9,14 @@
 import SpriteKit
 
 enum PowerUpKey: String {
+    case lifeline
+    case rewardBoost
     case doubleDice
     case doublePayout
     case triplePayout
-    case lifeline
-    case rewind
+    case reroll
     
-    static let allValues = [doubleDice, doublePayout, triplePayout, lifeline, rewind]
+    static let allValues = [lifeline, rewardBoost, doubleDice, doublePayout, triplePayout, reroll]
 }
 
 class PowerUpVault: DropdownNode {
@@ -23,22 +24,57 @@ class PowerUpVault: DropdownNode {
     
     init(activePowerUp: String) {
         let vault = SKSpriteNode(imageNamed: "powerUpVault")
+        vault.position = CGPoint(x: 0, y: ScreenSize.Height)
         vault.size = CGSize(width: 304, height: 214)
-        
-        let closeButton = ButtonNode(defaultButtonImage: "closeButton")
-        closeButton.size = CGSize(width: 44, height: 45)
         
         super.init(container: vault)
         
-        // Designate positions
-        vault.position = CGPoint(x: 0, y: ScreenSize.Height)
+        let closeButton = ButtonNode(defaultButtonImage: "closeButton")
         closeButton.position = CGPoint(x: 140, y: 94)
-        
-        // Add actions
+        closeButton.size = CGSize(width: 44, height: 45)
         closeButton.action = close
+        
+        // Set up info overlay
+        let infoOverlay = ButtonNode(defaultButtonImage: "overlay")
+        infoOverlay.action = { infoOverlay.removeFromParent() }
+        
+        let infoSprite = SKSpriteNode(imageNamed: "powerUpsInfo")
+        
+        infoOverlay.addChild(infoSprite)
+    
+        let infoButton = ButtonNode(defaultButtonImage: "infoButton")
+        infoButton.position = CGPoint(x: 120, y: -75)
+        infoButton.action = {
+            infoOverlay.alpha = 0.0
+            
+            let fadeIn = SKAction.fadeAlphaTo(1.0, duration: 0.2)
+            infoOverlay.runAction(fadeIn)
+            
+            vault.addChild(infoOverlay)
+        }
+        
+        var buttonImage = "offButton"
+        
+        if GameData.autoLoadEnabled {
+            buttonImage = "onButton"
+        }
+        
+        let autoLoadButton = ButtonNode(defaultButtonImage: buttonImage, activeButtonImage: buttonImage)
+        autoLoadButton.position = CGPoint(x: -110, y: -75)
+        autoLoadButton.action = {
+            GameData.toggleAutoLoad()
+                    
+            if GameData.autoLoadEnabled {
+                autoLoadButton.changeTexture("onButton")
+            } else {
+                autoLoadButton.changeTexture("offButton")
+            }
+        }
         
         // Add nodes
         vault.addChild(closeButton)
+        vault.addChild(autoLoadButton)
+        vault.addChild(infoButton)
         
         var position = 0
 

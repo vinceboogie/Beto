@@ -22,7 +22,7 @@ class Settings {
         background = SKSpriteNode(color: .blackColor(), size: CGSize(width: ScreenSize.Width, height: ScreenSize.Height))
         background.alpha = 0.0
         
-        closeButton = ButtonNode(defaultButtonImage: "closeButton")
+        closeButton = ButtonNode(defaultButtonImage: "closeButton_Large")
         closeButton.size = CGSize(width: 44, height: 45)
         
         var soundImage = "soundButton"
