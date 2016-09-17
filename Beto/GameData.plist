@@ -33,34 +33,7 @@
 		<integer>0</integer>
 	</dict>
 	<key>achievementTracker</key>
-	<dict>
-		<key>HighestWager</key>
-		<integer>0</integer>
-		<key>BlueWin</key>
-		<integer>0</integer>
-		<key>RedWin</key>
-		<integer>0</integer>
-		<key>GreenWin</key>
-		<integer>0</integer>
-		<key>YellowWin</key>
-		<integer>0</integer>
-		<key>CyanWin</key>
-		<integer>0</integer>
-		<key>PurpleWin</key>
-		<integer>0</integer>
-		<key>Lifeline</key>
-		<integer>0</integer>
-		<key>RewardBoost</key>
-		<integer>0</integer>
-		<key>DoubleDice</key>
-		<integer>0</integer>
-		<key>DoublePayout</key>
-		<integer>0</integer>
-		<key>TriplePayout</key>
-		<integer>0</integer>
-		<key>Reroll</key>
-		<integer>0</integer>
-	</dict>
+	<dict/>
 	<key>unlockedThemes</key>
 	<array>
 		<string>Default</string>
@@ -74,15 +47,15 @@
 	<key>soundMuted</key>
 	<false/>
 	<key>betDenomination</key>
-	<integer>1</integer>
+	<integer>5</integer>
 	<key>coinsUnlocked</key>
 	<integer>0</integer>
 	<key>gamesPlayed</key>
 	<integer>0</integer>
 	<key>highscore</key>
-	<integer>50</integer>
+	<integer>100</integer>
 	<key>coins</key>
-	<integer>50</integer>
+	<integer>100</integer>
 	<key>starCoins</key>
 	<integer>0</integer>
 	<key>XInitializerItem</key>

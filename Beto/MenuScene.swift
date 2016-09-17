@@ -36,7 +36,7 @@ class MenuScene: SKScene {
         themesButton.position = CGPoint(x: -60, y: -100)
         themesButton.action = presentThemesScene
         
-        // Achievements Button
+        // How To Play Button
         let helpButton = ButtonNode(defaultButtonImage: "helpButton")
         helpButton.size = CGSize(width: 44, height: 45)
         helpButton.position = CGPoint(x: 0, y: -100)
@@ -75,7 +75,20 @@ class MenuScene: SKScene {
     }
     
     func showTutorial() {
-        print("DELETE: Test")
+        let infoOverlay = ButtonNode(defaultButtonImage: "overlay")
+        infoOverlay.action = { infoOverlay.removeFromParent() }
+        
+        let infoSprite = SKSpriteNode(imageNamed: "howToPlayInfo")
+        infoSprite.position = CGPoint(x: 0, y: 50)
+        
+        infoOverlay.addChild(infoSprite)
+        
+        infoOverlay.alpha = 0.0
+        
+        let fadeIn = SKAction.fadeAlphaTo(1.0, duration: 0.2)
+        infoOverlay.runAction(fadeIn)
+        
+        addChild(infoOverlay)
     }
     
     func displaySettings() {

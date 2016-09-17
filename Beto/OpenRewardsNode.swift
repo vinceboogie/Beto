@@ -13,13 +13,24 @@ class OpenRewardsNode: DropdownNode {
     private var claimButton: ButtonNode
     
     init(diceKey: RewardsDiceKey) {
-        var rewardsCount: Int
+        var rewardsCount = 3
         var claimedCount = 0
         
         switch diceKey {
-        case .Bronze, .Silver, .Gold:
-            rewardsCount = 3
-        case .Platinum, .Diamond, .Ruby:
+        case .Bronze:
+            GameData.incrementAchievement(.Bronze)
+        case .Silver:
+            GameData.incrementAchievement(.Silver)
+        case .Gold:
+            GameData.incrementAchievement(.Gold)
+        case .Platinum:
+            GameData.incrementAchievement(.Platinum)
+            rewardsCount = 5
+        case .Diamond:
+            GameData.incrementAchievement(.Diamond)
+            rewardsCount = 5
+        case .Ruby:
+            GameData.incrementAchievement(.Ruby)
             rewardsCount = 5
         }
         

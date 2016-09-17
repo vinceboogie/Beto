@@ -51,7 +51,7 @@ class RewardsDice: ButtonNode {
         activeButton.color = UIColor.blackColor()
         activeButton.colorBlendFactor = 0.3
 
-        // NOTE: -99 denotes special case (Rewards Dice Unlocked screen)
+        // NOTE: -99 is for when you find a rewards dice during gameplay
         if count != -99 {
             addChild(labelShadow)
             addChild(label)

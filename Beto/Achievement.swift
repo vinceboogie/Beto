@@ -6,17 +6,20 @@
 //  Copyright © 2016 redgarage. All rights reserved.
 //
 
+struct Reward {
+    let starCoins: Int
+    let rewardsDice: RewardsDiceKey
+}
+
 class Achievement {
     let name: String
     let displayName: String
     let requirementValues: [Int]
     let requirements: [String]
     let rewards: [Reward]
-    var level: Int
-    var progress: Double
-    
-    var calculateLevel: (() -> (Int))?
-    var calculateProgress: (() -> (Double))?
+   
+    var level: Int = 0
+    var progress: Double = 0.0
     
     init(name: String, displayName: String, requirementValues: [Int], requirements: [String], rewards: [Reward]) {
         self.name = name
@@ -25,20 +28,36 @@ class Achievement {
         self.requirements = requirements
         self.rewards = rewards
         
-        level = 0
-        progress = 0
+        startTrackingAchievement()
+        calculateLevel()
+        calculateProgress()
     }
     
-    func update() {
-        var oldLevel = 0
-        
-        oldLevel = level
-        level = calculateLevel!()
-        
-        if level > oldLevel {
-            GameData.unlockedLevelHandler!(self)
+    // Creates a new entry for achievementTracker in the plist for newly added achievements
+    func startTrackingAchievement() {
+        if GameData.achievementTracker.indexForKey(name) == nil {
+            GameData.addNewAchievementTracker(name)
+            GameData.save()
         }
+    }
+    
+    func calculateLevel() {
+        let value = GameData.achievementTracker[name]!
         
-        progress = calculateProgress!()
+        if value >= requirementValues[2] {
+            level = 3
+        } else if value >= requirementValues[1] {
+            level = 2
+        } else if value >= requirementValues[0] {
+            level = 1
+        }
+    }
+    
+    func calculateProgress() {
+        if level == 3 {
+            progress = 1.0
+        } else {
+            progress = Double(GameData.achievementTracker[name]!) / Double(requirementValues[level])
+        }
     }
 }

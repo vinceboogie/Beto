@@ -8,9 +8,12 @@
 
 enum AchievementName: String {
     case GamesPlayed
-    case HighestWager
     case MoneyInTheBank
+    case HighestWager
+    case MoneyGrabber
+    case Unlucky
     case CoinCollector
+    case StarCoin
     case BlueWin
     case RedWin
     case GreenWin
@@ -23,6 +26,12 @@ enum AchievementName: String {
     case DoublePayout
     case TriplePayout
     case Reroll
+    case Bronze
+    case Silver
+    case Gold
+    case Platinum
+    case Diamond
+    case Ruby
 }
 
 class AchievementsManager {
@@ -33,30 +42,14 @@ class AchievementsManager {
          /********** AchievementName: Sample ***********/
          let sampleValues = [0, 0, 0]
          let sample = Achievement(name: AchievementName.CHANGETHIS.rawValue,
-                                  displayName: "Achievement Template",
+                                  displayName: "CHANGE THIS",
                                   requirementValues: sampleValues,
                                   requirements: ["This is an example \(sampleValues[0])",
                                     "This is an example \(sampleValues[1])",
-                                    "This is an example \(sampleValues[2])"],
-                                  rewards: [Reward(bonusPayoutMinutes: 1),
-                                    Reward(bonusPayoutMinutes: 2),
-                                    Reward(bonusPayoutMinutes: 4)])
-         
-         sample.calculateLevel = { () -> Int in
-         var level = 0
-         
-         return level
-         }
-         
-         sample.level = sample.calculateLevel!()
-         
-         sample.calculateProgress = { () -> Float in
-         let progress = Float(1.0)
-         
-         return progress
-         }
-         
-         sample.progress = sample.calculateProgress!()
+                                    "This is an example \(sampleValues[2])"], 
+                                  rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
+                                    Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond)])
          
          list.append(sample)
         */
@@ -69,90 +62,102 @@ class AchievementsManager {
                                       requirements: ["Play \(gamesPlayedValues[0]) times",
                                         "Play \(gamesPlayedValues[1]) times",
                                         "Play \(gamesPlayedValues[2]) times"],
-                                      rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
-                                        Reward(starCoins: 5, rewardsDice: .Platinum),
-                                        Reward(starCoins: 10, rewardsDice: .Diamond)])
-        
-        gamesPlayed.calculateLevel = { () -> Int in
-            var level = 0
-            
-            if GameData.gamesPlayed >= gamesPlayed.requirementValues[2] {
-                level = 3
-            } else if GameData.gamesPlayed >= gamesPlayed.requirementValues[1] {
-                level = 2
-            } else if GameData.gamesPlayed >= gamesPlayed.requirementValues[0] {
-                level = 1
-            }
-            
-            return level
-        }
-        
-        gamesPlayed.level = gamesPlayed.calculateLevel!()
-        
-        gamesPlayed.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if gamesPlayed.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.gamesPlayed) / Double(gamesPlayed.requirementValues[gamesPlayed.level])
-            }
-            
-            return progress
-        }
-        
-        gamesPlayed.progress = gamesPlayed.calculateProgress!()
+                                      rewards: [Reward(starCoins: 3, rewardsDice: .Platinum),
+                                        Reward(starCoins: 5, rewardsDice: .Diamond),
+                                        Reward(starCoins: 10, rewardsDice: .Ruby)])
         
         list.append(gamesPlayed)
         
+        /********** AchievementName: MoneyInTheBank ***********/
+        let moneyValues = [10000, 100000, 1000000]
+        let moneyInTheBank = Achievement(name: AchievementName.MoneyInTheBank.rawValue,
+                                         displayName: "Money in the Bank",
+                                         requirementValues: moneyValues,
+                                         requirements: ["Reach a highscore of \(moneyValues[0])",
+                                            "Reach a highscore of \(moneyValues[1])",
+                                            "Reach a highscore of \(moneyValues[2])"],
+                                         rewards: [Reward(starCoins: 3, rewardsDice: .Platinum),
+                                            Reward(starCoins: 5, rewardsDice: .Diamond),
+                                            Reward(starCoins: 10, rewardsDice: .Ruby)])
         
+        list.append(moneyInTheBank)
+        
+        
+        /********** AchievementName: HighestWager ***********/
+        let highestWagerValues = [1000, 10000, 100000]
+        let highestWager = Achievement(name: AchievementName.HighestWager.rawValue,
+                                       displayName: "The Gambler",
+                                       requirementValues: highestWagerValues,
+                                       requirements: ["Place a \(highestWagerValues[0]) bet on any color",
+                                        "Place a \(highestWagerValues[1]) bet on any color",
+                                        "Place a \(highestWagerValues[2]) bet on any color"],
+                                       rewards: [Reward(starCoins: 3, rewardsDice: .Platinum),
+                                        Reward(starCoins: 5, rewardsDice: .Diamond),
+                                        Reward(starCoins: 10, rewardsDice: .Ruby)])
+        
+        list.append(highestWager)
+        
+        
+        /********** AchievementName: MoneyGrabber ***********/
+        let moneyGrabberValues = [100, 1000, 10000]
+        let moneyGrabber = Achievement(name: AchievementName.MoneyGrabber.rawValue,
+                                      displayName: "Money Grabber",
+                                      requirementValues: moneyGrabberValues,
+                                      requirements: ["Win \(moneyGrabberValues[0]) times",
+                                        "Win \(moneyGrabberValues[1]) times",
+                                        "Win \(moneyGrabberValues[2]) times"],
+                                      rewards: [Reward(starCoins: 3, rewardsDice: .Platinum),
+                                        Reward(starCoins: 5, rewardsDice: .Diamond),
+                                        Reward(starCoins: 10, rewardsDice: .Ruby)])
+        
+        list.append(moneyGrabber)
+        
+        /********** AchievementName: Unlucky ***********/
+        let unluckyValues = [100, 1000, 10000]
+        let unlucky = Achievement(name: AchievementName.Unlucky.rawValue,
+                                       displayName: "Unlucky",
+                                       requirementValues: unluckyValues,
+                                       requirements: ["Win \(unluckyValues[0]) times without a reward",
+                                        "Win \(unluckyValues[1]) times without a reward",
+                                        "Win \(unluckyValues[2]) times without a reward"],
+                                       rewards: [Reward(starCoins: 3, rewardsDice: .Platinum),
+                                        Reward(starCoins: 5, rewardsDice: .Diamond),
+                                        Reward(starCoins: 10, rewardsDice: .Ruby)])
+        
+        list.append(unlucky)
+        
+
         /********** AchievementName: CoinCollector ***********/
         let coinValues = [1, 4, 7]
         let coinCollector = Achievement(name: AchievementName.CoinCollector.rawValue,
                                         displayName: "Coin Collector",
                                         requirementValues: coinValues,
-                                        requirements: ["Unlock a coin",
-                                            "Unlock \(coinValues[1]) coins",
-                                            "Unlock all coins"],
-                                        rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
-                                            Reward(starCoins: 5, rewardsDice: .Platinum),
-                                            Reward(starCoins: 10, rewardsDice: .Diamond)])
-    
-        coinCollector.calculateLevel = { () -> Int in
-            var level = 0
-            
-            if GameData.coinsUnlocked >= coinCollector.requirementValues[2] {
-                level = 3
-            } else if GameData.coinsUnlocked >= coinCollector.requirementValues[1] {
-                level = 2
-            } else if GameData.coinsUnlocked >= coinCollector.requirementValues[0] {
-                level = 1
-            }
-            
-            return level
-        }
-        
-        coinCollector.level = coinCollector.calculateLevel!()
-        
-        coinCollector.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if coinCollector.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.coinsUnlocked) / Double(coinCollector.requirementValues[coinCollector.level])
-            }
-            
-            return progress
-        }
-        
-        coinCollector.progress = coinCollector.calculateProgress!()
-        
+                                        requirements: ["Unlock a Coin",
+                                            "Unlock \(coinValues[1]) Coin",
+                                            "Unlock all Coins"],
+                                        rewards: [Reward(starCoins: 3, rewardsDice: .Platinum),
+                                            Reward(starCoins: 5, rewardsDice: .Diamond),
+                                            Reward(starCoins: 10, rewardsDice: .Ruby)])
+
         list.append(coinCollector)
         
         
+        /********** AchievementName: StarCoin ***********/
+        let starCoinValues = [10, 100, 1000]
+        let starCoin = Achievement(name: AchievementName.StarCoin.rawValue,
+                                 displayName: "Wish upon a Star",
+                                 requirementValues: starCoinValues,
+                                 requirements: ["Collect \(starCoinValues[0]) star coins",
+                                    "Collect \(starCoinValues[1]) star coins",
+                                    "Collect\(starCoinValues[2]) star coins"],
+                                 rewards: [Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond),
+                                    Reward(starCoins: 10, rewardsDice: .Ruby)])
+
+        list.append(starCoin)
+        
         /********** Color Achievements ***********/
-        let colorWinValues = [10, 100, 1000]
+        let colorWinValues = [10, 50, 100]
         
         /********** AchievementName: BlueWin ***********/
         let blueWin = Achievement(name: AchievementName.BlueWin.rawValue,
@@ -160,29 +165,8 @@ class AchievementsManager {
                                   requirementValues: colorWinValues,
                                   requirements: colorWinRequirements(Color.Blue, values: colorWinValues),
                                   rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
-                                    Reward(starCoins: 5, rewardsDice: .Platinum),
-                                    Reward(starCoins: 10, rewardsDice: .Diamond)])
-        
-        
-        blueWin.calculateLevel = { () -> Int in
-            return self.colorWinLevel(GameData.achievementTracker[blueWin.name]!, values: colorWinValues)
-        }
-        
-        blueWin.level = blueWin.calculateLevel!()
-        
-        blueWin.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if blueWin.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.achievementTracker[blueWin.name]!) / Double(blueWin.requirementValues[blueWin.level])
-            }
-            
-            return progress
-        }
-        
-        blueWin.progress = blueWin.calculateProgress!()
+                                    Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond)])
         
         list.append(blueWin)
         
@@ -193,29 +177,9 @@ class AchievementsManager {
                                   requirementValues: colorWinValues,
                                   requirements: colorWinRequirements(Color.Red, values: colorWinValues),
                                   rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
-                                    Reward(starCoins: 5, rewardsDice: .Platinum),
-                                    Reward(starCoins: 10, rewardsDice: .Diamond)])
-        
-        redWin.calculateLevel = { () -> Int in
-            return self.colorWinLevel(GameData.achievementTracker[redWin.name]!, values: colorWinValues)
-        }
-        
-        redWin.level = redWin.calculateLevel!()
-        
-        redWin.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if redWin.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.achievementTracker[redWin.name]!) / Double(redWin.requirementValues[redWin.level])
-            }
-            
-            return progress
-        }
-        
-        redWin.progress = redWin.calculateProgress!()
-        
+                                    Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond)])
+    
         list.append(redWin)
         
         
@@ -225,28 +189,8 @@ class AchievementsManager {
                                  requirementValues: colorWinValues,
                                  requirements: colorWinRequirements(Color.Green, values: colorWinValues),
                                  rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
-                                    Reward(starCoins: 5, rewardsDice: .Platinum),
-                                    Reward(starCoins: 10, rewardsDice: .Diamond)])
-        
-        greenWin.calculateLevel = { () -> Int in
-            return self.colorWinLevel(GameData.achievementTracker[greenWin.name]!, values: colorWinValues)
-        }
-        
-        greenWin.level = greenWin.calculateLevel!()
-        
-        greenWin.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if greenWin.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.achievementTracker[greenWin.name]!) / Double(greenWin.requirementValues[greenWin.level])
-            }
-            
-            return progress
-        }
-        
-        greenWin.progress = greenWin.calculateProgress!()
+                                    Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond)])
         
         list.append(greenWin)
         
@@ -257,29 +201,9 @@ class AchievementsManager {
                                  requirementValues: colorWinValues,
                                  requirements: colorWinRequirements(Color.Yellow, values: colorWinValues),
                                  rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
-                                    Reward(starCoins: 5, rewardsDice: .Platinum),
-                                    Reward(starCoins: 10, rewardsDice: .Diamond)])
-        
-        yellowWin.calculateLevel = { () -> Int in
-            return self.colorWinLevel(GameData.achievementTracker[yellowWin.name]!, values: colorWinValues)
-        }
-        
-        yellowWin.level = yellowWin.calculateLevel!()
-        
-        yellowWin.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if yellowWin.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.achievementTracker[yellowWin.name]!) / Double(yellowWin.requirementValues[yellowWin.level])
-            }
-            
-            return progress
-        }
-        
-        yellowWin.progress = yellowWin.calculateProgress!()
-        
+                                    Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond)])
+
         list.append(yellowWin)
         
         
@@ -289,29 +213,9 @@ class AchievementsManager {
                                  requirementValues: colorWinValues,
                                  requirements: colorWinRequirements(Color.Cyan, values: colorWinValues),
                                  rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
-                                    Reward(starCoins: 5, rewardsDice: .Platinum),
-                                    Reward(starCoins: 10, rewardsDice: .Diamond)])
-        
-        cyanWin.calculateLevel = { () -> Int in
-            return self.colorWinLevel(GameData.achievementTracker[cyanWin.name]!, values: colorWinValues)
-        }
-        
-        cyanWin.level = cyanWin.calculateLevel!()
-        
-        cyanWin.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if cyanWin.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.achievementTracker[cyanWin.name]!) / Double(cyanWin.requirementValues[cyanWin.level])
-            }
-            
-            return progress
-        }
-        
-        cyanWin.progress = cyanWin.calculateProgress!()
-        
+                                    Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond)])
+
         list.append(cyanWin)
         
         
@@ -321,123 +225,14 @@ class AchievementsManager {
                                  requirementValues: colorWinValues,
                                  requirements: colorWinRequirements(Color.Purple, values: colorWinValues),
                                  rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
-                                    Reward(starCoins: 5, rewardsDice: .Platinum),
-                                    Reward(starCoins: 10, rewardsDice: .Diamond)])
-        
-        purpleWin.calculateLevel = { () -> Int in
-            return self.colorWinLevel(GameData.achievementTracker[purpleWin.name]!, values: colorWinValues)
-        }
-        
-        purpleWin.level = purpleWin.calculateLevel!()
-        
-        purpleWin.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if purpleWin.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.achievementTracker[purpleWin.name]!) / Double(purpleWin.requirementValues[purpleWin.level])
-            }
-            
-            return progress
-        }
-        
-        purpleWin.progress = purpleWin.calculateProgress!()
-        
+                                    Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond)])
+
         list.append(purpleWin)
-        
-        /********** AchievementName: MoneyInTheBank ***********/
-        let moneyValues = [10000, 100000, 1000000]
-        let moneyInTheBank = Achievement(name: AchievementName.MoneyInTheBank.rawValue,
-                                 displayName: "Money in the Bank",
-                                 requirementValues: moneyValues,
-                                 requirements: ["Reach a highscore of \(moneyValues[0])",
-                                    "Reach a highscore of \(moneyValues[1])",
-                                    "Reach a highscore of \(moneyValues[2])"],
-                                 rewards: [Reward(starCoins: 3, rewardsDice: .Platinum),
-                                    Reward(starCoins: 5, rewardsDice: .Diamond),
-                                    Reward(starCoins: 10, rewardsDice: .Ruby)])
-        
-        moneyInTheBank.calculateLevel = { () -> Int in
-            var level = 0
-            
-            if GameData.highscore > moneyInTheBank.requirementValues[2] {
-                level = 3
-            } else if GameData.highscore > moneyInTheBank.requirementValues[1] {
-                level = 2
-            } else if GameData.highscore > moneyInTheBank.requirementValues[0] {
-                level = 1
-            }
-            
-            return level
-        }
-        
-        moneyInTheBank.level = moneyInTheBank.calculateLevel!()
-        
-        moneyInTheBank.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if moneyInTheBank.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.highscore) / Double(moneyInTheBank.requirementValues[moneyInTheBank.level])
-            }
-            
-            return progress
-        }
-        
-        moneyInTheBank.progress = moneyInTheBank.calculateProgress!()
-        
-        list.append(moneyInTheBank)
-        
-        
-        /********** AchievementName: HighestWager ***********/
-        let highestWagerValues = [1000, 100000, 1000000]
-        let highestWager = Achievement(name: AchievementName.HighestWager.rawValue,
-                                       displayName: "The Gambler",
-                                       requirementValues: highestWagerValues,
-                                       requirements: ["Place a \(highestWagerValues[0]) bet on any color",
-                                            "Place a \(highestWagerValues[1]) bet on any color",
-                                            "Place a \(highestWagerValues[2]) bet on any color"],
-                                       rewards: [Reward(starCoins: 3, rewardsDice: .Platinum),
-                                            Reward(starCoins: 5, rewardsDice: .Diamond),
-                                            Reward(starCoins: 10, rewardsDice: .Ruby)])
-        
-        highestWager.calculateLevel = { () -> Int in
-            var level = 0
-            
-            if GameData.achievementTracker[highestWager.name] >= highestWager.requirementValues[2] {
-                level = 3
-            } else if GameData.achievementTracker[highestWager.name] >= highestWager.requirementValues[1] {
-                level = 2
-            } else if GameData.achievementTracker[highestWager.name] >= highestWager.requirementValues[0] {
-                level = 1
-            }
-            
-            return level
-        }
-        
-        highestWager.level = highestWager.calculateLevel!()
-        
-        highestWager.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if highestWager.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.achievementTracker[highestWager.name]!) / Double(highestWager.requirementValues[highestWager.level])
-            }
-            
-            return progress
-        }
-        
-        highestWager.progress = highestWager.calculateProgress!()
-        
-        list.append(highestWager)
         
         
         /********** Power Up Achievements ***********/
-        let powerUpValues = [10, 100, 1000]
+        let powerUpValues = [10, 50, 100]
         
         
         /********** AchievementName: Lifeline ***********/
@@ -446,39 +241,9 @@ class AchievementsManager {
                                    requirementValues: powerUpValues,
                                    requirements: powerUpRequirements(AchievementName.Lifeline.rawValue, values: powerUpValues),
                                    rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
-                                    Reward(starCoins: 5, rewardsDice: .Platinum),
-                                    Reward(starCoins: 10, rewardsDice: .Diamond)])
-        
-        lifeline.calculateLevel = { () -> Int in
-            var level = 0
-            
-            if GameData.achievementTracker[lifeline.name] >= lifeline.requirementValues[2] {
-                level = 3
-            } else if GameData.achievementTracker[lifeline.name] >= lifeline.requirementValues[1] {
-                level = 2
-            } else if GameData.achievementTracker[lifeline.name] >= lifeline.requirementValues[0] {
-                level = 1
-            }
-            
-            return level
-        }
-        
-        lifeline.level = lifeline.calculateLevel!()
-        
-        lifeline.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if lifeline.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.achievementTracker[lifeline.name]!) / Double(lifeline.requirementValues[lifeline.level])
-            }
-            
-            return progress
-        }
-        
-        lifeline.progress = lifeline.calculateProgress!()
-        
+                                    Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond)])
+
         list.append(lifeline)
         
         /********** AchievementName: RewardBoost ***********/
@@ -487,39 +252,9 @@ class AchievementsManager {
                                    requirementValues: powerUpValues,
                                    requirements: powerUpRequirements(AchievementName.RewardBoost.rawValue, values: powerUpValues),
                                    rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
-                                    Reward(starCoins: 5, rewardsDice: .Platinum),
-                                    Reward(starCoins: 10, rewardsDice: .Diamond)])
-        
-        rewardBoost.calculateLevel = { () -> Int in
-            var level = 0
-            
-            if GameData.achievementTracker[rewardBoost.name] >= rewardBoost.requirementValues[2] {
-                level = 3
-            } else if GameData.achievementTracker[rewardBoost.name] >= rewardBoost.requirementValues[1] {
-                level = 2
-            } else if GameData.achievementTracker[rewardBoost.name] >= rewardBoost.requirementValues[0] {
-                level = 1
-            }
-            
-            return level
-        }
-        
-        rewardBoost.level = rewardBoost.calculateLevel!()
-        
-        rewardBoost.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if rewardBoost.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.achievementTracker[rewardBoost.name]!) / Double(rewardBoost.requirementValues[rewardBoost.level])
-            }
-            
-            return progress
-        }
-        
-        rewardBoost.progress = rewardBoost.calculateProgress!()
-        
+                                    Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond)])
+
         list.append(rewardBoost)
         
         
@@ -529,39 +264,9 @@ class AchievementsManager {
                                      requirementValues: powerUpValues,
                                      requirements: powerUpRequirements(AchievementName.DoubleDice.rawValue, values: powerUpValues),
                                      rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
-                                        Reward(starCoins: 5, rewardsDice: .Platinum),
-                                        Reward(starCoins: 10, rewardsDice: .Diamond)])
-        
-        doubleDice.calculateLevel = { () -> Int in
-            var level = 0
-            
-            if GameData.achievementTracker[doubleDice.name] >= doubleDice.requirementValues[2] {
-                level = 3
-            } else if GameData.achievementTracker[doubleDice.name] >= doubleDice.requirementValues[1] {
-                level = 2
-            } else if GameData.achievementTracker[doubleDice.name] >= doubleDice.requirementValues[0] {
-                level = 1
-            }
-            
-            return level
-        }
-        
-        doubleDice.level = doubleDice.calculateLevel!()
-        
-        doubleDice.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if doubleDice.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.achievementTracker[doubleDice.name]!) / Double(doubleDice.requirementValues[doubleDice.level])
-            }
-            
-            return progress
-        }
-        
-        doubleDice.progress = doubleDice.calculateProgress!()
-        
+                                        Reward(starCoins: 3, rewardsDice: .Platinum),
+                                        Reward(starCoins: 5, rewardsDice: .Diamond)])
+
         list.append(doubleDice)
         
         
@@ -571,39 +276,9 @@ class AchievementsManager {
                                      requirementValues: powerUpValues,
                                      requirements: powerUpRequirements(AchievementName.DoublePayout.rawValue, values: powerUpValues),
                                      rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
-                                        Reward(starCoins: 5, rewardsDice: .Platinum),
-                                        Reward(starCoins: 10, rewardsDice: .Diamond)])
-        
-        doublePayout.calculateLevel = { () -> Int in
-            var level = 0
-            
-            if GameData.achievementTracker[doublePayout.name] >= doublePayout.requirementValues[2] {
-                level = 3
-            } else if GameData.achievementTracker[doublePayout.name] >= doublePayout.requirementValues[1] {
-                level = 2
-            } else if GameData.achievementTracker[doublePayout.name] >= doublePayout.requirementValues[0] {
-                level = 1
-            }
-            
-            return level
-        }
-        
-        doublePayout.level = doublePayout.calculateLevel!()
-        
-        doublePayout.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if doublePayout.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.achievementTracker[doublePayout.name]!) / Double(doublePayout.requirementValues[doublePayout.level])
-            }
-            
-            return progress
-        }
-        
-        doublePayout.progress = doublePayout.calculateProgress!()
-        
+                                        Reward(starCoins: 3, rewardsDice: .Platinum),
+                                        Reward(starCoins: 5, rewardsDice: .Diamond)])
+   
         list.append(doublePayout)
         
         
@@ -613,39 +288,9 @@ class AchievementsManager {
                                        requirementValues: powerUpValues,
                                        requirements: powerUpRequirements(AchievementName.TriplePayout.rawValue, values: powerUpValues),
                                        rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
-                                        Reward(starCoins: 5, rewardsDice: .Platinum),
-                                        Reward(starCoins: 10, rewardsDice: .Diamond)])
-        
-        triplePayout.calculateLevel = { () -> Int in
-            var level = 0
-            
-            if GameData.achievementTracker[triplePayout.name] >= triplePayout.requirementValues[2] {
-                level = 3
-            } else if GameData.achievementTracker[triplePayout.name] >= triplePayout.requirementValues[1] {
-                level = 2
-            } else if GameData.achievementTracker[triplePayout.name] >= triplePayout.requirementValues[0] {
-                level = 1
-            }
-            
-            return level
-        }
-        
-        triplePayout.level = triplePayout.calculateLevel!()
-        
-        triplePayout.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if triplePayout.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.achievementTracker[triplePayout.name]!) / Double(triplePayout.requirementValues[triplePayout.level])
-            }
-            
-            return progress
-        }
-        
-        triplePayout.progress = triplePayout.calculateProgress!()
-        
+                                        Reward(starCoins: 3, rewardsDice: .Platinum),
+                                        Reward(starCoins: 5, rewardsDice: .Diamond)])
+
         list.append(triplePayout)
         
         
@@ -655,58 +300,99 @@ class AchievementsManager {
                                    requirementValues: powerUpValues,
                                    requirements: powerUpRequirements(AchievementName.Reroll.rawValue, values: powerUpValues),
                                    rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
-                                    Reward(starCoins: 5, rewardsDice: .Platinum),
-                                    Reward(starCoins: 10, rewardsDice: .Diamond)])
-        
-        reroll.calculateLevel = { () -> Int in
-            var level = 0
-            
-            if GameData.achievementTracker[reroll.name] >= reroll.requirementValues[2] {
-                level = 3
-            } else if GameData.achievementTracker[reroll.name] >= reroll.requirementValues[1] {
-                level = 2
-            } else if GameData.achievementTracker[reroll.name] >= reroll.requirementValues[0] {
-                level = 1
-            }
-            
-            return level
-        }
-        
-        reroll.level = reroll.calculateLevel!()
-        
-        reroll.calculateProgress = { () -> Double in
-            var progress = 0.0
-            
-            if reroll.level == 3 {
-                progress = 1.0
-            } else {
-                progress = Double(GameData.achievementTracker[reroll.name]!) / Double(reroll.requirementValues[reroll.level])
-            }
-            
-            return progress
-        }
-        
-        reroll.progress = reroll.calculateProgress!()
-        
+                                    Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond)])
+
         list.append(reroll)
+        
+        /********** Rewards Dice Achievements ***********/
+        let rewardsDiceValues = [10, 50, 100]
+
+        /********** AchievementName: Bronze ***********/
+        let bronze = Achievement(name: AchievementName.Bronze.rawValue,
+                                 displayName: "Got a Medal for this",
+                                 requirementValues: rewardsDiceValues,
+                                 requirements: rewardsDiceRequirements(AchievementName.Bronze.rawValue, values: rewardsDiceValues),
+                                 rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
+                                    Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond)])
+        
+        list.append(bronze)
+        
+        
+        /********** AchievementName: Silver ***********/
+        let silver = Achievement(name: AchievementName.Silver.rawValue,
+                                 displayName: "A Sterling Find",
+                                 requirementValues: rewardsDiceValues,
+                                 requirements: rewardsDiceRequirements(AchievementName.Silver.rawValue, values: rewardsDiceValues),
+                                 rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
+                                    Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond)])
+        
+        list.append(silver)
+        
+        
+        /********** AchievementName: Gold ***********/
+        let gold = Achievement(name: AchievementName.Gold.rawValue,
+                                 displayName: "Golden Retriever",
+                                 requirementValues: rewardsDiceValues,
+                                 requirements: rewardsDiceRequirements(AchievementName.Gold.rawValue, values: rewardsDiceValues),
+                                 rewards: [Reward(starCoins: 1, rewardsDice: .Gold),
+                                    Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond)])
+        
+        list.append(gold)
+        
+        
+        /********** AchievementName: Platinum ***********/
+        let platinum = Achievement(name: AchievementName.Platinum.rawValue,
+                                 displayName: "Worth More Than Gold",
+                                 requirementValues: rewardsDiceValues,
+                                 requirements: rewardsDiceRequirements(AchievementName.Platinum.rawValue, values: rewardsDiceValues),
+                                 rewards: [Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond),
+                                    Reward(starCoins: 10, rewardsDice: .Ruby)])
+        
+        list.append(platinum)
+        
+        
+        /********** AchievementName: Diamond ***********/
+        let diamond = Achievement(name: AchievementName.Diamond.rawValue,
+                                   displayName: "A Player's Best Friend",
+                                   requirementValues: rewardsDiceValues,
+                                   requirements: rewardsDiceRequirements(AchievementName.Diamond.rawValue, values: rewardsDiceValues),
+                                   rewards: [Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond),
+                                    Reward(starCoins: 10, rewardsDice: .Ruby)])
+        
+        list.append(diamond)
+        
+        
+        /********** AchievementName: Ruby ***********/
+        let ruby = Achievement(name: AchievementName.Ruby.rawValue,
+                                   displayName: "My Precious",
+                                   requirementValues: rewardsDiceValues,
+                                   requirements: rewardsDiceRequirements(AchievementName.Ruby.rawValue, values: rewardsDiceValues),
+                                   rewards: [Reward(starCoins: 3, rewardsDice: .Platinum),
+                                    Reward(starCoins: 5, rewardsDice: .Diamond),
+                                    Reward(starCoins: 10, rewardsDice: .Ruby)])
+        
+        list.append(ruby)
     }
     
     func update(name: AchievementName) {
-        if let achievement = get(name) {
-            achievement.update()
-        }
-    }
-    
-    func get(name: AchievementName) -> Achievement! {
-        for achievement in list {
-            if achievement.name == name.rawValue {
-                return achievement
-            }
-        }
+        let index = list.indexOf({$0.name == name.rawValue})
+        let achievement = list[index!]
+        let oldLevel = achievement.level
         
-        return nil
+        achievement.calculateLevel()
+        achievement.calculateProgress()
+        
+        if achievement.level > oldLevel {
+            GameData.unlockedLevelHandler!(achievement)
+        }
     }
-    
+
     private func colorWinRequirements(color: Color, values: [Int]) -> [String] {
         return ["Place \(values[0]) winning bets on \(color.rawValue)", "Place \(values[1]) winning bets on \(color.rawValue)", "Place \(values[2]) winning bets on \(color.rawValue)"]
     }
@@ -715,17 +401,7 @@ class AchievementsManager {
         return ["Use \(powerUp) \(values[0]) times", "Use \(powerUp) \(values[1]) times", "Use \(powerUp) \(values[2]) times"]
     }
     
-    private func colorWinLevel(winCount: Int, values: [Int]) -> Int {
-        var level = 0
-
-        if winCount >= values[2] {
-            level = 3
-        } else if winCount >= values[1] {
-            level = 2
-        } else if winCount >= values[0] {
-            level = 1
-        }
-
-        return level
+    private func rewardsDiceRequirements(dice: String, values: [Int]) -> [String] {
+        return ["Open \(values[0]) \(dice) rewards dice", "Open \(values[1]) \(dice) rewards dice", "Open \(values[2]) \(dice) rewards dice"]
     }
 }

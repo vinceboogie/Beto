@@ -142,6 +142,12 @@ class GameDataManager {
     
     func addStarCoins(amount: Int) {
         starCoins += amount
+        
+        if let value = achievementTracker[AchievementName.StarCoin.rawValue] {
+            achievementTracker[AchievementName.StarCoin.rawValue] = value + amount
+        }
+        
+        Achievements.update(.StarCoin)
     }
     
     func subtractStarCoins(amount: Int) {
@@ -161,6 +167,8 @@ class GameDataManager {
         
         if coins > highscore {
             highscore = coins
+            
+            achievementTracker[AchievementName.MoneyInTheBank.rawValue] = highscore
             Achievements.update(.MoneyInTheBank)
             
             var index = 0
@@ -177,9 +185,10 @@ class GameDataManager {
                 coinsUnlocked += 1
                 unlockedCoinHandler!()
             }
-            
+
+            achievementTracker[AchievementName.CoinCollector.rawValue] = coinsUnlocked
             Achievements.update(.CoinCollector)
-            }
+        }
     }
     
     func subtractCoins(amount: Int) {
@@ -188,10 +197,6 @@ class GameDataManager {
     
     func incrementGamesPlayed() {
         gamesPlayed += 1
-    }
-    
-    func decrementGamesPlayed() {
-        gamesPlayed -= 1
     }
     
     func increaseRewardChance(num: Int) {
@@ -203,22 +208,18 @@ class GameDataManager {
         rewardChance = 0
     }
     
+    func addNewAchievementTracker(name: String) {
+        achievementTracker[name] = 0
+    }
+    
     func incrementAchievement(name: AchievementName) {
         if let value = achievementTracker[name.rawValue] {
             achievementTracker[name.rawValue] = value + 1
         }
         
-        Achievements.update(name)
+        Achievements.update(name)        
     }
-    
-    func decrementAchievement(name: AchievementName) {
-        if let value = achievementTracker[name.rawValue] {
-            achievementTracker[name.rawValue] = value - 1
-        }
         
-        Achievements.update(name)
-    }
-    
     func updateHighestWager(wager: Int) {
         let key = AchievementName.HighestWager.rawValue
         
