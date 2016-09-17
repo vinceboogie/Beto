@@ -37,10 +37,10 @@ class MenuScene: SKScene {
         themesButton.action = presentThemesScene
         
         // Achievements Button
-        let achievementsButton = ButtonNode(defaultButtonImage: "achievementsButton")
-        achievementsButton.size = CGSize(width: 44, height: 45)
-        achievementsButton.position = CGPoint(x: 0, y: -100)
-        achievementsButton.action = displayAchievements
+        let helpButton = ButtonNode(defaultButtonImage: "helpButton")
+        helpButton.size = CGSize(width: 44, height: 45)
+        helpButton.position = CGPoint(x: 0, y: -100)
+        helpButton.action = showTutorial
         
         // Settings Button
         let settingsButton = ButtonNode(defaultButtonImage: "settingsButton")
@@ -51,7 +51,7 @@ class MenuScene: SKScene {
         // Add nodes
         layer.addChild(startGameButton)
         layer.addChild(themesButton)
-        layer.addChild(achievementsButton)
+        layer.addChild(helpButton)
         layer.addChild(settingsButton)
         
         addChild(background)
@@ -74,11 +74,8 @@ class MenuScene: SKScene {
         view!.presentScene(themesScene, transition: transition)
     }
     
-    func displayAchievements() {
-        let achievements = AchievementsListNode()
-        let layer = achievements.createLayer()
-        
-        addChild(layer)
+    func showTutorial() {
+        print("DELETE: Test")
     }
     
     func displaySettings() {

@@ -37,6 +37,7 @@ class BoardScene: SKScene {
     
     private var dropdownQueue: [DropdownNode]
     private var rewardTriggered = false
+    private var rewardBoostActivated = false
     private var diceType: DiceType = .Default
     private(set) var activePowerUp: String = ""
     
@@ -226,6 +227,10 @@ class BoardScene: SKScene {
     }
     
     private func displayShop() {
+        // DELETE: Unit Test 
+        GameData.addPowerUpCount("reroll", num: 10)
+        
+        
         let closeButton = ButtonNode(defaultButtonImage: "closeButton")
         closeButton.size = CGSize(width: 44, height: 45)
         closeButton.position = CGPoint(x: 140, y: 190)
@@ -691,8 +696,17 @@ class BoardScene: SKScene {
     
     func resolveRandomReward() {
         let rand = Int(arc4random_uniform(100)) + 1
+    
+        var rewardChance = GameData.rewardChance
         
-        if rand <= GameData.rewardChance {
+        if activePowerUp == PowerUpKey.rewardBoost.rawValue {
+            rewardChance += rewardChance
+            rewardBoostActivated = true
+        } else {
+            rewardBoostActivated = false
+        }
+        
+        if rand <= rewardChance {
             rewardTriggered = true
         } else {
             rewardTriggered = false
@@ -704,20 +718,37 @@ class BoardScene: SKScene {
             let rewardsDice: RewardsDice
             
             let rand = Int(arc4random_uniform(100)) + 1
-
-            // Chance: Bronze (70%), Silver (15%), Gold (9%), Platinum (3%), Diamond (2%), Ruby (1%)
-            if rand <= 70 {
-                rewardsDice = RewardsDice(key: .Bronze, count: -99)
-            } else if rand <= 85 {
-                rewardsDice = RewardsDice(key: .Silver, count: -99)
-            } else if rand <= 94 {
-                rewardsDice = RewardsDice(key: .Gold, count: -99)
-            } else if rand <= 97{
-                rewardsDice = RewardsDice(key: .Platinum, count: -99)
-            } else if rand <= 99 {
-                rewardsDice = RewardsDice(key: .Diamond, count: -99)
+            
+            if rewardBoostActivated {
+                // Chance: Bronze (50%), Silver (25%), Gold (15%), Platinum (5%), Diamond (4%), Ruby (1%)
+                if rand <= 50 {
+                    rewardsDice = RewardsDice(key: .Bronze, count: -99)
+                } else if rand <= 75 {
+                    rewardsDice = RewardsDice(key: .Silver, count: -99)
+                } else if rand <= 90 {
+                    rewardsDice = RewardsDice(key: .Gold, count: -99)
+                } else if rand <= 95{
+                    rewardsDice = RewardsDice(key: .Platinum, count: -99)
+                } else if rand <= 99 {
+                    rewardsDice = RewardsDice(key: .Diamond, count: -99)
+                } else {
+                    rewardsDice = RewardsDice(key: .Ruby, count: -99)
+                }
             } else {
-                rewardsDice = RewardsDice(key: .Ruby, count: -99)
+                // Chance: Bronze (70%), Silver (15%), Gold (9%), Platinum (3%), Diamond (2%), Ruby (1%)
+                if rand <= 70 {
+                    rewardsDice = RewardsDice(key: .Bronze, count: -99)
+                } else if rand <= 85 {
+                    rewardsDice = RewardsDice(key: .Silver, count: -99)
+                } else if rand <= 94 {
+                    rewardsDice = RewardsDice(key: .Gold, count: -99)
+                } else if rand <= 97{
+                    rewardsDice = RewardsDice(key: .Platinum, count: -99)
+                } else if rand <= 99 {
+                    rewardsDice = RewardsDice(key: .Diamond, count: -99)
+                } else {
+                    rewardsDice = RewardsDice(key: .Ruby, count: -99)
+                }
             }
 
             GameData.addRewardsDiceCount(rewardsDice.key.rawValue, num: 1)
@@ -734,16 +765,16 @@ class BoardScene: SKScene {
             
             addChild(rewardTriggeredNode.createLayer())
             
-            // reset rewardTriggered and rewardChance
+            // reset rewardTriggered, rewardBoostActivated, and rewardChance
             rewardTriggered = false
+            rewardBoostActivated = false
             GameData.resetRewardChance()
 
         }
         
         // DELETE: Temp Gameplay Rewards - Revised code later
-        let gamesPlayedKey = "GamesPlayed"
         
-        if GameData.achievementTracker[gamesPlayedKey]! % 10000 == 0 {
+        if GameData.gamesPlayed % 10000 == 0 {
             let rewardsDice = RewardsDice(key: .Diamond, count: -99)
             
             GameData.addRewardsDiceCount(rewardsDice.key.rawValue, num: 1)
@@ -762,7 +793,7 @@ class BoardScene: SKScene {
         }
         
         // DELETE: Temp Gameplay Rewards - Revised code later
-        if GameData.achievementTracker[gamesPlayedKey]! % 1000 == 0 {
+        if GameData.gamesPlayed % 1000 == 0 {
             let rewardsDice = RewardsDice(key: .Platinum, count: -99)
             
             GameData.addRewardsDiceCount(rewardsDice.key.rawValue, num: 1)
@@ -781,7 +812,7 @@ class BoardScene: SKScene {
         }
         
         // DELETE: Temp Gameplay Rewards - Revised code later
-        if GameData.achievementTracker[gamesPlayedKey]! % 100 == 0 {
+        if GameData.gamesPlayed % 100 == 0 {
             let rewardsDice = RewardsDice(key: .Gold, count: -99)
             
             GameData.addRewardsDiceCount(rewardsDice.key.rawValue, num: 1)

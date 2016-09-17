@@ -87,17 +87,19 @@ class OpenRewardsNode: DropdownNode {
         var amount = 0
         
         let rand = Int(arc4random_uniform(100)) + 1
-        
+                
         if rand <= 20 {
-            rewardType = PowerUpKey.doubleDice.rawValue
-        } else if rand <= 40 {
-            rewardType = PowerUpKey.doublePayout.rawValue
-        } else if rand <= 60 {
-            rewardType = PowerUpKey.triplePayout.rawValue
-        } else if rand <= 80 {
             rewardType = PowerUpKey.lifeline.rawValue
+        } else if rand <= 40 {
+            rewardType = PowerUpKey.rewardBoost.rawValue
+        } else if rand <= 60 {
+            rewardType = PowerUpKey.doubleDice.rawValue
+        } else if rand <= 80 {
+            rewardType = PowerUpKey.doublePayout.rawValue
+        } else if rand <= 90{
+            rewardType = PowerUpKey.triplePayout.rawValue
         } else {
-            rewardType = PowerUpKey.rewind.rawValue
+            rewardType = PowerUpKey.reroll.rawValue
         }
         
         switch diceKey {

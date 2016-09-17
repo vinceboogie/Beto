@@ -19,32 +19,22 @@
 	</dict>
 	<key>powerUps</key>
 	<dict>
+		<key>lifeline</key>
+		<integer>0</integer>
+		<key>rewardBoost</key>
+		<integer>0</integer>
 		<key>doubleDice</key>
 		<integer>0</integer>
 		<key>doublePayout</key>
 		<integer>0</integer>
 		<key>triplePayout</key>
 		<integer>0</integer>
-		<key>lifeline</key>
-		<integer>0</integer>
-		<key>rewind</key>
+		<key>reroll</key>
 		<integer>0</integer>
 	</dict>
 	<key>achievementTracker</key>
 	<dict>
-		<key>GamesPlayed</key>
-		<integer>0</integer>
 		<key>HighestWager</key>
-		<integer>0</integer>
-		<key>DoubleDice</key>
-		<integer>0</integer>
-		<key>DoublePayout</key>
-		<integer>0</integer>
-		<key>TriplePayout</key>
-		<integer>0</integer>
-		<key>Lifeline</key>
-		<integer>0</integer>
-		<key>Rewind</key>
 		<integer>0</integer>
 		<key>BlueWin</key>
 		<integer>0</integer>
@@ -58,6 +48,18 @@
 		<integer>0</integer>
 		<key>PurpleWin</key>
 		<integer>0</integer>
+		<key>Lifeline</key>
+		<integer>0</integer>
+		<key>RewardBoost</key>
+		<integer>0</integer>
+		<key>DoubleDice</key>
+		<integer>0</integer>
+		<key>DoublePayout</key>
+		<integer>0</integer>
+		<key>TriplePayout</key>
+		<integer>0</integer>
+		<key>Reroll</key>
+		<integer>0</integer>
 	</dict>
 	<key>unlockedThemes</key>
 	<array>
@@ -65,6 +67,8 @@
 	</array>
 	<key>currentThemeName</key>
 	<string>Default</string>
+	<key>autoLoadEnabled</key>
+	<false/>
 	<key>musicMuted</key>
 	<false/>
 	<key>soundMuted</key>
@@ -72,6 +76,8 @@
 	<key>betDenomination</key>
 	<integer>1</integer>
 	<key>coinsUnlocked</key>
+	<integer>0</integer>
+	<key>gamesPlayed</key>
 	<integer>0</integer>
 	<key>highscore</key>
 	<integer>50</integer>

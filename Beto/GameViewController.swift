@@ -20,11 +20,14 @@ class GameViewController: UIViewController {
     private var coinsView: UIImageView!
     private var highscoreLabel: UILabel!
     private var coinsLabel: UILabel!
-
-    var panGesture = UIPanGestureRecognizer.self()
-    var tapGesture = UITapGestureRecognizer.self()
-    var tapRecognizer = UITapGestureRecognizer.self()
-    var touchCount = 0.0
+    
+    private var sceneView: SCNView!
+    private var panGesture = UIPanGestureRecognizer.self()
+    private var tapGesture = UITapGestureRecognizer.self()
+    private var tapRecognizer = UITapGestureRecognizer.self()
+    private var touchCount = 0.0
+    private var rerollEnabled = false
+    private var rerolling = false
         
     override func shouldAutorotate() -> Bool {
         return true
@@ -45,6 +48,7 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // DELETE: Need to adjust highscore button on gameSceneHUD
         gameHUDView = UIImageView(frame: CGRect(x: 0, y: 0, width: 320 * Constant.ScaleFactor, height: 38 * Constant.ScaleFactor))
         gameHUDView.image = UIImage(named: "gameSceneHUD")
         self.view.addSubview(gameHUDView)
@@ -75,11 +79,16 @@ class GameViewController: UIViewController {
         coinsLabel.textAlignment = .Center
         self.view.addSubview(coinsLabel)
         
+        // Configure PowerUps
         if boardScene.activePowerUp != "" {
             let activePowerUpView = UIImageView(frame: CGRect(x: 10, y: gameHUDView.frame.height + 5, width: 48 * Constant.ScaleFactor, height: 48 * Constant.ScaleFactor))
             activePowerUpView.image = UIImage(named: boardScene.activePowerUp)
             activePowerUpView.contentMode = .TopLeft
             self.view.addSubview(activePowerUpView)
+        }
+        
+        if boardScene.activePowerUp == PowerUpKey.reroll.rawValue {
+            rerollEnabled = true
         }
         
         // Configure the Game scene
@@ -100,7 +109,7 @@ class GameViewController: UIViewController {
         gameScene.resolveGameplayHandler = { [unowned self] in self.handleResolveGameplay() }
         
         // Configure the view
-        let sceneView = self.view as! SCNView
+        sceneView = self.view as! SCNView
         sceneView.scene = gameScene
         sceneView.delegate = gameScene
         sceneView.playing = true
@@ -138,11 +147,12 @@ class GameViewController: UIViewController {
         }
     }
     
-    func handleResolveGameplay() {        
-        // Subtract wagers from GameData
-        GameData.subtractCoins(boardScene.getWagers())
-        
-        GameData.incrementAchievement(.GamesPlayed)
+    func handleResolveGameplay() {
+        // Only update coins and gamesPlayed during the first roll.
+        if !rerolling {
+            GameData.subtractCoins(boardScene.getWagers())
+            GameData.incrementGamesPlayed()
+        }
         
         var winningColors: [Color] = []
         var didWin = false
@@ -175,39 +185,65 @@ class GameViewController: UIViewController {
             }
             
             gameScene.animateRollResult(node, didWin: didPayout)
-
             delay(1.0) {}
+        }
+        
+        if !didWin && rerollEnabled {
+            // Save data before resetting for the reroll
+            GameData.save()
+            
+            rerollEnabled = false
+            rerolling = true
+
+            delay(2.0) {
+                self.touchCount = 0.0
+                self.gameScene = GameScene(dice: .Default)
+                self.gameScene.resolveGameplayHandler = { [unowned self] in self.handleResolveGameplay() }
+                self.gameScene.background.contents = UIImage(named: GameData.theme.background)
+             
+                self.sceneView.scene = self.gameScene
+                self.sceneView.delegate = self.gameScene
+            }
+            
+            return
         }
         
         boardScene.resolveWagers(didWin)
         boardScene.toggleReplayButton()
         
-        // Increment Achievement
+        // Increment appropriate achievement
         switch(boardScene.activePowerUp) {
+        case PowerUpKey.lifeline.rawValue:
+            GameData.incrementAchievement(.Lifeline)
+        case PowerUpKey.rewardBoost.rawValue:
+            GameData.incrementAchievement(.RewardBoost)
         case PowerUpKey.doubleDice.rawValue:
             GameData.incrementAchievement(.DoubleDice)
         case PowerUpKey.doublePayout.rawValue:
             GameData.incrementAchievement(.DoublePayout)
         case PowerUpKey.triplePayout.rawValue:
             GameData.incrementAchievement(.TriplePayout)
-        case PowerUpKey.lifeline.rawValue:
-            GameData.incrementAchievement(.Lifeline)
-        case PowerUpKey.rewind.rawValue:
-            GameData.incrementAchievement(.Rewind)
+        case PowerUpKey.reroll.rawValue:
+            GameData.incrementAchievement(.Reroll)
         default:
             break
         }
         
         GameData.subtractPowerUpCount(boardScene.activePowerUp, num: 1)
-        boardScene.deactivatePowerUpButtonPressed()
         
+        // Calculate rewardChance
         if didWin {
             let num = 4 - boardScene.squaresSelectedCount
-                        
+            
             GameData.increaseRewardChance(num)
             boardScene.resolveRandomReward()
         } else {
             GameData.resetRewardChance()
+        }
+        
+        // If autoLoad is OFF or no more powerUP remaining, set activePowerUp to nil
+        if !GameData.autoLoadEnabled || GameData.powerUps[boardScene.activePowerUp] == 0 {
+            boardScene.deactivatePowerUpButtonPressed()
         }
         
         boardScene.resetSquaresSelectedCount()
