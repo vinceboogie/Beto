@@ -35,6 +35,7 @@ class ThemesScene: SKScene {
         var headerPosition = 266
         var previousButtonPosition = CGPoint(x: -25, y: -206)
         var nextButtonPosition = CGPoint(x: 25, y: -206)
+        var infoButtonPosition = CGPoint(x: 130, y: -206)
 
         // Custom values for iPhone4
         if UIScreen.mainScreen().bounds.height == 480 {
@@ -42,6 +43,7 @@ class ThemesScene: SKScene {
             headerPosition = 221
             previousButtonPosition = CGPoint(x: -25, y: -160)
             nextButtonPosition = CGPoint(x: 25, y: -160)
+            infoButtonPosition = CGPoint(x: 130, y: -160)
             perPageCount = 9
         }
         
@@ -111,10 +113,30 @@ class ThemesScene: SKScene {
         nextButton.action = nextPage
         nextButton.position = nextButtonPosition
         
+        // Info
+        let infoOverlay = ButtonNode(defaultButtonImage: "overlay")
+        infoOverlay.action = { infoOverlay.removeFromParent() }
+        
+        let infoSprite = SKSpriteNode(imageNamed: "starCoinsInfo")
+        
+        infoOverlay.addChild(infoSprite)
+        
+        let infoButton = ButtonNode(defaultButtonImage: "infoButton")
+        infoButton.position = infoButtonPosition
+        infoButton.action = {
+            infoOverlay.alpha = 0.0
+            
+            let fadeIn = SKAction.fadeAlphaTo(1.0, duration: 0.2)
+            infoOverlay.runAction(fadeIn)
+            
+            self.addChild(infoOverlay)
+        }
+        
         layer.addChild(header)
         layer.addChild(container)
         layer.addChild(previousButton)
         layer.addChild(nextButton)
+        layer.addChild(infoButton)
         
         addChild(background)
         addChild(layer)

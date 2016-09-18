@@ -14,8 +14,8 @@ let Audio = AudioManager()
 let Achievements = AchievementsManager()
 
 struct Constant {
-    static let Denominations = [1, 5, 10, 50, 100, 1000, 10000, 100000]
-    static let CoinUnlockedAt = [100, 500, 1000, 5000, 10000, 100000, 1000000]
+    static let Denominations = [5, 10, 50, 100, 1000, 10000, 100000, 1000000]
+    static let CoinUnlockedAt = [500, 1000, 5000, 10000, 100000, 1000000, 10000000]
     static let Margin: CGFloat = 10
     static let ScaleFactor: CGFloat = UIScreen.mainScreen().bounds.width / 320
     static let FontName = "Futura Medium"

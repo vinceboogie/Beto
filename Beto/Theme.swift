@@ -10,9 +10,9 @@ import Foundation
 
 enum ThemePrice: Int {
     case Priceless = 99999
-    case Basic = 5
-    case Premium = 10
-    case Legendary = 50
+    case Basic = 10
+    case Premium = 50
+    case Legendary = 100
 }
 
 class Theme {

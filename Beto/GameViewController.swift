@@ -48,7 +48,6 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // DELETE: Need to adjust highscore button on gameSceneHUD
         gameHUDView = UIImageView(frame: CGRect(x: 0, y: 0, width: 320 * Constant.ScaleFactor, height: 38 * Constant.ScaleFactor))
         gameHUDView.image = UIImage(named: "gameSceneHUD")
         self.view.addSubview(gameHUDView)
@@ -151,7 +150,9 @@ class GameViewController: UIViewController {
         // Only update coins and gamesPlayed during the first roll.
         if !rerolling {
             GameData.subtractCoins(boardScene.getWagers())
+            
             GameData.incrementGamesPlayed()
+            GameData.incrementAchievement(.GamesPlayed)
         }
         
         var winningColors: [Color] = []
@@ -204,7 +205,7 @@ class GameViewController: UIViewController {
                 self.sceneView.scene = self.gameScene
                 self.sceneView.delegate = self.gameScene
             }
-            
+
             return
         }
         
@@ -231,8 +232,11 @@ class GameViewController: UIViewController {
         
         GameData.subtractPowerUpCount(boardScene.activePowerUp, num: 1)
         
-        // Calculate rewardChance
         if didWin {
+            // Increment MoneyGrabber achievement
+            GameData.incrementAchievement(.MoneyGrabber)
+
+            // Calculate rewardChance
             let num = 4 - boardScene.squaresSelectedCount
             
             GameData.increaseRewardChance(num)

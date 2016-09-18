@@ -121,13 +121,11 @@ class BoardScene: SKScene {
         coinVaultButton.position = CGPoint(x: (board.size.width - coinVaultButton.size.width) / 2,
                                            y: board.position.y + (board.size.height + powerUpButton.size.height + Constant.Margin) / 2)
         
-        // DELETE: Change image name?
         diceVaultButton = ButtonNode(defaultButtonImage: "rewardsDiceButton")
         diceVaultButton.size = CGSize(width: 31, height: 36)
         diceVaultButton.position = CGPoint(x: (board.size.width - diceVaultButton.size.width) / 2,
                                            y: gameHUD.position.y - (gameHUD.size.height + diceVaultButton.size.height + Constant.Margin) / 2)
         
-        // DELETE: Change image name?
         deactivatePowerUpSprite = SKSpriteNode(imageNamed: "deactivateButton")
         deactivatePowerUpSprite.size = CGSize(width: 18, height: 19)
         
@@ -226,11 +224,8 @@ class BoardScene: SKScene {
         addChild(layer)
     }
     
-    private func displayShop() {
-        // DELETE: Unit Test 
-        GameData.addPowerUpCount("reroll", num: 10)
-        
-        
+    // DELETE: Might have to drop this feature
+    private func displayShop() {        
         let closeButton = ButtonNode(defaultButtonImage: "closeButton")
         closeButton.size = CGSize(width: 44, height: 45)
         closeButton.position = CGPoint(x: 140, y: 190)
@@ -517,8 +512,6 @@ class BoardScene: SKScene {
         
         // Add winnings
         if winningSquare.wager > 0 {
-            
-            // DELETE: Test
             var winnings = winningSquare.wager
             
             if activePowerUp == "" {
@@ -710,6 +703,9 @@ class BoardScene: SKScene {
             rewardTriggered = true
         } else {
             rewardTriggered = false
+            
+            // Increment Unlucky achievement
+            GameData.incrementAchievement(.Unlucky)
         }
     }
     
