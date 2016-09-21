@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import StoreKit
 
 class Settings {
     private let layer: SKNode
@@ -14,6 +15,7 @@ class Settings {
     private let soundButton: ButtonNode
     private let musicButton: ButtonNode
     private let closeButton: ButtonNode
+    private let deactivateButton: ButtonNode
     
     init() {
         layer = SKNode()
@@ -27,6 +29,7 @@ class Settings {
         
         var soundImage = "soundButton"
         var musicImage = "musicButton"
+        var deactivateImage = "closeButton_Large"
         
         if Audio.soundMuted {
             soundImage = "soundButton_mute"
@@ -41,6 +44,9 @@ class Settings {
         
         musicButton = ButtonNode(defaultButtonImage: musicImage)
         musicButton.size = CGSize(width: 44, height: 45)
+        
+        deactivateButton = ButtonNode(defaultButtonImage: deactivateImage)
+        deactivateButton.size = CGSize(width: 44, height: 45)
     }
     
     func createLayer() -> SKNode {
@@ -52,17 +58,20 @@ class Settings {
         closeButton.action = close
         soundButton.action = toggleSoundButton
         musicButton.action = toggleMusicButton
+        deactivateButton.action = toggleDeactivateButton
         
         // Designate positions
         closeButton.position = CGPoint(x: 60, y: -100)
         soundButton.position = CGPoint(x: 0, y: -160)
         musicButton.position = CGPoint(x: 60, y: -160)
+        deactivateButton.position = CGPoint(x: 120, y: -160)
         
         // Add nodes to layer node
         layer.addChild(background)
         layer.addChild(closeButton)
         layer.addChild(soundButton)
         layer.addChild(musicButton)
+        layer.addChild(deactivateButton)
         
         return layer
     }
@@ -73,6 +82,7 @@ class Settings {
         soundButton.runAction(SKAction.removeFromParent())
         musicButton.runAction(SKAction.removeFromParent())
         closeButton.runAction(SKAction.removeFromParent())
+        deactivateButton.runAction(SKAction.removeFromParent())
         
         let fadeOut = SKAction.fadeAlphaTo(0.0, duration: 0.3)
         let backgroundActions = SKAction.sequence([fadeOut, SKAction.removeFromParent()])
@@ -101,4 +111,15 @@ class Settings {
             musicButton.changeTexture("musicButton")
         }
     }
+    
+    func toggleDeactivateButton() {
+        print("REMOVE ADS")
+        
+        Products.store.requestProducts { success, products in
+            if success {
+                
+            }
+        }
+    }
+
 }
