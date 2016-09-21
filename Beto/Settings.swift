@@ -29,7 +29,7 @@ class Settings {
         
         var soundImage = "soundButton"
         var musicImage = "musicButton"
-        var deactivateImage = "closeButton_Large"
+        let deactivateImage = "closeButton_Large"
         
         if Audio.soundMuted {
             soundImage = "soundButton_mute"
@@ -113,13 +113,12 @@ class Settings {
     }
     
     func toggleDeactivateButton() {
-        print("REMOVE ADS")
-        
-        Products.store.requestProducts { success, products in
+        Products.store.requestProducts { (success, products) in
             if success {
-                
+                for product in products! {
+                    Products.store.buyProduct(product)
+                }
             }
         }
     }
-
 }

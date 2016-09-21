@@ -10,11 +10,8 @@ import Foundation
 
 public struct Products {
     private static let Prefix = "com.redgarage.Beto."
-    
     public static let RemoveAds = Prefix + "RemoveAds"
-    
     private static let productIdentifiers: Set<ProductIdentifier> = [Products.RemoveAds]
-    
     public static let store = IAPHelper(productIds: Products.productIdentifiers)
 }
 

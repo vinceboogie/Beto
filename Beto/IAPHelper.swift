@@ -15,15 +15,12 @@ public class IAPHelper : NSObject  {
     
     private let productIdentifiers: Set<ProductIdentifier>
     private var purchasedProductIdentifiers = Set<ProductIdentifier>()
-    
     private var productsRequest: SKProductsRequest?
     private var productsRequestCompletionHandler: ProductsRequestCompletionHandler?
-    
     static let IAPHelperPurchaseNotification = "IAPHelperPurchaseNotification"
     
     public init(productIds: Set<ProductIdentifier>) {
         self.productIdentifiers = productIds
-        
         for productIdentifier in productIds {
             let purchased = NSUserDefaults.standardUserDefaults().boolForKey(productIdentifier)
             if purchased {
@@ -33,9 +30,7 @@ public class IAPHelper : NSObject  {
                 print("Not purchased: \(productIdentifier)")
             }
         }
-        
         super.init()
-        
         SKPaymentQueue.defaultQueue().addTransactionObserver(self)
     }
 }
@@ -47,26 +42,21 @@ extension IAPHelper {
     public func requestProducts(completionHandler: ProductsRequestCompletionHandler) {
         productsRequest?.cancel()
         productsRequestCompletionHandler = completionHandler
-        
         productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers)
         productsRequest!.delegate = self
         productsRequest!.start()
     }
-    
     public func buyProduct(product: SKProduct) {
         print("Buying \(product.productIdentifier)...")
         let payment = SKPayment(product: product)
         SKPaymentQueue.defaultQueue().addPayment(payment)
     }
-    
     public func isProductPurchased(productIdentifier: ProductIdentifier) -> Bool {
         return purchasedProductIdentifiers.contains(productIdentifier)
     }
-    
     public class func canMakePayments() -> Bool {
         return SKPaymentQueue.canMakePayments()
     }
-    
     public func restorePurchases() {
         SKPaymentQueue.defaultQueue().restoreCompletedTransactions()
     }
@@ -143,13 +133,11 @@ extension IAPHelper: SKPaymentTransactionObserver {
         if transaction.error!.code != SKErrorCode.PaymentCancelled.rawValue {
             print("Transaction Error: \(transaction.error?.localizedDescription)")
         }
-        
         SKPaymentQueue.defaultQueue().finishTransaction(transaction)
     }
     
     private func deliverPurchaseNotificatioForIdentifier(identifier: String?) {
         guard let identifier = identifier else { return }
-        
         purchasedProductIdentifiers.insert(identifier)
         NSUserDefaults.standardUserDefaults().setBool(true, forKey: identifier)
         NSUserDefaults.standardUserDefaults().synchronize()
